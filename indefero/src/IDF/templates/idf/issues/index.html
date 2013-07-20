@@ -1,0 +1,17 @@
+{extends "idf/issues/base.html"}
+{block docclass}yui-t2{assign $inAllIssues=true}{/block}
+{block body}
+{$issues.render}
+{if !$user.isAnonymous()}
+{aurl 'url', 'IDF_Views_Issue::create', array($project.shortname)}
+<p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'New Issue'}</a></p>{/if}
+
+{/block}
+{block context}
+{aurl 'open_url', 'IDF_Views_Issue::index', array($project.shortname)}
+{aurl 'closed_url', 'IDF_Views_Issue::listStatus', array($project.shortname, 'closed')}
+{blocktrans}<p><strong>Open issues:</strong> <a href="{$open_url}">{$open}</a></p>
+<p><strong>Closed issues:</strong> <a href="{$closed_url}">{$closed}</a></p>{/blocktrans}
+{assign $cloud_url = 'IDF_Views_Issue::listLabel'}
+{include 'idf/tags-cloud.html'}
+{/block}

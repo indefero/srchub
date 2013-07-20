@@ -1,0 +1,134 @@
+{extends "idf/gadmin/users/base.html"}
+{block docclass}yui-t1{assign $inUpdate=true}{/block}
+{block body}
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to update the user.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+<form method="post"  enctype="multipart/form-data" action=".">
+<table class="form" summary="">
+<tr>
+<th>{trans 'Login:'}</th>{aurl 'url', 'IDF_Views_User::view', array($cuser.login)}
+<td><a href="{$url}">{$cuser.login}</a></td>
+</tr>
+<tr>
+<th>{$form.f.first_name.labelTag}:</th>
+<td>{if $form.f.first_name.errors}{$form.f.first_name.fieldErrors}{/if}
+{$form.f.first_name|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.last_name.labelTag}:</strong></th>
+<td>{if $form.f.last_name.errors}{$form.f.last_name.fieldErrors}{/if}
+{$form.f.last_name|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.email.labelTag}:</strong></th>
+<td>{if $form.f.email.errors}{$form.f.email.fieldErrors}{/if}
+{$form.f.email|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.language.labelTag}:</th>
+<td>{if $form.f.language.errors}{$form.f.language.fieldErrors}{/if}
+{$form.f.language|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.password.labelTag}:</th>
+<td>{if $form.f.password.errors}{$form.f.password.fieldErrors}{/if}
+{$form.f.password|unsafe}<br />
+<span class="helptext">{$form.f.password.help_text}</span>
+</td>
+</tr>
+<tr>
+<th>{$form.f.password2.labelTag}:</th>
+<td>{if $form.f.password2.errors}{$form.f.password2.fieldErrors}{/if}
+{$form.f.password2|unsafe}
+</td>
+</tr>
+<tr><td colspan="2" class="separator">{trans "Public Profile"}</td></tr>
+<tr>
+<th>{$form.f.description.labelTag}:</th>
+<td>{if $form.f.description.errors}{$form.f.description.fieldErrors}{/if}
+{$form.f.description|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.twitter.labelTag}:</th>
+<td>{if $form.f.twitter.errors}{$form.f.twitter.fieldErrors}{/if}
+{$form.f.twitter|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.public_email.labelTag}:</th>
+<td>{if $form.f.public_email.errors}{$form.f.public_email.fieldErrors}{/if}
+{$form.f.public_email|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.website.labelTag}:</th>
+<td>{if $form.f.website.errors}{$form.f.website.fieldErrors}{/if}
+{$form.f.website|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.custom_avatar.labelTag}:</th>
+<td>{if $form.f.custom_avatar.errors}{$form.f.custom_avatar.fieldErrors}{/if}
+{$form.f.custom_avatar|unsafe}<br />
+<span class="helptext">{$form.f.custom_avatar.help_text}</span>
+</td>
+</tr>
+<tr>
+<th>{if $form.f.remove_custom_avatar.errors}{$form.f.remove_custom_avatar.fieldErrors}{/if}
+{$form.f.remove_custom_avatar|unsafe}
+</th>
+<td>{$form.f.remove_custom_avatar.labelTag}<br />
+<span class="helptext">{$form.f.remove_custom_avatar.help_text}</span></td>
+</tr>
+{if $user.administrator}
+<tr><td colspan="2" class="separator">{trans "Administrative"}</td></tr>
+<tr>
+<th>{if $form.f.staff.errors}{$form.f.staff.fieldErrors}{/if}
+{$form.f.staff|unsafe}
+</th>
+<td>{$form.f.staff.labelTag}<br />
+<span class="helptext">{$form.f.staff.help_text}</span></td>
+</tr>{/if}
+<tr>
+<th>{if $form.f.active.errors}{$form.f.active.fieldErrors}{/if}
+{$form.f.active|unsafe}
+</th>
+<td>{$form.f.active.labelTag}<br />
+<span class="helptext">{$form.f.active.help_text}</span></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+<input type="submit" value="{trans 'Update User'}" name="submit" />
+| <a href="{url 'IDF_Views_Admin::users'}">{trans 'Cancel'}</a>
+</td>
+</tr>
+</table>
+</form>
+{/block}
+{block context}
+<div class="issue-submit-info">
+<p><strong>{trans 'Instructions:'}</strong></p>
+<p>{blocktrans}If you are changing the email address of the user, you
+need to ensure that you are providing a valid email
+address{/blocktrans}</p>
+{if $user.administrator}
+<p>{blocktrans}If you give the user staff rights, the user will be
+able to create new projects and update other non staff users.
+{/blocktrans}</p> {/if}
+</div>
+{/block}
+
+
+

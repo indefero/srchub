@@ -1,0 +1,6 @@
+{extends "idf/gadmin/base.html"}
+{block tabusher} class="active"{/block}
+{block subtabs}
+<a {if $inUsher}class="active" {/if}href="{url 'IDF_Views_Admin::usher'}">{trans 'Configured servers'}</a> |
+<a {if $inUsherControl}class="active" {/if}href="{url 'IDF_Views_Admin::usherControl', array('')}">{trans 'Usher control'}</a>
+{/block}

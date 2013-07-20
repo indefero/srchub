@@ -1,0 +1,33 @@
+{extends "idf/source/base.html"}
+{block docclass}yui-t2{assign $inError=true}{/block}
+{block body}
+
+<p>{blocktrans}The revision identifier <b>{$commit}</b> is ambiguous and can be
+expanded to multiple valid revisions - please choose one:{/blocktrans}</p>
+
+<table summary="" class="tree-list">
+<thead>
+<tr>
+<th>{trans 'Title'}</th>
+<th>{trans 'Author'}</th>
+<th>{trans 'Date'}</th>
+<th>{trans 'Branch'}</th>
+<th>{trans 'Revision'}</th>
+</tr>
+</thead>
+<tbody>
+{foreach $revisions as $revision}
+{aurl 'url', $redirect, array($project.shortname, $revision.commit)}
+<tr class="log">
+<td>{$revision.title}</td>
+<td>{$revision.author}</td>
+<td>{$revision.date}</td>
+<td>{$revision.branch}</td>
+<td><a href="{$url}">{$revision.commit}</a></td>
+</td>
+</tr>
+{/foreach}
+</tbody>
+</table>
+{/block}
+

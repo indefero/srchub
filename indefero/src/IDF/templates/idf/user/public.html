@@ -1,0 +1,66 @@
+{extends "idf/base-simple.html"}
+{block body}
+<table class="form" summary="">
+<tr>
+<th style="text-align: right">{if $user_data.avatar != ''}
+    <img style="max-height: 60px; max-width: 60px;" src="{upload}/avatars/{$user_data.avatar}" alt=" " />
+{else}
+    <img src="http://www.gravatar.com/avatar/{$member.email|md5}.jpg?s=60&amp;d={media}/idf/img/spacer.gif" alt=" " />
+{/if}
+</th>
+<td>{$member}</td>
+</tr>
+{if $user_data.description != ''}
+<tr>
+<th>{trans 'Description:'}</th>
+<td>{$user_data.description}</td>
+</tr>
+{/if}
+{if $user_data.twitter != ''}
+<tr>
+<th>{trans 'Twitter:'}</th>
+<td><a rel="nofollow" target="_blank" href='http://twitter.com/{$user_data.twitter}'>{$user_data.twitter}</a></td>
+</tr>
+{/if}
+{if $user_data.public_email != ''}
+<tr>
+<th>{trans 'Public Email:'}</th>
+<td><a href='mailto:{$user_data.public_email}'>{$user_data.public_email}</a></td>
+</tr>
+{/if}
+{if $user_data.website != ''}
+<tr>
+<th>{trans 'Website:'}</th>
+<td><a rel="nofollow" target="_blank" href='{$user_data.website}'>{$user_data.website}</a></td>
+</tr>
+{/if}
+
+<tr>
+<th>{trans 'Last time seen:'}</th>
+<td>{$member.last_login|dateago}</td>
+</tr>
+<tr>
+<th>{trans 'Member since:'}</th>
+<td>{$member.date_joined|date}</td>
+</tr>
+</table>
+Projects:
+<table class="form">
+{foreach $projects as $p}
+{if $p.private == 0}
+<tr>
+<td>
+<a href="{url 'IDF_Views_Project::home', array($p.name)}">{$p.name} - {$p.shortdesc}</a>
+</td>
+</tr>
+{/if}
+{/foreach}
+</table>
+{/block}
+{block context}
+<div class="issue-submit-info">
+<p>{blocktrans}You are looking at the public profile of {$member}.{/blocktrans}</p>
+</div>
+{/block}
+
+

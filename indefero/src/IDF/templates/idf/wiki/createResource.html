@@ -1,0 +1,56 @@
+{extends "idf/wiki/base.html"}
+{block docclass}yui-t1{assign $inCreateResource = true}{/block}
+{block body}
+
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to create the page.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+
+<form method="post" enctype="multipart/form-data" action="." >
+<table class="form" summary="">
+<tr>
+<th><strong>{$form.f.title.labelTag}:</strong></th>
+<td>{if $form.f.title.errors}{$form.f.title.fieldErrors}{/if}
+{$form.f.title|unsafe}<br />
+<span class="helptext">{$form.f.title.help_text}</span>
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.summary.labelTag}:</strong></th>
+<td>{if $form.f.summary.errors}{$form.f.summary.fieldErrors}{/if}
+{$form.f.summary|unsafe}<br />
+<span class="helptext">{$form.f.summary.help_text}</span>
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.file.labelTag}:</strong></th>
+<td>{if $form.f.file.errors}{$form.f.file.fieldErrors}{/if}
+{$form.f.file|unsafe}
+</td>
+</tr>
+<td>&nbsp;</td>
+<td><input type="submit" value="{trans 'Create Resource'}" name="submit" /> | <a href="{url 'IDF_Views_Wiki::listResources', array($project.shortname)}">{trans 'Cancel'}</a>
+</td>
+</tr>
+</table>
+</form>
+{/block}
+{block context}
+<div class="issue-submit-info">
+{blocktrans}
+Wiki resources are later addressed in wiki pages by their title, so ensure that you
+give your resource a unique and an easy to remember name.
+{/blocktrans}
+</div>
+{/block}
+{block javascript}
+<script type="text/javascript">
+document.getElementById('id_title').focus()
+</script>
+{/block}
+

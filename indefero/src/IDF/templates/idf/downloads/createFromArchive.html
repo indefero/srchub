@@ -1,0 +1,38 @@
+{extends "idf/downloads/base.html"}
+{block docclass}yui-t3{assign $inCreateFromArchive=true}{/block}
+{block body}
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to submit the archive.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+
+<form method="post" enctype="multipart/form-data" action=".">
+<table class="form" summary="">
+<tr>
+<th><strong>{$form.f.archive.labelTag}:</strong></th>
+<td>{if $form.f.archive.errors}{$form.f.archive.fieldErrors}{/if}
+{$form.f.archive|unsafe}
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><input type="submit" value="{trans 'Submit Archive'}" name="submit" /> | <a href="{url 'IDF_Views_Download::index', array($project.shortname)}">{trans 'Cancel'}</a>
+</td>
+</tr>
+</table>
+</form>
+{/block}
+{block context}
+<div class="issue-submit-info">
+<h2>{trans 'Instructions'}</h2>
+
+<p>{blocktrans}The archive must include a <code>manifest.xml</code> file with meta information about the
+files to process inside the archive. All processed files must be unique or replace existing files explicitely.{/blocktrans}</p>
+{aurl 'url', 'IDF_Views::faqArchiveFormat'}
+<p>{blocktrans}You can learn more about the archive format <a href="{$url}">here</a>.{/blocktrans}</p>
+</div>
+{/block}

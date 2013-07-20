@@ -1,0 +1,240 @@
+{extends "idf/issues/base.html"}
+{block titleicon}{if $form}<form class="star" method="post" action="{url 'IDF_Views_Issue::star', array($project.shortname, $issue.id)}"><input type="image" src="{if $starred}{media '/idf/img/star.png'}{else}{media '/idf/img/star-grey.png'}{/if}" name="submit" title="{if $starred}{trans 'Remove this issue from your watch list'}{else}{trans 'Add this issue to your watch list'}{/if}" /></form> {/if}{/block}
+{block body}
+<div class="issue-prev-next">
+{if $previous_issue_id}
+<a href="{url 'IDF_Views_Issue::view', array($project.shortname, $previous_issue_id)}" title="{if $closed}{trans 'View the previous closed issue'}{else}{trans 'View the previous open issue'}{/if}">Previous issue</a>
+{/if}
+{if $previous_issue_id and $next_issue_id} - {/if}
+{if $next_issue_id}
+<a href="{url 'IDF_Views_Issue::view', array($project.shortname, $next_issue_id)}" title="{if $closed}{trans 'View the next closed issue'}{else}{trans 'View the next open issue'}{/if}">Next issue</a>
+{/if}
+</div>
+{assign $i = 0}
+{assign $nc = $comments.count()}
+{foreach $comments as $c}{ashowuser 'submitter', $c.get_submitter(), $request}
+{assign $submitter = $c.get_submitter()}
+{assign $submitter_data = $c.get_submitter_data()}
+<div class="issue-comment{if $i == 0} issue-comment-first{/if}{if $i == ($nc-1)} issue-comment-last{/if}" id="ic{$c.id}">
+{if $submitter_data.avatar != ''}
+<img style="float:right; position: relative; max-height: 60px; max-width: 60px;" src="{upload}/avatars/{$submitter_data.avatar}" alt=" " />
+{else}
+<img style="float:right; position: relative; max-height: 60px; max-width: 60px;" src="http://www.gravatar.com/avatar/{$submitter.email|md5}.jpg?s=60&amp;d={media}/idf/img/spacer.gif" alt=" " />
+{/if}
+{if $i == 0}
+<p>{blocktrans}Reported by {$submitter}, {$c.creation_dtime|date}{/blocktrans}</p>
+{else}
+{aurl 'url', 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}
+{assign $id = $c.id}
+{assign $url = $url~'#ic'~$c.id}
+<p>{blocktrans}Comment <a href="{$url}">{$i}</a> by {$submitter}, {$c.creation_dtime|date}{/blocktrans}</p>
+{/if}
+
+
+{if strlen($c.content) > 0}<pre class="issue-comment-text">{issuetext $c.content, $request}</pre>{/if}
+{assign $attachments = $c.get_attachment_list()}
+{if $attachments.count() > 0}
+<hr align="left" class="attach" />
+<ul>
+{foreach $attachments as $a}<li><a href="{url 'IDF_Views_Issue::getAttachment', array($project.shortname, $a.id, $a.filename)}" title="{trans 'download'}">{$a.filename}</a> - {$a.filesize|size}{if $a.isText()} - <a href="{url 'IDF_Views_Issue::viewAttachment', array($project.shortname, $a.id, $a.filename)}">{trans 'view'}</a>{/if}</li>{/foreach}</ul>{/if}
+{if $i> 0 and $c.changedIssue()}
+<div class="issue-changes">
+{foreach $c.changes as $w => $v}
+<strong>{if $w == 'su'}{trans 'Summary:'}{/if}{if $w == 'st'}{trans 'Status:'}{/if}{if $w == 'ow'}{trans 'Owner:'}{/if}{if $w == 'lb'}{trans 'Labels:'}{/if}{if $w == 'rel'}{trans 'Relations:'}{/if}</strong>
+{if $w == 'lb' or $w == 'rel'}
+  {foreach $v as $t => $ls}
+    {foreach $ls as $l}
+      {if $t == 'rem'}<s>{/if}{$l}{if $t == 'rem'}</s>{/if}
+    {/foreach}
+  {/foreach}
+{else}
+  {$v}
+{/if}<br />
+{/foreach}
+</div>
+{/if}
+</div>{assign $i = $i + 1}{if $i == $nc and false == $form}
+<div class="issue-comment-signin">
+{aurl 'url', 'IDF_Views::login'}{blocktrans}<a href="{$url}">Sign in</a> to reply to this comment.{/blocktrans}
+</div>
+{/if}
+{/foreach}
+
+{if $form}
+<hr />
+
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to change the issue.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+
+{if $closed and (!$isOwner and !$isMember)}
+<p><img src="{media '/idf/img/warning.png'}" style="vertical-align: text-bottom;" alt=" " /> {blocktrans}This issue is marked as closed, add a comment only if you think this issue is still valid and more work is needed to fully fix it.{/blocktrans}</p>
+{/if}
+
+{if $preview}
+<h2 id="preview">{trans 'Preview'}</h2>
+<div class="issue-comment issue-comment-first issue-comment-last">
+<br /><pre class="issue-comment-text">{issuetext $preview, $request}</pre>
+</div>
+<hr />
+{/if}
+
+<form method="post" enctype="multipart/form-data" action="{url 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}" >
+<table class="form" summary="">
+<tr>
+<th><strong>{$form.f.content.labelTag}:</strong></th>
+<td>{if $form.f.content.errors}{$form.f.content.fieldErrors}{/if}
+{$form.f.content|unsafe}
+</td>
+</tr>
+<tr id="form-attachment-1">
+<th>{$form.f.attachment1.labelTag}:</th>
+<td>{if $form.f.attachment1.errors}{$form.f.attachment1.fieldErrors}{/if}
+{$form.f.attachment1|unsafe}
+</td>
+</tr>
+<tr id="form-attachment-2">
+<th>{$form.f.attachment2.labelTag}:</th>
+<td>{if $form.f.attachment2.errors}{$form.f.attachment2.fieldErrors}{/if}
+{$form.f.attachment2|unsafe}
+</td>
+</tr>
+<tr id="form-attachment-3">
+<th>{$form.f.attachment3.labelTag}:</th>
+<td>{if $form.f.attachment3.errors}{$form.f.attachment3.fieldErrors}{/if}
+{$form.f.attachment3|unsafe}
+</td>
+</tr>{if $isOwner or $isMember}
+<tr>
+<th><strong>{$form.f.summary.labelTag}:</strong></th>
+<td>{if $form.f.summary.errors}{$form.f.summary.fieldErrors}{/if}
+{$form.f.summary|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.status.labelTag}:</strong></th>
+<td>{if $form.f.status.errors}{$form.f.status.fieldErrors}{/if}
+{$form.f.status|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.owner.labelTag}:</th>
+<td>{if $form.f.owner.errors}{$form.f.owner.fieldErrors}{/if}
+{$form.f.owner|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.relation_type0.labelTag}:</th>
+<td>
+{assign $prevField}
+{foreach $form as $field}
+   {if strpos($field.name, 'relation_type') === 0}
+        {$field|unsafe}
+        {assign $prevField = $field}
+   {/if}
+   {if strpos($field.name, 'relation_issue') === 0}
+        {$field|unsafe}<br />
+        {if $prevField.errors}{$prevField.fieldErrors}{/if}
+        {if $field.errors}{$field.fieldErrors}{/if}
+   {/if}
+{/foreach}
+</td>
+</tr>
+<tr>
+<th>{$form.f.label1.labelTag}:</th>
+<td>
+{if $form.f.label1.errors}{$form.f.label1.fieldErrors}{/if}{$form.f.label1|unsafe}
+{if $form.f.label2.errors}{$form.f.label2.fieldErrors}{/if}{$form.f.label2|unsafe}
+{if $form.f.label3.errors}{$form.f.label3.fieldErrors}{/if}{$form.f.label3|unsafe}<br />
+{if $form.f.label4.errors}{$form.f.label4.fieldErrors}{/if}{$form.f.label4|unsafe}
+{if $form.f.label5.errors}{$form.f.label5.fieldErrors}{/if}{$form.f.label5|unsafe}
+{if $form.f.label6.errors}{$form.f.label6.fieldErrors}{/if}{$form.f.label6|unsafe}
+</td>
+</tr>{/if}
+<tr>
+<td>&nbsp;</td>
+<td>
+<input type="submit" value="{trans 'Submit Changes'}" name="submit" />
+<input type="submit" value="{trans 'Preview'}" name="preview" /> |
+<a href="{url 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}">{trans 'Cancel'}</a>
+</td>
+</tr>
+</table>
+</form>
+{/if}
+{/block}
+{block context}
+<div class="issue-info">
+{ashowuser 'submitter', $issue.get_submitter(), $request}
+<p><strong>{trans 'Created:'}</strong> <span class="nobrk">{$issue.creation_dtime|dateago}</span> <span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>
+{if $issue.modif_dtime != $issue.creation_dtime}<p>
+<strong>{trans 'Updated:'}</strong> <span class="nobrk">{$issue.modif_dtime|dateago}</span></p>{/if}
+<p>
+<strong>{trans 'Status:'}</strong> {$issue.get_status.name}</p>
+{if $issue.get_owner != null}<p>
+<strong>{trans 'Owner:'}</strong> {showuser $issue.get_owner(), $request}
+</p>{/if}
+{if $interested > 0}<p><strong>{trans 'Followed by:'}</strong> {blocktrans $interested}{$interested} person{plural}{$interested} persons{/blocktrans}</p>{/if}
+{assign $tags = $issue.get_tags_list()}{if $tags.count()}
+<p>
+<strong>{trans 'Labels:'}</strong><br />
+{foreach $tags as $tag}{aurl 'url', 'IDF_Views_Issue::listLabel', array($project.shortname, $tag.id, 'open')}
+<span class="label"><a href="{$url}" class="label"><strong>{$tag.class}:</strong>{$tag.name}</a></span><br />
+{/foreach}
+</p>{/if}
+{if count($related_issues) > 0}
+{foreach $related_issues as $verb => $rel_issues}
+<p>
+{assign $verb = __($verb)}
+<strong>{blocktrans}This issue {$verb}{/blocktrans}</strong><br />
+  {foreach $rel_issues as $rel_issue}
+     <span class="label">
+        <a href="{url 'IDF_Views_Issue::view', array($project.shortname, $rel_issue.other_issue)}"
+           class="label" title="{$rel_issue.other_summary}">
+           <strong>{$rel_issue.other_issue}</strong> - {$rel_issue.other_summary|shorten:30}
+        </a>
+     </span><br />
+  {/foreach}
+</p>
+{/foreach}
+{/if}
+</div>
+{/block}
+{block javascript}{if $form}{include 'idf/issues/js-autocomplete.html'}
+<script type="text/javascript">
+{literal}
+$(document).ready(function(){
+
+    // Hide the upload forms, we insert before the first attach file
+    // row an "Attach File" little link.
+    // We hide all the rows.
+    $("#form-attachment-1").before("{/literal}<tr id=\"form-block-0\"><td>&nbsp;</td><td><img style=\"vertical-align: text-bottom;\" src=\"{media '/idf/img/attachment.png'}\" alt=\" \" align=\"bottom\" /><a id=\"form-show-0\" href=\"#\">{trans 'Attach file'}{literal}</a></td></tr>");
+    $("#form-show-0").click(function(){
+        $("#form-attachment-1").show();
+        $("#form-block-0").hide();
+        return false;
+    });
+    $("#form-attachment-1 td").append("<span id=\"form-block-1\"><a id=\"form-show-1\" href=\"#\">{/literal}{trans 'Attach another file'}{literal}</a></span>");
+    $("#form-show-1").click(function(){
+            $("#form-attachment-2").show();
+            $("#form-block-1").hide();
+            return false;
+        });
+    $("#form-attachment-2 td").append("<span id=\"form-block-2\"><a id=\"form-show-2\" href=\"#\">{/literal}{trans 'Attach another file'}{literal}</a></span>");
+    $("#form-show-2").click(function(){
+            $("#form-attachment-3").show();
+            $("#form-block-2").hide();
+            return false;
+        });
+    var j=0;
+    for (j=1;j<4;j=j+1) {
+        $("#form-attachment-"+j).hide();
+    }
+    });{/literal}
+</script>
+{/if}{/block}

@@ -1,0 +1,22 @@
+{extends "idf/base.html"}
+{block tabissues} class="active"{/block}
+{block subtabs}
+<div id="sub-tabs">
+  <a {if $inSummaryIssues}class="active" {/if}href="{url 'IDF_Views_Issue::summary', array($project.shortname)}">{trans 'Summary'}</a>
+| <a {if $inAllIssues}class="active" {/if}href="{url 'IDF_Views_Issue::index', array($project.shortname)}">{trans 'All Issues'}</a>
+{if !$user.isAnonymous()}
+| <a {if $inMyIssues}class="active" {/if}href="{url 'IDF_Views_Issue::userIssues', array($project.shortname, $user.login, 'submit')}">{trans 'My Issues'}</a>
+| <a {if $inWatchList}class="active" {/if}href="{url 'IDF_Views_Issue::watchList', array($project.shortname, 'open')}">{trans 'My watch list'}</a>
+| <a {if $inCreate}class="active" {/if}href="{url 'IDF_Views_Issue::create', array($project.shortname)}">{trans 'New Issue'}</a>
+{/if}
+| <form class="star" action="{url 'IDF_Views_Issue::search', array($project.shortname)}" method="get">
+<input accesskey="4" type="text" value="{$query}" name="q" size="20" />
+<input type="submit" name="s" value="{trans 'Search'}" />
+</form>
+{if $inIssue} |
+{aurl 'url', 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}
+<a href="{$url}">{trans 'Back to the issue'}</a>
+{/if}
+{superblock}
+</div>
+{/block}

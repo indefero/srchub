@@ -1,0 +1,30 @@
+{extends "idf/source/base.html"}
+{block docclass}yui-t2{assign $inError=true}{/block}
+{block body}
+
+<p>{blocktrans}The revision <b>{$commit}</b> is not valid or does not exist
+in this repository.{/blocktrans}</p>
+
+{if count($branches) > 0}
+<p>{blocktrans}The following list shows all available branches:{/blocktrans}</p>
+<ul>
+{foreach $branches as $branch => $path}
+{if $path}{aurl 'url', 'IDF_Views_Source::tree', array($project.shortname, 'HEAD', $path)}
+{else}{aurl 'url', 'IDF_Views_Source::treeBase', array($project.shortname, 'HEAD')}{/if}
+<li class="label">
+  <a href="{$url}" class="label">{$branch}</a>
+</li>
+{/foreach}
+</ul>
+{/if}
+
+{if $isOwner or $isMember}
+{aurl 'url', 'IDF_Views_Source::help', array($project.shortname)}
+<p>{blocktrans}If this is a new repository, the reason for this error
+could be that you have not committed and / or pushed any change so far.
+In this case please take a look at the <a href="{$url}">Help</a> page
+how to access your repository.{/blocktrans}</p>
+{/if}
+
+{/block}
+

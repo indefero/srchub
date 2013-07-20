@@ -1,0 +1,34 @@
+{extends "idf/source/base.html"}
+{block docclass}yui-t2{assign $inHelp=true}{/block}
+{block body}
+
+<p>{blocktrans}The team behind {$project} is using
+the <strong>monotone</strong> software to manage the source
+code.{/blocktrans}</p>
+
+<h3>{trans 'Command-Line Access'}</h3>
+
+<p><kbd>mtn clone {$project.getSourceAccessUrl()}</kbd></p>
+
+{if $isOwner or $isMember}
+<h3>{trans 'First Commit'}</h3>
+
+<p>{blocktrans}To make a first commit in the repository, perform the following steps:{/blocktrans}</p>
+
+<pre>
+mtn setup -b {$project.getConf().getVal('mtn_master_branch', 'your-branch')} .
+mtn add -R .
+mtn commit -m "initial import"
+mtn push {$project.getSourceAccessUrl()}
+</pre>
+
+{/if}
+
+{/block}
+{block context}
+<div class="issue-submit-info">
+<p>{blocktrans}Find here more details on how to access {$project} source code.{/blocktrans}</p>
+</div>
+{/block}
+
+

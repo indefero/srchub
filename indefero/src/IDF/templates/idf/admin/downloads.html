@@ -1,0 +1,68 @@
+{extends "idf/admin/base.html"}
+{block docclass}yui-t3{assign $inDownloads = true}{/block}
+{block body}
+<form method="post" action=".">
+<table class="form" summary="">
+<tr>
+<td colspan="2"><strong>{$form.f.labels_download_predefined.labelTag}:</strong><br />
+{if $form.f.labels_download_predefined.errors}{$form.f.labels_download_predefined.fieldErrors}{/if}
+{$form.f.labels_download_predefined|unsafe}
+</td>
+</tr>
+<tr>
+<td colspan="2">{$form.f.labels_download_one_max.labelTag}:<br />
+{if $form.f.labels_download_one_max.errors}{$form.f.labels_download_one_max.fieldErrors}{/if}
+{$form.f.labels_download_one_max|unsafe}
+</td>
+</tr>
+<tr>
+<td>{$form.f.upload_webhook_url.labelTag}:<br />
+{if $form.f.upload_webhook_url.errors}{$form.f.upload_webhook_url.fieldErrors}{/if}
+{$form.f.upload_webhook_url|unsafe}<br>
+</td>
+</tr>
+<tr>
+<td>{trans 'Web-Hook authentication key:'} {$hookkey}</td>
+</tr>
+<tr>
+<td colspan="2">
+<input type="submit" value="{trans 'Save Changes'}" name="submit" /> 
+</td>
+</tr>
+</table>
+</form>
+{/block}
+{block context}
+<div class="issue-submit-info">
+{blocktrans}
+<p><strong>Instructions:</strong></p>
+<p>List one status value per line in desired sort-order.</p>
+<p>Optionally, use an equals-sign to document the meaning of each status value.</p>
+{/blocktrans}
+</div>
+<div class="issue-submit-info">
+
+{blocktrans}<p>The webhook URL setting specifies an URL to which a HTTP <strong>PUT</strong>
+request is sent after a new download has been added or to which a HTTP <strong>POST</strong>
+request is sent after an existing download has been updated.
+If this field is empty, notifications are disabled.</p>
+
+<p>Only properly-escaped <strong>HTTP</strong> URLs are supported, for example:</p>
+
+<ul>
+<li><code>http://domain.com/upload</code></li>
+<li><code>http://domain.com/upload?my%20param</code></li>
+</ul>
+
+<p>In addition, the URL may contain the following "%" notation, which
+will be replaced with specific project values for each download:</p>
+
+<ul>
+<li><code>%p</code> - project name</li>
+<li><code>%d</code> - download id</li>
+</ul>
+
+<p>For example, updating download 123 of project 'my-project' with
+web hook URL <code>http://mydomain.com/%p/%d</code> would send a POST request to
+<code>http://mydomain.com/my-project/123</code>.</p>{/blocktrans}</div>
+{/block}

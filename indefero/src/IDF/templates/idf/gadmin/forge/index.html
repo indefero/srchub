@@ -1,0 +1,65 @@
+{extends "idf/gadmin/forge/base.html"}
+
+{block docclass}yui-t3{assign $inIndex=true}{/block}
+
+{block body}
+<form method="post" action=".">
+<table class="form" summary="">
+<colgroup>
+    <col width="20" />
+    <col width="*" />
+</colgroup>
+<tr>
+<td>{$form.f.enabled|unsafe}</td>
+<td>
+{$form.f.enabled.labelTag}
+{if $form.f.enabled.errors}{$form.f.enabled.fieldErrors}{/if}
+</td>
+</tr>
+<tr>
+<td colspan="2">
+{if $form.f.content.errors}{$form.f.content.fieldErrors}{/if}
+{$form.f.content|unsafe}
+</td>
+<tr>
+<td colspan="2">
+<input type="submit" value="{trans 'Save Changes'}" name="submit" />
+</td>
+</tr>
+</table>
+</form>
+<script type="text/javascript" charset="utf-8">
+// <!-- {literal}
+  $(document).ready(function() {
+	var handler = function() {
+	  if ($(this).is(':checked')) {
+        $('#id_content').removeAttr('readonly');
+      } else {
+        $('#id_content').attr('readonly', 'readonly');
+      }
+    };
+    $('#id_enabled').bind('click', handler);
+    handler.call($('#id_enabled'));			 
+  });
+// {/literal} --> 
+</script>
+{/block}
+
+{block context}
+{assign $eurl = 'http://michelf.com/projects/php-markdown/extra/'}
+{assign $burl = 'http://daringfireball.net/projects/markdown/syntax'}
+<div class="issue-submit-info">
+{blocktrans}
+<p><strong>Instructions:</strong></p>
+<p>You can set up a custom forge page that is used as entry page for the forge instead of the plain project listing. This page is then also accessible via the 'Home' link in main menu bar.</p>
+<p>The content of the page can use the <a href="{$burl}">Markdown syntax</a> with the <a href="{$eurl}"><em>Extra</em> extension</a>.</p>
+<p>Additionally, the following macros are available:<br />
+<ul>
+<li><code>&#x7b;projectlist, label=..., order=(name|activity), limit=...}</code> - Renders a project list that can optionally be filtered by label, ordered by 'name' or 'activity' and / or limited to a specific number of projects.</li>
+</ul>
+</p>
+{/blocktrans}
+</div>
+{/block}
+
+

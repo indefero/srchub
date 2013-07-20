@@ -1,0 +1,161 @@
+{extends "idf/admin/base.html"}
+{block docclass}yui-t3{assign $inTabs = true}{/block}
+{block body}
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to update the access rights.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+<form method="post" action=".">
+<table class="form access-rights" summary="">
+<tr>
+<th>&nbsp;</th>
+<th class="left"><strong>{trans 'Access Rights'}</strong></th>
+<th class="left"><strong>{trans 'Notifications'}</strong></th>
+</tr>
+<tr>
+<th><strong>{$form.f.downloads_access_rights.labelTag}:</strong></th>
+<td>{if $form.f.downloads_access_rights.errors}{$form.f.downloads_access_rights.fieldErrors}{/if}
+{$form.f.downloads_access_rights|unsafe}
+</td>
+<td>{if $form.f.downloads_notification_email.errors}{$form.f.downloads_notification_email.fieldErrors}{/if}
+{$form.f.downloads_notification_owners_enabled|unsafe}
+{$form.f.downloads_notification_owners_enabled.labelTag}
+{$form.f.downloads_notification_members_enabled|unsafe}
+{$form.f.downloads_notification_members_enabled.labelTag}
+{$form.f.downloads_notification_email_enabled|unsafe}
+{$form.f.downloads_notification_email_enabled.labelTag}
+{$form.f.downloads_notification_email|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.wiki_access_rights.labelTag}:</strong></th>
+<td>{if $form.f.wiki_access_rights.errors}{$form.f.wiki_access_rights.fieldErrors}{/if}
+{$form.f.wiki_access_rights|unsafe}
+</td>
+<td>{if $form.f.wiki_notification_email.errors}{$form.f.wiki_notification_email.fieldErrors}{/if}
+{$form.f.wiki_notification_owners_enabled|unsafe}
+{$form.f.wiki_notification_owners_enabled.labelTag}
+{$form.f.wiki_notification_members_enabled|unsafe}
+{$form.f.wiki_notification_members_enabled.labelTag}
+{$form.f.wiki_notification_email_enabled|unsafe}
+{$form.f.wiki_notification_email_enabled.labelTag}
+{$form.f.wiki_notification_email|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.issues_access_rights.labelTag}:</strong></th>
+<td>{if $form.f.issues_access_rights.errors}{$form.f.issues_access_rights.fieldErrors}{/if}
+{$form.f.issues_access_rights|unsafe}
+</td>
+<td>{if $form.f.issues_notification_email.errors}{$form.f.issues_notification_email.fieldErrors}{/if}
+{$form.f.issues_notification_owners_enabled|unsafe}
+{$form.f.issues_notification_owners_enabled.labelTag}
+{$form.f.issues_notification_members_enabled|unsafe}
+{$form.f.issues_notification_members_enabled.labelTag}
+{$form.f.issues_notification_email_enabled|unsafe}
+{$form.f.issues_notification_email_enabled.labelTag}
+{$form.f.issues_notification_email|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.source_access_rights.labelTag}:</strong></th>
+<td>{if $form.f.source_access_rights.errors}{$form.f.source_access_rights.fieldErrors}{/if}
+{$form.f.source_access_rights|unsafe}
+</td>
+<td>{if $form.f.source_notification_email.errors}{$form.f.source_notification_email.fieldErrors}{/if}
+{$form.f.source_notification_owners_enabled|unsafe}
+{$form.f.source_notification_owners_enabled.labelTag}
+{$form.f.source_notification_members_enabled|unsafe}
+{$form.f.source_notification_members_enabled.labelTag}
+{$form.f.source_notification_email_enabled|unsafe}
+{$form.f.source_notification_email_enabled.labelTag}
+{$form.f.source_notification_email|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.review_access_rights.labelTag}:</strong></th>
+<td>{if $form.f.review_access_rights.errors}{$form.f.review_access_rights.fieldErrors}{/if}
+{$form.f.review_access_rights|unsafe}
+</td>
+<td>{if $form.f.review_notification_email.errors}{$form.f.review_notification_email.fieldErrors}{/if}
+{$form.f.review_notification_owners_enabled|unsafe}
+{$form.f.review_notification_owners_enabled.labelTag}
+{$form.f.review_notification_members_enabled|unsafe}
+{$form.f.review_notification_members_enabled.labelTag}
+{$form.f.review_notification_email_enabled|unsafe}
+{$form.f.review_notification_email_enabled.labelTag}
+{$form.f.review_notification_email|unsafe}
+</td>
+</tr>
+<tr>
+<th>&nbsp;</th>
+<td>
+{if $form.f.private_project.errors}{$form.f.private_project.fieldErrors}{/if}
+{$form.f.private_project|unsafe}
+{$form.f.private_project.labelTag}
+</td>
+</tr>
+<tr id="authorized-users-row">
+<td>&nbsp;</td>
+<td colspan="2">{$form.f.authorized_users.labelTag}:<br />
+{if $form.f.authorized_users.errors}{$form.f.authorized_users.fieldErrors}{/if}
+{$form.f.authorized_users|unsafe}
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td colspan="2">
+<input type="submit" value="{trans 'Save Changes'}" name="submit" />
+</td>
+</tr>
+</table>
+</form>
+{/block}
+{block context}
+<div class="issue-submit-info">
+<p>{blocktrans}This section allows you to configure project tabs access rights and notifications.{/blocktrans}</p>
+<p><strong>{trans 'Access Rights'}</strong></p>
+<p>{blocktrans}Tab access controls whether a single user can navigate into a particular section of your project via the main menu or automatically generated object links.{/blocktrans}</p>  
+<p>{blocktrans}If you mark a project as private, only the project members and administrators, together with the extra authorized users you provide will have access to the project as a whole. You will still be able to define further access rights for the different tabs but the "Open to all" and "Signed in users" will default to authorized users only.{/blocktrans}</p>
+<p>{blocktrans}For the extra authorized user list, specify each person by its login. Each person must have already registered with the given login. Separate the logins with commas and/or new lines.{/blocktrans}</p>
+<p>{blocktrans}Only project members and admins have write access to the source. If you restrict the access to the source, anonymous access is not provided and the users must authenticate themselves with their password or SSH key.{/blocktrans}</p>
+<p><strong>{trans 'Notifications'}</strong></p>
+<p>{blocktrans}Here you can configure who should be notified about changes in a particular section. You can also configure additional addresses, like the one of a mailing list, that should be notified. (Keep in mind that you might have to register the sender address <strong>{$from_email}</strong> to let the mailing list actually accept notification emails.) Multiple email addresses must be separated through commas (',').{/blocktrans}</p>
+</div>
+{/block}
+
+{block javascript}{literal}
+<script type="text/javascript">
+$(document).ready(function() {
+    // if not checked, hide
+    if (!$("#id_private_project").is(":checked")) {
+        $("#authorized-users-row").hide();
+    }
+    $("#id_private_project").click(function() {
+        if ($("#id_private_project").is(":checked")) {
+            $("#authorized-users-row").show();
+        } else {
+            $("#authorized-users-row").hide();
+        }
+    });
+    
+    // if not checked, hide
+    $.each(['downloads', 'wiki', 'issues', 'source', 'review'], function(index, section) { 
+    	if (!$("#id_" + section + "_notification_email_enabled").is(":checked")) {
+            $("#id_" + section + "_notification_email").hide();
+    	}
+        $("#id_" + section + "_notification_email_enabled").click(function() {
+            if ($("#id_" + section + "_notification_email_enabled").is(":checked")) {
+                $("#id_" + section + "_notification_email").show();
+            } else {
+                $("#id_" + section + "_notification_email").hide();
+            }
+        });
+    });     
+});
+</script>
+{/literal}{/block}

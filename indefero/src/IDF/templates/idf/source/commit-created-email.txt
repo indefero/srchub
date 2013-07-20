@@ -1,0 +1,17 @@
+{trans 'Hello,'}
+
+{blocktrans}A new commit has been created:{/blocktrans}
+
+{$commit.summary|safe}
+
+{trans 'Commit:'} {$commit.scm_id|safe}
+{trans 'Project:'} {$project.name|safe}
+{trans 'Created by:'} {$commit.get_author|safe}
+{trans 'Created at:'} {$commit.creation_dtime|date:"%Y-%m-%d %H:%M:%S"}
+{if $commit.fullmessage}
+{trans 'Content:'}
+
+{$commit.fullmessage}
+{/if}
+--
+{trans 'Commit details:'} {$url_base}{url 'IDF_Views_Source::commit', array($project.shortname, $commit.scm_id)}

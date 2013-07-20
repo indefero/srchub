@@ -1,0 +1,49 @@
+{extends "idf/wiki/base.html"}
+{block extraheader}{if $oldrev}<meta name="ROBOTS" content="NOINDEX" />{/if}{/block}
+{block docclass}yui-t3{assign $inResourceView=true}{/block}
+{block body}
+
+{assign $submitter = $oldrev.get_submitter()}{aurl 'url', 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title)}
+<div class="old-rev">
+<p>{blocktrans}You are looking at an old revision (<em>{$oldrev.summary}</em>) of the resource 
+<a href="{$url}">{$resource.title}</a>. This revision was created by {$submitter}.{/blocktrans}</p>
+</div>
+<p>{blocktrans}If you delete this old revision, it will be removed from the database and <strong>you will not be able to recover it</strong>.{/blocktrans}</p>
+<form method="post" action=".">
+<table class="form" summary="">
+<tr>
+<td>&nbsp;</td>
+<td><input type="submit" value="{trans 'Delete Revision'}" name="submit" /> | <a href="{url 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title)}">{trans 'Cancel'}</a> 
+</td>
+</tr>
+</table>
+</form>
+
+<p class="desc">{$resource.summary}</p>
+
+{assign $preview = $oldrev.renderRaw()}
+{if $preview == ''}
+  {assign $preview = __('Unable to render preview for this MIME type.')}
+{/if}
+<p class="preview">{$preview|unsafe}</p>
+
+<ul>
+<li>{trans 'File size'}: {$oldrev.filesize|size}</li>
+<li>{trans 'MIME type'}: {$resource.mime_type}</li>
+<li><a href="{$oldrev.getRawURL(true)}">{trans 'Download this file'}</a></li>
+</ul>
+{/block}
+
+{/block}
+{block context}
+{assign $submitter = $resource.get_submitter()}
+<p><strong>{trans 'Created:'}</strong> <span class="nobrk">{$resource.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>
+{if $oldrev.creation_dtime != $resource.creation_dtime}<p>{assign $submitter = $oldrev.get_submitter()}
+<strong>{trans 'Updated:'}</strong> <span class="nobrk">{$oldrev.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>{/if}
+{if $revs.count() > 0}
+<p><strong>{trans 'Old Revisions'}</strong></p>
+<ul>{foreach $revs as $old}
+<li><a href="{url 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title), array('rev'=>$old.id)}">{$old.summary}</a></li>
+{/foreach}</ul>
+{/if}
+{/block}

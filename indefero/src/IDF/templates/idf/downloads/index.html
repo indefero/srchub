@@ -1,0 +1,21 @@
+{extends "idf/downloads/base.html"}
+{block docclass}yui-t1{assign $inDownloads=true}{/block}
+{block body}
+{$downloads.render}
+{if $isOwner or $isMember}
+{aurl 'url', 'IDF_Views_Download::create', array($project.shortname)}
+<p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'New Download'}</a></p>{/if}
+
+{/block}
+{block context}
+<p><strong>{trans 'Number of files:'}</strong> {$downloads.nb_items}</p>
+{assign $cloud_url = 'IDF_Views_Download::listLabel'}
+{assign $cloud = 'downloads'}
+{include 'idf/tags-cloud.html'}
+{if $deprecated > 0}
+{aurl 'url', 'IDF_Views_Download::listLabel', array($project.shortname, $dlabel.id)}
+<p class="helptext">{blocktrans}See <a href="{$url}">the deprecated files</a>.{/blocktrans}</p>
+{/if}
+
+{/block}
+

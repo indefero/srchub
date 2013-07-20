@@ -1,0 +1,11 @@
+{extends "idf/base.html"}
+{block tabdownloads} class="active"{/block}
+{block subtabs}
+<div id="sub-tabs">
+<a {if $inDownloads}class="active" {/if}href="{url 'IDF_Views_Download::index', array($project.shortname)}">{trans 'Downloads'}</a> 
+{if $isOwner or $isMember}
+| <a {if $inCreate}class="active" {/if}href="{url 'IDF_Views_Download::create', array($project.shortname)}">{trans 'New Download'}</a> 
+| <a {if $inCreateFromArchive}class="active" {/if}href="{url 'IDF_Views_Download::createFromArchive', array($project.shortname)}">{trans 'Upload Archive'}</a>
+{/if}
+</div>
+{/block}

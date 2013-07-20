@@ -1,0 +1,101 @@
+{extends "idf/base-simple.html"}
+{block docclass}yui-t3{/block}
+{block body}
+<ul>
+<li><a href="#q-keyboard">{trans 'What are the keyboard shortcuts?'}</a></li>
+<li><a href="#q-duplicate">{trans 'How to mark an issue as duplicate?'}</a></li>
+<li><a href="#q-mugshot">{trans 'How can I display my head next to my comments?'}</a></li>
+<li><a href="#q-wiki">{trans 'How can I embed images and other resources in my documentation pages?'}</a></li>
+<li><a href="#q-archive-format">{trans 'What is this "Upload Archive" functionality about?'}</a></li>
+<li><a href="#q-api">{trans 'What is the API and how is it used?'}</a></li>
+</ul>
+
+<h2 id="q-keyboard">{trans 'What are the keyboard shortcuts?'}</h2>
+
+<ul>
+<li>{trans '<kbd>Shift+h</kbd>: This help page.'}</li>
+</ul>
+
+<p>{trans 'If you are in a project, you have the following shortcuts:'}</p>
+
+<ul>
+<li>{trans '<kbd>Shift+u</kbd>: Project updates.'}</li>
+<li>{trans '<kbd>Shift+d</kbd>: Downloads.'}</li>
+<li>{trans '<kbd>Shift+o</kbd>: Documentation.'}</li>
+<li>{trans '<kbd>Shift+a</kbd>: Create a new issue.'}</li>
+<li>{trans '<kbd>Shift+i</kbd>: List of open issues.'}</li>
+<li>{trans '<kbd>Shift+m</kbd>: The issues you submitted.'}</li>
+<li>{trans '<kbd>Shift+w</kbd>: The issues assigned to you.'}</li>
+<li>{trans '<kbd>Shift+s</kbd>: Source.'}</li>
+</ul>
+
+<p>{trans 'You also have the standard access keys:'}</p>
+
+<ul>
+<li>{trans '<kbd>Alt+1</kbd>: Home.'}</li>
+<li>{trans '<kbd>Alt+2</kbd>: Skip the menus.'}</li>
+<li>{trans '<kbd>Alt+4</kbd>: Search (when available).'}</li>
+</ul>
+
+<h2 id="q-duplicate">{trans 'How to mark an issue as duplicate?'}</h2>
+
+{blocktrans}<p>This is simple:</p>
+<ol>
+<li>Write in the comments "This is a duplicate of issue 123" or - if you are a member of the crew -
+directly add the "duplicates" relation with the value "123" below the comment field. Change "123"
+with the corresponding issue number.</li>
+<li>Change the status of the current issue to <em>Duplicate</em>.</li>
+<li>Submit the changes.</li>
+</ol>{/blocktrans}
+
+<h2 id="q-mugshot">{trans 'How can I display my head next to my comments?'}</h2>
+
+<p>{blocktrans}You need to create an account on <a href="http://en.gravatar.com/">Gravatar</a>, this takes about 5 minutes and is free.{/blocktrans}</p>
+
+<h2 id="q-wiki">{trans 'How can I embed images and other resources in my documentation pages?'}</h2>
+
+{blocktrans}
+<p>To embed any previously uploaded resource into your wiki page, you can use the <code>[[!ResourceName]]</code> syntax.</p>
+
+<p>The rendering of the resource can then be further fine-tuned:
+<ul>
+<li><code>[[!ImageResource, align=right, width=200]]</code> renders "ImageResource" right-aligned and scale its width to 200</li>
+<li><code>[[!TextResource, align=center, width=300, height=300]]</code> renders "TextResource" in a centered, 300 by 300 px iframe</li>
+<li><code>[[!AnyResource, preview=no]]</code> does not render a preview of the resource, but only provides a download link (default for binary resources)</li>
+<li><code>[[!BinaryResource, title=Download]]</code> renders the download link of "BinaryResource" with an alternative title</li>
+</ul>
+</p>
+
+Resources are versioned, just like wiki pages. If you update a resource, old wiki pages still show the state of the resource
+at the time when the wiki page was edited. If you specifically want to update a resource on a page, you therefor need to update
+the resource at first and then also the page where it is referenced, otherwise the change won't be visible until the next regular edit. 
+{/blocktrans}
+
+<h2 id="q-archive-format">{trans 'What is this "Upload Archive" functionality about?'}</h2>
+
+{blocktrans}<p>If you have to publish many files at once for a new release, it is a very tedious task
+to upload them one after another and enter meta information like a summary, a description or additional
+labels for each of them.</p>
+<p>InDefero therefore supports a special archive format that is basically a standard zip file which comes with
+some meta information. These meta information are kept in a special manifest file, which is distinctly kept from
+the rest of the files in the archive that should be published.</p>
+<p>Once this archive has been uploaded, InDefero reads in the meta information, unpacks the other files from
+the archive and creates new individual downloads for each of them.</p>{/blocktrans}
+
+{aurl 'url', 'IDF_Views::faqArchiveFormat'}
+<p>{blocktrans}<a href="{$url}">Learn more about the archive format</a>.{/blocktrans}</p>
+
+<h2 id="q-api">{trans 'What is the API and how is it used?'}</h2>
+
+<p>{blocktrans}The API (Application Programming Interface) is used to interact with InDefero with another program. For example, this can be used to create a desktop program to submit new tickets easily.{/blocktrans}</p>
+{aurl 'url', 'IDF_Views::faqApi'}
+<p>{blocktrans}<a href="{$url}">Learn more about the API</a>.{/blocktrans}</p>
+
+{/block}
+{block context}
+<p>{trans 'Here we are, just to help you.'}</p>
+<h2>{trans 'Projects'}</h2>
+<ul>{foreach $projects as $p}
+<li><a href="{url 'IDF_Views_Project::home', array($p.shortname)}">{$p}</a></li>
+{/foreach}</ul>
+{/block}

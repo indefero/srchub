@@ -1,0 +1,35 @@
+{extends "idf/base-simple.html"}
+{block docclass}yui-t2{/block}
+{block body}
+<form method="post" action="{url 'IDF_Views::login'}">
+<input type="hidden" name="_redirect_after" value="{$_redirect_after}" />
+{if $error}
+<p class="px-message-error">{$error}</p>
+{/if}
+<h3>{trans 'What is your account information?'}</h3>
+<table class="form" summary="">
+<tr>
+<th class="a-r"><strong>{trans 'My login is'}</strong></th>
+<td class="a-l"><input type="text" name="login" id="id_login" value="{$login}" /></th>
+</tr>
+<tr>
+<th class="a-r"><strong>{trans 'My password is'}</strong></th>
+<td class="a-l"><input type="password" name="password" id="id_password" /></th>
+</tr>
+</table>
+
+<p><input type="submit" value="{trans 'Sign in'}" />
+| <a href="{url 'IDF_Views::passwordRecoveryAsk'}">{trans 'I lost my password!'}</a>
+</p>
+</form>
+<script type="text/javascript">
+document.getElementById('id_login').focus()
+</script>
+{/block}
+{block context}
+<div class="issue-submit-info">
+<h3>{trans 'Welcome.'}</h3>
+{aurl 'url', 'IDF_Views::register', array()}
+<p>{blocktrans}You can <a href="{$url}">create an account</a> if you don't have one yet.{/blocktrans}</a></p>
+<p>{trans 'It takes less than a minute to create your account.'}</p></div>
+{/block}

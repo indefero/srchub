@@ -1,0 +1,32 @@
+{extends "idf/gadmin/usher/base.html"}
+
+{block docclass}yui-t3{assign $inUsherControl=true}{/block}
+
+{block body}
+<p>
+{trans 'current server status:'} {$status} |
+{if $status == "SHUTDOWN"}
+   <a href="{url 'IDF_Views_Admin::usherControl', array('startup')}">{trans 'startup'}</a>
+{else}
+   <a href="{url 'IDF_Views_Admin::usherControl', array('shutdown')}">{trans 'shutdown'}</a>
+{/if}
+</p>
+
+<p>{trans 'reload server configuration:'}
+   <a href="{url 'IDF_Views_Admin::usherControl', array('reload')}">{trans 'reload'}</a>
+</p>
+{/block}
+
+{block context}
+<div class="issue-submit-info">
+<p><strong>{trans 'Status explanation'}</strong></p>
+<ul>
+<li>ACTIVE n: {trans 'active with n total open connections'}</li>
+<li>WAITING: {trans 'waiting for new connections'}</li>
+<li>SHUTTINGDOWN: {trans 'usher is being shut down, not accepting connections'}</li>
+<li>SHUTDOWN: {trans 'usher is shut down, all local servers are stopped and not accepting connections'}</li>
+</ul>
+
+</div>
+{/block}
+

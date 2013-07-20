@@ -1,0 +1,46 @@
+{extends "idf/wiki/base.html"}
+{block docclass}yui-t2{/block}
+{block body}
+
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to update the page.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+
+<form method="post" enctype="multipart/form-data" action="." >
+<table class="form" summary="">
+<tr>
+<th><strong>{$form.f.summary.labelTag}:</strong></th>
+<td>{if $form.f.summary.errors}{$form.f.summary.fieldErrors}{/if}
+{$form.f.summary|unsafe}<br />
+<span class="helptext">{$form.f.summary.help_text}</span>
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.file.labelTag}:</strong></th>
+<td>{if $form.f.file.errors}{$form.f.file.fieldErrors}{/if}
+{$form.f.file|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.comment.labelTag}:</strong></th>
+<td>{if $form.f.comment.errors}{$form.f.comment.fieldErrors}{/if}
+{$form.f.comment|unsafe}<br />
+<span class="helptext">{$form.f.comment.help_text}</span>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>{* float left is a fix for Firefox < 3.5 *}
+<span style="float: left;"> <input type="submit" value="{trans 'Update Resource'}" name="submit" /> | <a href="{url 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title)}">{trans 'Cancel'}</a></span>{if $isOwner or $isAdmin or $isMember}
+{aurl 'url', 'IDF_Views_Wiki::deleteResource', array($project.shortname, $resource.id)}
+<span class="dellink"><a href="{$url}" title="{trans 'Delete this resource'}"><img src="{media '/idf/img/trash.png'}" style="vertical-align: text-bottom;" alt="{trans 'Trash'}" /></a> <a href="{$url}" title="{trans 'Delete this resource'}">{trans 'Delete this resource'}</a></span>{/if}
+</td>
+</tr>
+</table>
+</form>
+{/block}

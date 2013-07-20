@@ -1,0 +1,12 @@
+{extends "idf/base.html"}
+{block tabsource} class="active"{/block}
+{block subtabs}
+{if !$inHelp and !$inError and (in_array($commit, $tree_in) or (in_array($commit, $tags_in)))}{assign $currentCommit =  $commit}{else}{assign $currentCommit = $project.getScmRoot()}{/if}
+<div id="sub-tabs">
+<a {if $inSourceTree}class="active" {/if}href="{url 'IDF_Views_Source::treeBase', array($project.shortname, $currentCommit)}">{trans 'Source Tree'}</a> |
+<a {if $inChangeLog}class="active" {/if}href="{url 'IDF_Views_Source::changeLog', array($project.shortname, $currentCommit)}">{trans 'Change Log'}</a>
+{if $inCommit}| {trans 'Commit'}{/if} |
+<a {if $inHelp}class="active" {/if}href="{url 'IDF_Views_Source::help', array($project.shortname)}">{trans 'How To Get The Code'}</a>
+</div>
+{/block}
+{block title}{$title}{/block}

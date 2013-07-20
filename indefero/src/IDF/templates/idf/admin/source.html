@@ -1,0 +1,92 @@
+{extends "idf/admin/base.html"}
+{block docclass}yui-t3{assign $inSource = true}{/block}
+{block body}
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to update the source configuration.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+<form method="post" action=".">
+<table class="form" summary="">
+<tr>
+<th>{trans 'Repository type:'}</th>
+<td>{$repository_type}
+</td>
+</tr>
+<tr>
+<th>{trans 'Repository access:'}</th>
+<td>{$repository_access}
+</td>
+</tr>{if $repository_size != -1}
+<tr>
+<th>{trans 'Repository size:'}</th>
+<td>{$repository_size|size}
+</td>
+</tr>{/if}{if $remote_svn}
+<tr>
+<th>{$form.f.svn_username.labelTag}:</th>
+<td>{if $form.f.svn_username.errors}{$form.f.svn_username.fieldErrors}{/if}
+{$form.f.svn_username|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.svn_password.labelTag}:</th>
+<td>{if $form.f.svn_password.errors}{$form.f.svn_password.fieldErrors}{/if}
+{$form.f.svn_password|unsafe}
+</td>
+</tr>{/if}
+<tr>
+<th>{$form.f.webhook_url.labelTag}:</th>
+<td>{if $form.f.webhook_url.errors}{$form.f.webhook_url.fieldErrors}{/if}
+{$form.f.webhook_url|unsafe}<br />
+</td>
+</tr>
+<tr>
+<th>{trans 'Web-Hook authentication key:'}</th>
+<td>{$hookkey}
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+<input type="submit" value="{trans 'Save Changes'}" name="submit" /> 
+</td>
+</tr>
+</table>
+</form>
+{/block}
+{block context}
+<div class="issue-submit-info">
+<p>{blocktrans}You can find here the current repository configuration of your project.{/blocktrans}</p>
+</div>
+
+
+<br>
+<div class="issue-submit-info">
+
+{blocktrans}<p>The webhook URL setting specifies an URL to which a HTTP 
+<strong>{$hook_request_method}</strong> request is sent after each repository
+commit. If this field is empty, notifications are disabled.</p>
+
+<p>Only properly-escaped <strong>HTTP</strong> URLs are supported, for example:</p>
+
+<ul>
+<li><code>http://domain.com/commit</code></li>
+<li><code>http://domain.com/commit?my%20param</code></li>
+</ul>
+
+<p>In addition, the URL may contain the following "%" notation, which
+will be replaced with specific project values for each commit:</p>
+
+<ul>
+<li><code>%p</code> - project name</li>
+<li><code>%r</code> - revision number</li>
+</ul>
+
+<p>For example, committing revision 123 to project 'my-project' with
+post-commit URL <code>http://mydomain.com/%p/%r</code> would send a request to
+<code>http://mydomain.com/my-project/123</code>.</p>{/blocktrans}</div>
+{/block}

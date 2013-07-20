@@ -1,0 +1,29 @@
+{extends "idf/base.html"}
+{block extraheader}<link rel="alternate" type="application/atom+xml" title="{trans 'Latest updates'}" href="{$feedurl}"/>{/block}
+{block docclass}yui-t2{/block}
+{block tabhome} class="active"{/block}
+{block subtabs}
+<div id="sub-tabs">
+<a href="{url 'IDF_Views_Project::home', array($project.shortname)}">{trans 'Welcome'}</a> | <strong><a href="{url 'IDF_Views_Project::timeline', array($project.shortname, 'all')}" class="active">{trans 'Latest Updates'}</a></strong>{superblock}
+</div>
+{/block}
+
+{block body}
+{$timeline.render}
+{/block}
+
+{block context}
+<p><span class="label{if 'all' == $model_filter} active{/if}"><a href="{url 'IDF_Views_Project::timeline', array($project.shortname, 'all')}">{trans 'All Updates'}</a></span></p>
+<p><strong>{trans 'Filter by type'}</strong><br />
+{foreach $accessible_model_filters as $filter_key => $filter_name}
+{if $filter_key != 'all'}
+<span class="label{if $filter_key == $model_filter} active{/if}"><a href="{url 'IDF_Views_Project::timeline', array($project.shortname, $filter_key)}">{$filter_name}</a></span><br />
+{/if}
+{/foreach}
+</p>
+<p><strong>{trans 'Subscribe to this timeline'}</strong><br />
+<span class="label"><img src="{media '/idf/img/rss.png'}" alt="{trans 'RSS'}" /> <a href="{$feedurl}">{trans 'Atom feed'}</a></span>
+</p>
+{/block}
+
+

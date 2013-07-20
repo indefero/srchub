@@ -1,0 +1,96 @@
+{if $isOwner or $isMember}
+<script type="text/javascript" src="{media '/idf/js/jquery.bgiframe.min.js'}"></script>
+<script type="text/javascript" src="{media '/idf/js/jquery.autocomplete.min.js'}"></script>
+<script type="text/javascript" charset="utf-8">
+// <!-- {literal}
+  $(document).ready(function(){
+    var auto_labels = [{/literal}{$auto_labels|safe}{literal}];
+    var auto_status = [{/literal}{$auto_status|safe}{literal}];
+    var auto_owner = [{/literal}{$auto_owner|safe}{literal}];
+    var auto_relation_types = [{/literal}{$auto_relation_types|safe}{literal}];
+
+    var j=0;
+    for (j=1;j<7;j=j+1) {
+  $("#id_label"+j).autocomplete(auto_labels, {
+        minChars: 0,
+        width: 310,
+        matchContains: true,
+        max: 50,
+        highlightItem: false,
+        formatItem: function(row, i, max, term) {
+            return row.to.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "  <span style='font-size: 80%;'>" + row.name + "</span>";
+        },
+        formatResult: function(row) {
+            return row.to;
+        }
+    });
+}
+  $("#id_status").autocomplete(auto_status, {
+        minChars: 0,
+        width: 310,
+        matchContains: true,
+        max: 50,
+        highlightItem: false,
+        formatItem: function(row, i, max, term) {
+            return row.to.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "  <span style='font-size: 80%;'>" + row.name + "</span>";
+        },
+        formatResult: function(row) {
+            return row.to;
+        }
+    });
+  $("#id_owner").autocomplete(auto_owner, {
+        minChars: 0,
+        width: 310,
+        matchContains: true,
+        max: 50,
+        highlightItem: false,
+        formatItem: function(row, i, max, term) {
+            return row.to.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "  <span style='font-size: 80%;'>" + row.name + "</span>";
+        },
+        formatResult: function(row) {
+            return row.to;
+        }
+    });
+  for (var idx = 0; ; ++idx) {
+      if ($("#id_relation_type" + idx).length == 0)
+          break;
+
+      $("#id_relation_type" + idx).autocomplete(auto_relation_types, {
+            minChars: 0,
+            width: 310,
+            matchContains: true,
+            max: 50,
+            highlightItem: false,
+            formatItem: function(row, i, max, term) {
+                return row.to.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "  <span style='font-size: 80%;'>" + row.name + "</span>";
+            },
+            formatResult: function(row) {
+                return row.to;
+            }
+        });
+{/literal}
+    {if $issue}
+{literal}
+      $("#id_relation_issue" + idx).autocomplete("{/literal}{url 'IDF_Views_Issue::autoCompleteIssueList', array($project.shortname, $issue.id)}{literal}", {
+            minChars: 0,
+            width: 310,
+            matchContains: true,
+            max: 10,
+            multiple: true,
+            delay: 500,
+            highlightItem: false,
+            formatItem: function(row, i, max, term) {
+                return row[1].replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "  <span style='font-size: 80%;'>" + row[0] + "</span>";
+            },
+            formatResult: function(row) {
+                return row[1];
+            }
+        });
+{/literal}
+    {/if}
+{literal}
+    }
+  });
+{/literal} //-->
+</script>
+{/if}

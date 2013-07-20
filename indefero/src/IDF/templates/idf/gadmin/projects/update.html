@@ -1,0 +1,101 @@
+{extends "idf/gadmin/projects/base.html"}
+{block body}
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to update the project.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+<form method="post" action=".">
+<table class="form" summary="">
+<tr>
+<th><strong>{$form.f.name.labelTag}:</strong></th>
+<td>
+{if $form.f.name.errors}{$form.f.name.fieldErrors}{/if}
+{$form.f.name|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.shortdesc.labelTag}:</strong></th>
+<td>
+{if $form.f.shortdesc.errors}{$form.f.shortdesc.fieldErrors}{/if}
+{$form.f.shortdesc|unsafe}<br />
+<span class="helptext">{$form.f.shortdesc.help_text}</span>
+</td>
+</tr>
+<tr>
+<th>{$form.f.external_project_url.labelTag}:</th>
+<td>{if $form.f.external_project_url.errors}{$form.f.external_project_url.fieldErrors}{/if}
+{$form.f.external_project_url|unsafe}
+</td>
+</tr>
+{if $project.getConf().getVal('scm') == 'mtn'}
+<tr class="mtn-form">
+<th><strong>{$form.f.mtn_master_branch.labelTag}:</strong></th>
+<td>{if $form.f.mtn_master_branch.errors}{$form.f.mtn_master_branch.fieldErrors}{/if}
+{$form.f.mtn_master_branch|unsafe}<br />
+<span class="helptext">{$form.f.mtn_master_branch.help_text}</span>
+</td>
+</tr>
+{/if}
+<tr>
+<th>{$form.f.label1.labelTag}:</th>
+<td>
+{if $form.f.label1.errors}{$form.f.label1.fieldErrors}{/if}{$form.f.label1|unsafe}
+{if $form.f.label2.errors}{$form.f.label2.fieldErrors}{/if}{$form.f.label2|unsafe}<br />
+{if $form.f.label3.errors}{$form.f.label3.fieldErrors}{/if}{$form.f.label3|unsafe}
+{if $form.f.label4.errors}{$form.f.label4.fieldErrors}{/if}{$form.f.label4|unsafe}<br />
+{if $form.f.label5.errors}{$form.f.label5.fieldErrors}{/if}{$form.f.label5|unsafe}
+{if $form.f.label6.errors}{$form.f.label6.fieldErrors}{/if}{$form.f.label6|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.owners.labelTag}:</strong></th>
+<td>
+{if $form.f.owners.errors}{$form.f.owners.fieldErrors}{/if}
+{$form.f.owners|unsafe}<br />
+<span class="helptext">{trans 'Provide at least one owner for the project.'}</span>
+</td>
+</tr>
+<tr>
+<th>{$form.f.members.labelTag}:</th>
+<td>
+{if $form.f.members.errors}{$form.f.members.fieldErrors}{/if}
+{$form.f.members|unsafe}
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td> {aurl 'url', 'IDF_Views_Admin::projectDelete', array($project.id)}
+{* float left is a fix for Firefox < 3.5 *}
+<span style="float: left;"><input type="submit" value="{trans 'Update Project'}" name="submit" />
+| <a href="{url 'IDF_Views_Admin::projects'}">{trans 'Cancel'}</a></span> {if $isAdmin}
+ <span class="dellink"><a href="{$url}" title="{trans 'Delete this project'}"><img src="{media '/idf/img/trash.png'}" style="vertical-align: text-bottom;" alt="{trans 'Trash'}" /></a> <a href="{$url}" title="{trans 'Delete this project'}">{trans 'Delete this project'}</a><br /><span class="note helptext">{trans 'You will be asked to confirm.'}</span></span>{/if}
+</td>
+</tr>
+</table>
+</form>
+{include 'idf/project/js-autocomplete.html'}{/block}
+{/block}
+
+{block context}
+<div class="issue-submit-info">
+{blocktrans}
+<p><strong>Instructions:</strong></p>
+<p>Specify each person by its login. Each person must have already registered with the given login.</p>
+<p>Separate the logins with commas and/or new lines.</p>
+{/blocktrans}
+</div>
+<div class="issue-submit-info">
+{blocktrans}
+<p><strong>Notes:</strong></p>
+<p>A project owner may make any change to this project, including removing other project owners. You need to be carefull when you give owner rights.</p>
+<p>A project member will not have access to the administration area but will have more options available in the use of the project.</p>
+{/blocktrans}
+</div>
+{/block}
+
+
+

@@ -1,0 +1,96 @@
+{extends "idf/admin/base.html"}
+{block docclass}yui-t1{assign $inSummary = true}{/block}
+{block body}
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'The form contains some errors. Please correct them to update the summary.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+<form method="post" enctype="multipart/form-data" action=".">
+<table class="form" summary="">
+<tr>
+<th><strong>{$form.f.name.labelTag}:</strong></th>
+<td>{if $form.f.name.errors}{$form.f.name.fieldErrors}{/if}
+{$form.f.name|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.shortdesc.labelTag}:</strong></th>
+<td>{if $form.f.shortdesc.errors}{$form.f.shortdesc.fieldErrors}{/if}
+{$form.f.shortdesc|unsafe}<br />
+<span class="helptext">{$form.f.shortdesc.help_text}</span>
+</td>
+</tr>
+<tr>
+<th>{$form.f.external_project_url.labelTag}:</th>
+<td>{if $form.f.external_project_url.errors}{$form.f.external_project_url.fieldErrors}{/if}
+{$form.f.external_project_url|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.description.labelTag}:</strong></th>
+<td>{if $form.f.description.errors}{$form.f.description.fieldErrors}{/if}
+{$form.f.description|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.label1.labelTag}:</th>
+<td>
+{if $form.f.label1.errors}{$form.f.label1.fieldErrors}{/if}{$form.f.label1|unsafe}
+{if $form.f.label2.errors}{$form.f.label2.fieldErrors}{/if}{$form.f.label2|unsafe}
+{if $form.f.label3.errors}{$form.f.label3.fieldErrors}{/if}{$form.f.label3|unsafe}<br />
+{if $form.f.label4.errors}{$form.f.label4.fieldErrors}{/if}{$form.f.label4|unsafe}
+{if $form.f.label5.errors}{$form.f.label5.fieldErrors}{/if}{$form.f.label5|unsafe}
+{if $form.f.label6.errors}{$form.f.label6.fieldErrors}{/if}{$form.f.label6|unsafe}
+</td>
+</tr>
+<tr>
+<th>{trans 'Current logo'}:</th>
+<td>
+{if $logo}
+<img src="{url 'IDF_Views_Project::logo', array($project.shortname)}" alt="{trans 'Project logo'}" />
+{else}
+{trans 'Your project does not have a logo configured yet.'}
+{/if}
+</td>
+</tr>
+<tr>
+<th>{$form.f.logo.labelTag}:</th>
+<td>{if $form.f.logo.errors}{$form.f.logo.fieldErrors}{/if}
+{$form.f.logo|unsafe}
+</td>
+</tr>
+{if $logo}
+<tr>
+<th>{$form.f.logo_remove.labelTag}:</th>
+<td>{if $form.f.logo_remove.errors}{$form.f.logo_remove.fieldErrors}{/if}
+{$form.f.logo_remove|unsafe}
+</td>
+</tr>
+{/if}
+<tr>
+<th>{$form.f.enableads.labelTag}:</th>
+<td>{if $form.f.enableads.errors}{$form.f.enableads.fieldErrors}{/if}
+{$form.f.enableads|unsafe}
+</td>
+<tr><td>&nbsp;</td>
+<td>
+<input type="submit" name="submit" value="{trans 'Save Changes'}" />
+</td>
+</table>
+</form>
+{include 'idf/project/js-autocomplete.html'}{/block}
+{/block}
+
+{block context}
+<div class="issue-submit-info">
+{assign $url = 'http://daringfireball.net/projects/markdown/syntax'}
+{blocktrans}
+<p><strong>Instructions:</strong></p>
+<p>The description of the project can be improved using the <a href="{$url}">Markdown syntax</a>.</p>
+{/blocktrans}
+</div>
+{/block}

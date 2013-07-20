@@ -1,0 +1,12 @@
+{extends "idf/wiki/base.html"}
+{block docclass}yui-t1{assign $inResourceList=true}{/block}
+{block body}
+{$resources.render}
+{aurl 'url', 'IDF_Views_Wiki::createResource', array($project.shortname)}
+<p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'New Resource'}</a></p>
+
+{/block}
+{block context}
+<p><strong>{trans 'Number of resources:'}</strong> {$resources.nb_items}</p>
+{/block}
+

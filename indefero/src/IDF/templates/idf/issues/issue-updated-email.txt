@@ -1,0 +1,29 @@
+{trans 'Hello,'}
+
+{if $owns_issue}{blocktrans}The following issue you are owning has been updated:{/blocktrans}{else}{blocktrans}The following issue has been updated:{/blocktrans}{/if}
+
+{$issue.id} - {$issue.summary|safe}
+{trans 'Project:'} {$project.name|safe}
+{trans 'Status:'} {$issue.get_status.name}
+{trans 'Reported by:'} {$issue.get_submitter|safe}
+{trans 'URL:'} {$url_base}{url 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}
+{assign $tags = $issue.get_tags_list()}{if $tags.count()}{trans 'Labels:'}
+{foreach $tags as $tag} {$tag.class|safe}:{$tag.name|safe}
+{/foreach}
+{/if}{trans 'Comments (last first):'}
+
+{foreach $comments as $c}{assign $who = $c.get_submitter()}# {blocktrans}By {$who|safe}, {$c.creation_dtime|date}:{/blocktrans}
+
+{if strlen($c.content) > 0}{$c.content|safe}{/if}{if $c.changedIssue()}
+{foreach $c.changes as $w => $v}
+ {if $w == 'su'}{trans 'Summary:'}{/if}{if $w == 'st'}{trans 'Status:'}{/if}{if $w == 'ow'}{trans 'Owner:'}{/if}{if $w == 'lb'}{trans 'Labels:'}{/if}{if $w == 'rel'}{trans 'Relations:'}{/if} {if $w == 'lb' or $w == 'rel'}{foreach $v as $t => $ls}{foreach $ls as $l}{if $t == 'rem'}-{/if}{$l} {/foreach}{/foreach}{else}{$v}{/if}{/foreach}{/if}{assign $attachments = $c.get_attachment_list()}{if $attachments.count() > 0}
+
+{trans 'Attachments:'}{foreach $attachments as $a}
+- {$a.filename|safe} - {$a.filesize|ssize}
+  {$url_base}{url 'IDF_Views_Issue::viewAttachment', array($project.shortname, $a.id, $a.filename)}{/foreach}
+{/if}
+
+{/foreach}
+
+--
+{trans 'Issue:'} {$url_base}{url 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}

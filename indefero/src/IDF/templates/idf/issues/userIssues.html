@@ -1,0 +1,20 @@
+{extends "idf/issues/base.html"}
+{block docclass}yui-t2{if $user.login == $login}{assign $inMyIssues = true}{/if}{/block}
+{block body}
+{$issues.render}
+{if !$user.isAnonymous()}
+{aurl 'url', 'IDF_Views_Issue::create', array($project.shortname)}
+<p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'New Issue'}</a></p>{/if}
+
+{/block}
+{block context}
+{aurl 'owner_url', 'IDF_Views_Issue::userIssues', array($project.shortname, $login, 'owner')}
+{aurl 'submit_url', 'IDF_Views_Issue::userIssues', array($project.shortname, $login, 'submit')}
+{aurl 'owner_closed_url', 'IDF_Views_Issue::userIssues', array($project.shortname, $login, 'ownerclosed')}
+{aurl 'submit_closed_url', 'IDF_Views_Issue::userIssues', array($project.shortname, $login, 'submitclosed')}
+<p><strong>{trans 'Submitted issues:'}</strong> <a href="{$submit_url}">{$nb_submit}</a> 
+{if $nb_submit_closed}<br /><span class="helptext">{blocktrans $nb_submit_closed}See the <a href="{$submit_closed_url}">{$nb_submit_closed} closed</a>.{plural}See the <a href="{$submit_closed_url}">{$nb_submit_closed} closed</a>.{/blocktrans}</span>{/if}</p>
+{if $nb_owner > 0}
+<p><strong>{trans 'Working issues:'}</strong> <a href="{$owner_url}">{$nb_owner}</a>
+ {if $nb_owner_closed}<br /><span class="helptext">{blocktrans $nb_owner_closed}See the <a href="{$owner_closed_url}">{$nb_owner_closed} closed</a>.{plural}See the <a href="{$owner_closed_url}">{$nb_owner_closed} closed</a>.{/blocktrans}</span>{/if}</p>{/if}
+{/block}

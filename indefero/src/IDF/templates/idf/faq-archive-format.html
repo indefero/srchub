@@ -1,0 +1,125 @@
+{extends "idf/base-simple.html"}
+{block docclass}yui-t3{/block}
+{block body}
+<p>At the moment, this documentation is only available in English.</p>
+
+<ul>
+<li><a href="#q-motivation">Motivation</a></li>
+<li><a href="#q-manifest">The manifest format</a></li>
+<li><a href="#q-notes">Final notes</a></li>
+</ul>
+
+<h2 id="q-motivation">Motivation</h2>
+
+<p>
+Adding multiple, individual downloads to a project for a release can be a tedious task if
+one has to select each file manually, and then has to fill in the summary and correct labels
+for each of these downloads individually.
+</p>
+
+<p>
+InDefero therefore supports the upload of "archives" that contain multiple downloadable
+files. These archives are standard PKZIP files with only one special property - they
+contain an additional manifest file which describes the files that should be published.
+</p>
+
+<p>
+Once such an archive has been uploaded and validated by InDefero, its files are extracted
+and individual downloads are created for each of them. If the archive contains files
+that should replace existing downloads, then InDefero takes care of this as well -
+automatically. Files that exist in the archive but are not listed in the manifest are
+not extracted.
+</p>
+
+<p>
+An archive file and its manifest file can easily be compiled, either by hand with the help
+of a text editor, or through an automated build system with the help of your build tool of
+choice, such as Apache Ant.
+</p>
+
+<h2 id="q-manifest">The manifest format</h2>
+
+<p>
+The manifest is an XML file that follows a simple syntax. As it is always easier to look
+at an example, here you have one:
+</p>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;manifest>
+  &lt;file>
+    &lt;name>foo-1.2.tar.gz&lt;/name>
+    &lt;summary>Tarball&lt;/summary>
+    &lt;replaces>foo-1.1.tar.gz&lt;/replaces>
+    &lt;labels>
+       &lt;label>Type:Archive&lt;/label>
+    &lt;/labels>
+  &lt;/file>
+  &lt;file>
+    &lt;name>foo-1.2-installer.exe&lt;/name>
+    &lt;summary>Windows MSI Installer&lt;/summary>
+    &lt;description>This installer needs Windows XP SP2 or later.&lt;/description>
+    &lt;labels>
+       &lt;label>Type:Installer&lt;/label>
+       &lt;label>OpSys:Windows&lt;/label>
+    &lt;/labels>
+  &lt;/file>
+&lt;/manifest>
+</pre>
+
+<p>
+This is the DTD for the format:
+</p>
+
+<pre>
+&lt;!DOCTYPE manifest [
+&lt;!ELEMENT manifest (file+)>
+&lt;!ELEMENT file (name,summary,replaces?,description?,tags?)>
+&lt;!ELEMENT name (#PCDATA)>
+&lt;!ELEMENT summary (#PCDATA)>
+&lt;!ELEMENT replaces (#PCDATA)>
+&lt;!ELEMENT description (#PCDATA)>
+&lt;!ELEMENT labels (label+)>
+&lt;!ELEMENT label (#PCDATA)>
+]>
+</pre>
+
+<p>
+The format is more or less self-explaining, all fields map to properties of a single download. Note
+that there is a limit of <strong>six</strong> labels that you can attach to a download, similar to
+what the regular file upload functionality allows.
+</p> 
+
+<p>One special element has been introduced and this is named <code>replaces</code>. If this optional element
+is given, InDefero looks for a file with that name in the project and acts in one of the following
+two ways:
+</p>
+
+<ul>
+<li>If the new file's name is distinct from the file's name that is given in <code>replaces</code>,
+then the replaced file is <strong>marked as deprecated</strong> with the <code>Other:Deprecated</code> label
+(or any other label that is configured as the very last label in the download project configuration).</li>
+<li>If the new file's name is equal to the file's name that is given in <code>replaces</code>,
+then the replaced file <strong>is deleted</strong> before the new file is created. This happens because each file name
+has to be unique per project and a deprecated and a new file with the same name cannot coexist in InDefero.
+Note that while the filename-based URI of the download keeps intact, the download counter will be reset by
+this procedure.</li>
+</ul>
+
+If no existing file is found for the <code>replaces</code> tag, then this is completely ignored.
+</p>
+
+<h2 id="q-notes">Final notes</h2>
+
+<p>Any file in the archive that is not enlisted in the manifest is ignored during
+the upload process, so ensure that your <code>manifest.xml</code> contains all the file names (case
+sensitive) you want to be processed.</p> 
+{/block}
+
+{block context}
+<p>{trans 'Here we are, just to help you.'}</p>
+<h2>{trans 'Projects'}</h2>
+<ul>{foreach $projects as $p}
+<li><a href="{url 'IDF_Views_Project::home', array($p.shortname)}">{$p}</a></li>
+{/foreach}</ul>
+{/block}

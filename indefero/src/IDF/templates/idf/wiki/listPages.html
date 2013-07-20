@@ -1,0 +1,20 @@
+{extends "idf/wiki/base.html"}
+{block docclass}yui-t1{assign $inPageList=true}{/block}
+{block body}
+{$pages.render}
+{if !$user.isAnonymous()}
+{aurl 'url', 'IDF_Views_Wiki::createPage', array($project.shortname)}
+<p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'New Page'}</a></p>{/if}
+
+{/block}
+{block context}
+<p><strong>{trans 'Number of pages:'}</strong> {$pages.nb_items}</p>
+{assign $cloud_url = 'IDF_Views_Wiki::listPagesWithLabel'}
+{assign $cloud = 'wiki'}
+{include 'idf/tags-cloud.html'}
+{if $deprecated > 0}
+{aurl 'url', 'IDF_Views_Wiki::listPagesWithLabel', array($project.shortname, $dlabel.id)}
+<p class="helptext">{blocktrans}See <a href="{$url}">the deprecated pages</a>.{/blocktrans}</p>
+{/if}
+{/block}
+

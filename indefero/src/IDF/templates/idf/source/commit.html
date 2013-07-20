@@ -1,0 +1,83 @@
+{extends "idf/source/base.html"}
+{block extraheader}<link rel="stylesheet" type="text/css" href="{media '/idf/css/prettify.css'}"/>{/block}
+{block docclass}yui-t1{assign $inCommit=true}{/block}
+{block body}
+<table class="commit" summary="">
+<tr>
+<th><strong>{trans 'Date:'}</strong></th><td>{$cobject.date|date:"%Y-%m-%d %H:%M:%S"} ({$cobject.date|dateago})</td>
+</tr>
+<tr>
+<th><strong>{trans 'Author:'}</strong></th><td>{showuser $rcommit.get_author(), $request, $cobject.author}</td>
+</tr>
+{if $cobject.branch}<tr>
+<th><strong>{trans 'Branch:'}</strong></th><td>{$cobject.branch}</td>
+</tr>{/if}
+<tr>
+<th><strong>{trans 'Commit:'}</strong></th><td class="mono"><a href="{url 'IDF_Views_Source::treeBase', array($project.shortname, $commit)}" title="{trans 'View corresponding source tree'}">{$cobject.commit}</a></td>
+</tr>
+{if $cobject.parents}<tr>
+<th><strong>{trans 'Parents:'}</strong></th><td class="mono">{foreach $cobject.parents as $parent}
+<a href="{url 'IDF_Views_Source::commit', array($project.shortname, $parent)}" title="{trans 'View corresponding commit'}">{$parent}</a><br />
+{/foreach}
+</td>
+</tr>{/if}
+<tr>
+<th><strong>{trans 'Message:'}</strong></th><td>{issuetext $cobject.title, $request}{if isset($cobject.full_message)}<br/><br/>{issuetext $cobject.full_message, $request, true, false, true, true, true}{/if}</td>
+</tr>{if count($cobject.parents) < 2 and count($changes)}
+<tr>
+<th><strong>{trans 'Changes:'}</strong></th>
+<td>
+<table class="changes">
+{foreach $changes.deletions as $filename}
+<tr><td><span class="scm-action deleted" title="{trans 'deleted'}">D</span></td><td>{$filename}{if !empty($diff.files[$filename])} (<a href="#diff-{$filename|md5}">{trans 'full'}</a>){/if}</td></tr>
+{/foreach}
+{foreach $changes.renames as $oldname => $newname}
+<tr><td><span class="scm-action renamed" title="{trans 'renamed'}">R</span></td><td><a href="{url 'IDF_Views_Source::tree', array($project.shortname, $commit, $newname)}">{$oldname} &rarr; {$newname}</a></td></tr>
+{/foreach}
+{foreach $changes.copies as $srcname => $destname}
+<tr><td><span class="scm-action copied" title="{trans 'copied'}">C</span></td><td><a href="{url 'IDF_Views_Source::tree', array($project.shortname, $commit, $destname)}">{$srcname} &rarr; {$destname}</a></td></tr>
+{/foreach}
+{foreach $changes.additions as $filename}
+<tr><td><span class="scm-action added" title="{trans 'added'}">A</span></td><td><a href="{url 'IDF_Views_Source::tree', array($project.shortname, $commit, $filename)}">{$filename}</a>{if !empty($diff.files[$filename])} (<a href="#diff-{$filename|md5}">{trans 'full'}</a>){/if}</td></tr>
+{/foreach}
+{foreach $changes.patches as $filename}
+<tr><td><span class="scm-action patched" title="{trans 'modified'}">M</span></td><td><a href="{url 'IDF_Views_Source::tree', array($project.shortname, $commit, $filename)}">{$filename}</a>{if !empty($diff.files[$filename])}{assign $ndiff = count($diff.files[$filename]['chunks'])} (<a href="#diff-{$filename|md5}">{blocktrans $ndiff}{$ndiff} diff{plural}{$ndiff} diffs{/blocktrans}</a>){/if}</td></tr>
+{/foreach}
+{foreach $changes.properties as $filename => $properties}
+<tr><td><span class="scm-action property-changed" title="{trans 'properties changed'}">P</span></td><td><a href="{url 'IDF_Views_Source::tree', array($project.shortname, $commit, $filename)}">{$filename}</a>
+<table class="properties">
+{foreach $properties as $key => $value}
+<tr><td>{$key}</td>
+{if $value == null}
+    <td class="removed">{trans 'removed'}</td>
+{else}
+    <td>{$value}</td>
+{/if}
+</tr>
+{/foreach}
+</table>
+</td></tr>
+{/foreach}
+</table>
+</td>
+</tr>{/if} {* End of the if count($changes) *}
+</table>
+
+{if count($cobject.parents) < 2 and count($diff.files)}
+<h2>{trans 'File differences'}</h2>
+
+{$diff.as_html()}
+{/if}
+
+{if count($cobject.parents) < 2 and (count($diff.files) or $large_commit)}
+{aurl 'url', 'IDF_Views_Source::downloadDiff', array($project.shortname, $commit)}
+<p class="right soft"><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/package-grey.png'}" alt="{trans 'Archive'}" align="bottom"/></a> <a href="{$url}">{trans 'Download the corresponding diff file'}</a></p>
+{/if}
+
+{/block}
+{block javascript}
+<script type="text/javascript" src="{media '/idf/js/prettify.js'}"></script>
+<script type="text/javascript">
+prettyPrint();
+</script>
+{/block}

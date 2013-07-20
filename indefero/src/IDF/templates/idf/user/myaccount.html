@@ -1,0 +1,171 @@
+{extends "idf/base-simple.html"}
+{block body}
+{if $form.errors}
+<div class="px-message-error">
+<p>{trans 'Oops, please check the form for errors.'}</p>
+{if $form.get_top_errors}
+{$form.render_top_errors|unsafe}
+{/if}
+</div>
+{/if}
+
+<form method="post" enctype="multipart/form-data" action=".">
+<table class="form" summary="">
+<tr>
+<th>{trans 'Login:'}</th>{aurl 'url', 'IDF_Views_User::view', array($user.login)}
+<td><a href="{$url}">{$user.login}</a></td>
+</tr>
+<tr>
+<th>{$form.f.first_name.labelTag}:</th>
+<td>{if $form.f.first_name.errors}{$form.f.first_name.fieldErrors}{/if}
+{$form.f.first_name|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.last_name.labelTag}:</strong></th>
+<td>{if $form.f.last_name.errors}{$form.f.last_name.fieldErrors}{/if}
+{$form.f.last_name|unsafe}
+</td>
+</tr>
+<tr>
+<th><strong>{$form.f.email.labelTag}:</strong></th>
+<td>{if $form.f.email.errors}{$form.f.email.fieldErrors}{/if}
+{$form.f.email|unsafe}<br />
+<span class="helptext">{$form.f.email.help_text}</span>
+</td>
+</tr>
+<tr>
+<th>{$form.f.language.labelTag}:</th>
+<td>{if $form.f.language.errors}{$form.f.language.fieldErrors}{/if}
+{$form.f.language|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.password.labelTag}:</th>
+<td>{if $form.f.password.errors}{$form.f.password.fieldErrors}{/if}
+{$form.f.password|unsafe}<br />
+<span class="helptext">{$form.f.password.help_text}</span>
+</td>
+</tr>
+<tr>
+<th>{$form.f.password2.labelTag}:</th>
+<td>{if $form.f.password2.errors}{$form.f.password2.fieldErrors}{/if}
+{$form.f.password2|unsafe}
+</td>
+</tr>
+<tr><td colspan="2" class="separator">{trans "Public Profile"}</td></tr>
+<tr>
+<th>{$form.f.description.labelTag}:</th>
+<td>{if $form.f.description.errors}{$form.f.description.fieldErrors}{/if}
+{$form.f.description|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.twitter.labelTag}:</th>
+<td>{if $form.f.twitter.errors}{$form.f.twitter.fieldErrors}{/if}
+{$form.f.twitter|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.public_email.labelTag}:</th>
+<td>{if $form.f.public_email.errors}{$form.f.public_email.fieldErrors}{/if}
+{$form.f.public_email|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.website.labelTag}:</th>
+<td>{if $form.f.website.errors}{$form.f.website.fieldErrors}{/if}
+{$form.f.website|unsafe}
+</td>
+</tr>
+<tr>
+<th>{$form.f.custom_avatar.labelTag}:</th>
+<td>{if $form.f.custom_avatar.errors}{$form.f.custom_avatar.fieldErrors}{/if}
+{$form.f.custom_avatar|unsafe}<br />
+<span class="helptext">{$form.f.custom_avatar.help_text}</span>
+</td>
+</tr>
+<tr>
+<th>{if $form.f.remove_custom_avatar.errors}{$form.f.remove_custom_avatar.fieldErrors}{/if}
+{$form.f.remove_custom_avatar|unsafe}
+</th>
+<td>{$form.f.remove_custom_avatar.labelTag}<br />
+<span class="helptext">{$form.f.remove_custom_avatar.help_text}</span></td>
+</tr>
+<tr><td colspan="2" class="separator">{trans "Key Management"}</td></tr>
+<tr>
+<th>{$form.f.public_key.labelTag}:</th>
+<td>{if $form.f.public_key.errors}{$form.f.public_key.fieldErrors}{/if}
+{$form.f.public_key|unsafe}<br />
+<span class="helptext">{$form.f.public_key.help_text}</span>
+</td>
+</tr>
+<tr><td colspan="2" class="separator">{trans "Secondary Emails"}</td></tr>
+<tr>
+<th>{$form.f.secondary_mail.labelTag}:</th>
+<td>{if $form.f.secondary_mail.errors}{$form.f.secondary_mail.fieldErrors}{/if}
+{$form.f.secondary_mail|unsafe}<br />
+<span class="helptext">{$form.f.secondary_mail.help_text}</span>
+</td>
+</tr>
+<tr class="pass-info" id="extra-password">
+<th>{trans 'Extra password'}:</th>
+<td><span class="mono">{$ext_pass}</span><br />
+<span class="helptext">{trans 'This password is used to access some of the external systems managed by our infrastructure. It will be regenerated if you change your password.'}</span>
+</td>
+</tr>
+<tr class="pass-info">
+<th>{trans 'API key'}:</th>
+<td><span class="mono">{$api_key}</span><br />
+<span class="helptext">{trans 'Your API key will be regenerated automatically if you change your password.'}</span>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><input type="submit" value="{trans 'Update Your Account'}" name="submit" /> | <a href="{url 'IDF_Views::index'}">{trans 'Cancel'}</a>
+</td>
+</tr>
+</table>
+</form>
+
+{if count($keys)}
+<table summary=" " class="recent-issues">
+<tr><th colspan="2">{trans 'Your Current Public Keys'}</th></tr>
+{foreach $keys as $key}<tr><td>
+<span class="mono">{$key.showCompact()}</span></td><td> <form class="star" method="post" action="{url 'IDF_Views_User::deleteKey', array($key.id)}"><input type="image" src="{media '/idf/img/trash.png'}" name="submit" value="{trans 'Delete this key'}" /></form>
+</td>
+</tr>{/foreach}
+</table>
+{/if}
+{if count($mailaddrs)>1}
+<table summary=" " class="recent-issues">
+<tr><th colspan="2">{trans 'Your additional email addresses'}</th></tr>
+{foreach $mailaddrs as $mail}{if $mail.id != -1}<tr><td>
+{$mail.address}</td><td> <form class="star" method="post" action="{url 'IDF_Views_User::deleteMail', array($mail.id)}"><input type="image" src="{media '/idf/img/trash.png'}" name="submit" value="{trans 'Delete this address'}" /></form>
+</td>
+</tr>{/if}{/foreach}
+</table>
+{/if}
+{/block}
+{block context}
+<div class="issue-submit-info">
+<p>{trans 'If possible, use your real name. By using your real name, people will have more trust in your comments and remarks.'}</p>
+<p>{trans 'The extra password is used to access some of the external systems and the API key is used to interact with this website using a program.'}</p>
+</div>{/block}
+
+{block javascript}<script type="text/javascript">
+document.getElementById('id_first_name').focus();
+{literal}
+$(document).ready(function() {
+    // Hide the key password by default.
+    $("#extra-password").before("{/literal}<tr id=\"form-block-0\"><td>&nbsp;</td><td><img style=\"vertical-align: text-bottom;\" src=\"{media '/idf/img/start.png'}\" alt=\" \" align=\"bottom\" /> <a id=\"form-show-0\" href=\"#\">{trans 'Show API key and extra password'}{literal}</a>.</td></tr>");
+    $("#form-show-0").click(function(){
+        $(".pass-info").show();
+        $("#form-block-0").hide();
+        return false;
+    });
+    $(".pass-info").hide();
+});{/literal}
+</script>
+{/block}
+

@@ -1,0 +1,21 @@
+{trans 'Hello,'}
+
+{if $owns_issue}{blocktrans}A new issue has been created and assigned to you:{/blocktrans}{else}{blocktrans}A new issue has been created:{/blocktrans}{/if}
+
+{$issue.id} - {$issue.summary|safe}
+{trans 'Project:'} {$project.name|safe}
+{trans 'Status:'} {$issue.get_status.name|safe}
+{trans 'Reported by:'} {$issue.get_submitter|safe}
+{assign $tags = $issue.get_tags_list()}{if $tags.count()}{trans 'Labels:'}
+{foreach $tags as $tag} {$tag.class|safe}:{$tag.name|safe}
+{/foreach}{/if}
+{trans 'Description:'}
+
+{$comment.content|safe}{assign $attachments = $comment.get_attachment_list()}
+{if $attachments.count() > 0}
+{trans 'Attachments:'}{foreach $attachments as $a}
+- {$a.filename|safe} - {$a.filesize|ssize}
+  {$url_base}{url 'IDF_Views_Issue::viewAttachment', array($project.shortname, $a.id, $a.filename)}{/foreach}
+{/if}
+--
+{trans 'Issue:'} {$url_base}{url 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}

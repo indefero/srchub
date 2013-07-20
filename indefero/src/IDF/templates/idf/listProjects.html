@@ -1,0 +1,63 @@
+{extends "idf/base-simple.html"}
+{block docclass}yui-t2{/block}
+{block body}
+{if $projects.count() == 0}
+<p>{trans 'No projects managed with InDefero were found.'}</p>
+{if $isAdmin}
+{aurl 'url', 'IDF_Views_Admin::projectCreate'}
+<p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'Create Project'}</a></p>{/if}
+{else}
+{include 'idf/project-list.html'}
+{/if}
+{/block}
+
+{block context}
+<strong>{trans 'Filter projects by label'}</strong>
+{if count($projectLabels) == 0}
+<p class="smaller">{trans 'No projects with labels found.'}</p>
+{else}
+    <dl class="tagscloud smaller">{foreach $projectLabels as $class => $labels}
+        <dt class="label">{$class}</dt>
+        {foreach $labels as $idx => $label}
+            {* 0.75 - or 75% - is the minimum font size we'd like to see in this tag cloud *}
+            {assign $fontScale = round($label.rel_project_count * 100) + 75}
+            <dd><a href="{url 'IDF_Views::listProjectsByLabel', array($label->id, $order)}" 
+                   class="label"
+                   title="{blocktrans $label.project_count}1 project{plural}{$label.project_count} projects{/blocktrans}"
+                   style="font-size: {$fontScale}%">{$label.name}{if $idx != count($labels) - 1},{/if}</a></dd>
+        {/foreach}
+    {/foreach}</dl>
+    {if $tag}
+        <p class="smaller"><a href="{url 'IDF_Views::listProjectsByLabel', array('all', $order)}">
+            {blocktrans}Remove filter for {$tag}{/blocktrans}</a></p>
+    {/if}
+{/if}
+<br />
+
+<strong>{trans 'Order'}</strong>
+{assign $labelPart = 'all'}
+{if $tag}{assign $labelPart = $tag->id}{/if}
+<p class="smaller">
+{if $order != 'name'}<a href="{url 'IDF_Views::listProjectsByLabel', array($labelPart, 'name')}">{/if}
+{trans 'By name'}{if $order != 'name'}</a>{/if} 
+ &ndash;
+{if $order != 'activity'}<a href="{url 'IDF_Views::listProjectsByLabel', array($labelPart, 'activity')}">{/if}
+{trans 'By activity'}{if $order != 'activity'}</a>{/if} 
+</p>
+<br />
+
+<strong>{trans 'Filtered project stats'}</strong>
+<dl class="statistics smaller">
+<dt>{trans 'Issues:'}</dt><dd>{$stats.issues}</dd>
+<dt>{trans 'Commits:'}</dt><dd>{$stats.commits}</dd>
+<dt>{trans 'Documentations:'}</dt><dd>{$stats.docpages}</dd>
+<dt>{trans 'Downloads:'}</dt><dd>{$stats.downloads}</dd>
+<dt>{trans 'Code reviews:'}</dt><dd>{$stats.reviews}</dd>
+<dt>Projects:</dt><dd>{$stats.proj_count}</dd>
+</dl>
+{/block}
+
+{block foot}
+<div id="branding">Powered by <a href="http://www.indefero.net" title="InDefero, bug tracking and more">InDefero</a>,
+<br />a <a href="http://www.ceondo.com">Céondo Ltd</a> initiative. <br />
+srchub.org is ran by <br /><a href="mailto:adamsna[at]datanethost.net">Nathan Adams</a>.</div>{/block}

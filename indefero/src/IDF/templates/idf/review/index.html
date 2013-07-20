@@ -1,0 +1,8 @@
+{extends "idf/review/base.html"}
+{block docclass}yui-t2{assign $inOpenReviews=true}{/block}
+{block body}
+{$reviews.render}
+{if !$user.isAnonymous()}
+{aurl 'url', 'IDF_Views_Review::create', array($project.shortname)}
+<p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'Start Code Review'}</a></p>{/if}
+{/block}

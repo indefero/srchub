@@ -1,0 +1,31 @@
+{extends "idf/gadmin/projects/base.html"}
+
+{block docclass}yui-t3{assign $inLabels=true}{/block}
+
+{block body}
+<form method="post" action=".">
+<table class="form" summary="">
+<tr>
+<td colspan="2"><strong>{$form.f.project_labels.labelTag}:</strong><br />
+{if $form.f.project_labels.errors}{$form.f.project_labels.fieldErrors}{/if}
+{$form.f.project_labels|unsafe}
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<input type="submit" value="{trans 'Save Changes'}" name="submit" />
+</td>
+</tr>
+</table>
+</form>
+{/block}
+
+{block context}
+<div class="issue-submit-info">
+{blocktrans}
+<p><strong>Instructions:</strong></p>
+<p>List one status value per line in desired sort-order.</p>
+<p>Optionally, use an equals-sign to document the meaning of each status value.</p>
+{/blocktrans}
+</div>
+{/block}

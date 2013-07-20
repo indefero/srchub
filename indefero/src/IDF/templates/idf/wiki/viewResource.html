@@ -1,0 +1,62 @@
+{extends "idf/wiki/base.html"}
+
+{block extraheader}
+{if !$rev.is_head}<meta name="ROBOTS" content="NOINDEX" />{/if}
+{/block}
+
+{block docclass}yui-t3{assign $inResourceView=true}{/block}
+
+{block body}
+{if !$rev.is_head}
+{ashowuser 'submitter', $rev.get_submitter(), $request}{aurl 'url', 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title)}
+<div class="old-rev">
+<p>{blocktrans}You are looking at an old revision of the resource 
+<a href="{$url}">{$resource.title}</a>. This revision was created
+by {$submitter}.{/blocktrans}</p>
+</div>
+{/if}
+
+<div id="wiki-resource">
+<p class="desc">{$resource.summary}</p>
+
+{assign $preview = $rev.renderRaw()}
+{if $preview == ''}
+  {assign $preview = __('Unable to render preview for this MIME type.')}
+{/if}
+<p class="preview">{$preview|unsafe}</p>
+
+<ul>
+<li>{trans 'File size'}: {$rev.filesize|size}</li>
+<li>{trans 'MIME type'}: {$resource.mime_type}</li>
+<li><a href="{$rev.getRawURL(true)}">{trans 'Download this file'}</a></li>
+</ul>
+
+{if !$rev.is_head and ($isOwner or $isAdmin)}
+{aurl 'url', 'IDF_Views_Wiki::deleteResourceRev', array($project.shortname, $rev.id)}
+<p class="delp"><a href="{$url}" title="{trans 'Delete this revision'}"><img src="{media '/idf/img/trash.png'}" style="vertical-align: text-bottom;" alt="{trans 'Trash'}" /></a> <a href="{$url}">{trans 'Delete this revision'}</a></p>
+{/if}
+
+<p><strong>{trans 'Page Usage'}</strong></p>
+{if $pagerevs.count() == 0}
+<p>{trans 'This resource is not used on any pages yet.'}</p>
+{else}
+<ul>{foreach $pagerevs as $pagerev}
+{assign $css = ''}
+{if !$pagerev.is_head}{assign $css=' class="old-rev"'}{/if}
+<li{$css|unsafe}><a href="{url 'IDF_Views_Wiki::viewPage', array($project.shortname, $pagerev.get_wikipage().title), array('rev'=>$pagerev.id)}">{$pagerev.get_wikipage().title} ({$pagerev.summary})</a></li>
+{/foreach}</ul>
+{/if}
+</div>
+{/block}
+{block context}
+{ashowuser 'submitter', $resource.get_submitter(), $request}
+<p><strong>{trans 'Created:'}</strong> <span class="nobrk">{$resource.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>
+{if $rev.creation_dtime != $resource.creation_dtime}<p>{ashowuser 'submitter', $rev.get_submitter(), $request}
+<strong>{trans 'Updated:'}</strong> <span class="nobrk">{$rev.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>{/if}
+{if $revs.count() > 0}
+<p><strong>{trans 'Old Revisions'}</strong></p>
+<ul>{foreach $revs as $old}
+<li><a href="{url 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title), array('rev'=>$old.id)}">{$old.summary}</a></li>
+{/foreach}</ul>
+{/if}
+{/block}

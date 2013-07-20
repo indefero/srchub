@@ -1,0 +1,10 @@
+{assign $eurl = 'http://michelf.com/projects/php-markdown/extra/'}
+{assign $burl = 'http://daringfireball.net/projects/markdown/syntax'}
+{aurl 'furl', 'IDF_Views::faq'}
+{blocktrans}
+<p><strong>Instructions:</strong></p>
+<p>The content of the page can use the <a href="{$burl}">Markdown syntax</a> with the <a href="{$eurl}"><em>Extra</em> extension</a>.</p>
+<p>Website addresses are automatically linked and you can link to another page in the documentation using double square brackets like that <code>[[AnotherPage]]</code>.</p>
+<p>If you want to embed uploaded resources, use the <code>[[!ResourceName]]</code> syntax for that. This is described more in detail <a href="{$furl}#q-wiki">in the FAQ.</a></p> 
+<p>To directly include a file content from the repository, embrace its path with triple square brackets: <code>[[[my/file.txt]]]</code>.</p>
+{/blocktrans}

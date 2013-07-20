@@ -1,0 +1,108 @@
+{extends "idf/issues/base.html"}
+
+{block docclass}yui-t2{assign $inSummaryIssues=true}{/block}
+
+{block context}
+<p><a>
+<p><a href="{url 'IDF_Views_Issue::index', array($project.shortname)}">{blocktrans}View all open issues.{/blocktrans}</a></p>
+{if !$user.isAnonymous()}
+    <p><a href="{url 'IDF_Views_Issue::create', array($project.shortname)}">{blocktrans}Create an issue.{/blocktrans}</a></p>
+{/if}
+{/block}
+
+{block body}
+{if $trackerEmpty}
+    {aurl 'create_url', 'IDF_Views_Issue::create', array($project.shortname)}
+    <p>{blocktrans}The issue tracker is empty.<br /><a href="{$create_url}">Create your first issue</a>.{/blocktrans}</p>
+{else}
+<div class='issue-summary'>
+{foreach $tagStatistics as $key => $class}
+    <div>
+    <h2>{blocktrans}Unresolved: By {$key}{/blocktrans}</h2>
+    <table class='issue-summary'>
+    <tbody>
+    {foreach $class as $key => $value}
+        <tr>
+        <td class="name"><a href="{url 'IDF_Views_Issue::listLabel', array($project.shortname, $value[2], 'open')}">{$key}</a></td>
+        <td class="count">{$value[0]}</td>
+        <td class="graph">
+            <table class='graph'>
+            <tbody><tr>
+            <td style="width:{$value[1] * 0.8 + 1}%" class="graph-color" valign="center">
+            <div class="colour-bar"></div>
+            </td>
+            <td class="graph-percent">{$value[1]}%</td>
+            </tr>
+            </tbody>
+            </table>
+        </td>
+        </tr>
+    {/foreach}
+    </tbody>
+    </table>
+    </div>
+{/foreach}
+</div>
+
+<div class='issue-summary'>
+{if $status}
+    <div>
+    <h2>{blocktrans}Status Summary{/blocktrans}</h2>
+    <table class='issue-summary'>
+    <tbody>
+    {foreach $status as $key => $value}
+        <tr>
+        <td class="name"><a href="{url 'IDF_Views_Issue::listStatus', array($project.shortname, $key)}">{$key}</a></td>
+        <td class="count">{$value[0]}</td>
+        <td class="graph">
+            <table class='graph'>
+            <tbody><tr>
+            <td style="width:{$value[1] * 0.8 + 1}%" class="graph-color" valign="center">
+            <div class="colour-bar"></div>
+            </td>
+            <td class="graph-percent">{$value[1]}%</td>
+            </tr>
+            </tbody>
+            </table>
+        </td>
+        </tr>
+    {/foreach}
+    </tbody>
+    </table>
+    </div>
+{/if}
+
+{if $ownerStatistics}
+    <div>
+    <h2>{blocktrans}Unresolved: By Assignee{/blocktrans}</h2>
+    <table class='issue-summary'>
+    <tbody>
+    {foreach $ownerStatistics as $key => $value}
+        <tr>
+        <td class="name">
+        {if !empty($value[2])}
+        {aurl 'url', 'IDF_Views_Issue::userIssues', array($project.shortname, $value[2], 'owner')}
+        <a href="{$url}">{$key}</a>
+        {else}{$key}{/if}
+        </td>
+        <td class="count">{$value[0]}</td>
+        <td class="graph">
+            <table class='graph'>
+            <tbody><tr>
+            <td style="width:{$value[1] * 0.8 + 1}%" class="graph-color" valign="center">
+            <div class="colour-bar"></div>
+            </td>
+            <td class="graph-percent">{$value[1]}%</td>
+            </tr>
+            </tbody>
+            </table>
+        </td>
+        </tr>
+    {/foreach}
+    </tbody>
+    </table>
+    </div>
+{/if}
+</div>
+{/if}
+{/block}

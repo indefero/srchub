@@ -1,0 +1,47 @@
+{extends "idf/wiki/base.html"}
+{block docclass}yui-t3{assign $inResourceView=true}{/block}
+{block body}
+
+<p>{blocktrans}If you delete this documentation resource, it will be removed from the database with all the associated revisions 
+and <strong>you will not be able to recover it</strong>. Any documentation pages that reference this resource,
+will no longer be able to render it, but won't be deleted.{/blocktrans}</p>
+<form method="post" action=".">
+<table class="form" summary="">
+<tr>
+<td>&nbsp;</td>
+<td>
+{$form.f.confirm|unsafe} <strong>{$form.f.confirm.labelTag}</strong><br />
+{if $form.f.confirm.errors}{$form.f.confirm.fieldErrors}{/if}
+<input type="submit" value="{trans 'Delete Resource'}" name="submit" /> | <a href="{url 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title)}">{trans 'Cancel'}</a> 
+</td>
+</tr>
+</table>
+</form>
+
+<p class="desc">{$resource.summary}</p>
+
+{assign $preview = $rev.renderRaw()}
+{if $preview == ''}
+  {assign $preview = __('Unable to render preview for this MIME type.')}
+{/if}
+<p class="preview">{$preview|unsafe}</p>
+
+<ul>
+<li>{trans 'File size'}: {$rev.filesize|size}</li>
+<li>{trans 'MIME type'}: {$resource.mime_type}</li>
+<li><a href="{$rev.getRawURL(true)}">{trans 'Download this file'}</a></li>
+</ul>
+{/block}
+
+{block context}
+{assign $submitter = $resource.get_submitter()}
+<p><strong>{trans 'Created:'}</strong> <span class="nobrk">{$resource.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>
+{if $rev.creation_dtime != $resource.creation_dtime}<p>{assign $submitter = $rev.get_submitter()}
+<strong>{trans 'Updated:'}</strong> <span class="nobrk">{$rev.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>{/if}
+{if $revs.count() > 0}
+<p><strong>{trans 'Old Revisions'}</strong></p>
+<ul>{foreach $revs as $old}
+<li><a href="{url 'IDF_Views_Wiki::viewResource', array($project.shortname, $resource.title), array('rev'=>$old.id)}">{$old.summary}</a></li>
+{/foreach}</ul>
+{/if}
+{/block}

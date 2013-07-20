@@ -1,0 +1,1398 @@
+/*
+# ***** BEGIN LICENSE BLOCK *****
+# This file is part of InDefero, an open source project management application.
+# Copyright (C) 2008-2011 Céondo Ltd and contributors.
+#
+# InDefero is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# InDefero is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ***** END LICENSE BLOCK ***** */
+
+body {
+  font-family: arial, helvetica, sans-serif;
+}
+
+.top {
+  margin-top: 5px;
+}
+
+a:link {
+  color: #00e;
+}
+
+a:visited {
+  color: #551a8b;
+}
+
+a:active{
+  color: #f00;
+}
+
+.yui-g {
+  padding: 0 1em;
+}
+
+.left {
+  text-align: left !important;
+}
+
+.right {
+  text-align: right !important;
+}
+
+.a-c {
+  text-align: center !important;
+}
+
+.dellink {
+  float: right;
+  position: relative;
+}
+
+.dellink a {
+  color: #a00;
+}
+
+a.userw {
+  color: #000;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.soft {
+  color: #777;
+}
+
+.soft a {
+  color: #777;
+}
+
+a.soft {
+  color: #777;
+}
+
+a.soft:visited {
+  color: #777;
+}
+
+div.context {
+  padding-top: 0.5em;
+  padding-left: 1em;
+  position: relative;
+  top: 0;
+}
+
+div.context h3 {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 10px 0 5px;
+}
+
+/**
+ * Form
+ */
+form.star {
+  display: inline;
+}
+
+table.form th, table.form td {
+  border: none;
+  vertical-align: top;
+}
+table.form th {
+  text-align: right;
+  font-weight: normal;
+}
+
+table.form td.separator {
+  font-weight: bold;
+  text-align: center;
+}
+
+.px-message-error {
+  padding-left: 37px;
+  background: url("../img/dialog-error.png");
+  background-repeat: no-repeat;
+  background-position: 3px 0;
+  color: #c00;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+ul.errorlist {
+  color: #c00;
+  font-weight: bold;
+}
+
+div.user-messages {
+  border: 1px solid rgb(229, 225, 169);
+  background-color: #fffde3;
+  margin-bottom: 2em;
+  margin-left: -1px;
+  width: 100%;
+}
+
+div.theterms {
+  border: 1px solid rgb(229, 225, 169);
+  background-color: #fffde3;
+  padding: 1em 1em 0 1em;
+}
+
+
+/**
+ * Recent issues
+ */
+table.uploads {
+	width: 90%;
+	text-align:center;
+}
+
+table.uploads tr.log {
+  border-bottom: 1px solid #e7ebe3;
+}
+
+table.uploads th {
+  background-color: #e4e8E0;
+  vertical-align: top;
+  border-color: #d3d7cf;
+}
+
+table.uploads tr {
+  border-left: 1px solid #d3d7cf;
+  border-right: 1px solid #d3d7cf;
+  border-bottom: 1px solid #d3d7cf;
+}
+
+table.uploads td {
+  border: none;
+  vertical-align: top;
+}
+
+table.uploads tfoot th {
+  text-align: right;
+}
+
+table.uploads tfoot th a {
+  color: #000;
+  font-weight: normal;
+}
+
+table.uploads th a.px-current-page {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+table.recent-issues {
+  width: 90%;
+}
+
+table.minsize {
+  width: auto !important;
+}
+
+table.recent-issues tr.log {
+  border-bottom: 1px solid #e7ebe3;
+}
+
+table.recent-issues th {
+  background-color: #e4e8E0;
+  vertical-align: top;
+  border-color: #d3d7cf;
+}
+
+table.recent-issues tr {
+  border-left: 1px solid #d3d7cf;
+  border-right: 1px solid #d3d7cf;
+  border-bottom: 1px solid #d3d7cf;
+}
+
+table.recent-issues td {
+  border: none;
+  vertical-align: top;
+}
+
+table.recent-issues tfoot th {
+  text-align: right;
+}
+
+table.recent-issues tfoot th a {
+  color: #000;
+  font-weight: normal;
+}
+
+table.recent-issues th a.px-current-page {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+span.px-sort {
+  font-weight: normal;
+  font-size: 70%;
+  white-space: nowrap;
+  padding-left: 1em;
+}
+
+span.px-header-title {
+  white-space: nowrap;
+}
+
+span.px-header-title a, span.px-header-title a:link, span.px-header-title a:visited, span.px-header-title a:active {
+  color: #000;
+}
+
+dl.tagscloud,
+dl.statistics {
+    margin: 0;
+    margin-bottom: 1em;
+}
+
+dl.tagscloud dt {
+  margin-top: .5em;
+  font-weight: bold;
+}
+
+dl.tagscloud dd {
+  margin: 0;
+  display: inline;
+}
+
+dl.statistics dt {
+  margin-top: .5em;
+  font-style: italic;
+}
+
+dl.statistics dd {
+  margin: 0;
+  float: right;
+  margin-top: -1.2em;
+  margin-right: 2em;
+}
+
+/**
+ * Issue
+ */
+a.issue-c {
+  text-decoration: line-through;
+}
+
+pre.issue-comment-text {
+  font-family: monospace;
+  line-height: 1.2; /* to be nice also with links */
+}
+
+div.issue-comment {
+  border-left: 3px solid #8ae234;
+  border-bottom: 1px solid #d3d7cf;
+  border-right: 1px solid #d3d7cf;
+  padding: 0.5em;
+}
+
+.issue-comment-focus {
+  border-right: 3px solid #8ae234 !important;
+}
+
+div.issue-comment-first {
+  border-top: 1px solid #d3d7cf;
+  clear: both;
+}
+
+div.issue-comment-signin {
+  -moz-border-radius: 0 0 3px 3px;
+  -webkit-border-radius: 3px;
+  -webkit-border-top-left-radius: 0;
+  -webkit-border-top-right-radius: 0;
+  background-color: #d3d7cf;
+  padding: 4px;
+}
+
+div.issue-comment-signin a {
+  color: #000;
+}
+
+div.issue-changes {
+  background-color: #d3d7cf;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 4px;
+  width: 60%;
+}
+
+div.issue-changes-timeline {
+  background-color: #eeeeec;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  margin-top: 4px;
+  padding: 4px;
+  width: 60%;
+  color: #888a85;
+}
+
+div.issue-prev-next {
+  float: right;
+  margin-top: -1.5em;
+}
+
+div.issue-submit-info {
+  background-color: #d3d7cf;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
+
+div.issue-submit-info h2 {
+  margin-top: 0;
+}
+
+span.label {
+  color: #204a87;
+  padding-left: 0.5em;
+}
+
+span.label img {
+  max-height: 13px;
+  vertical-align: -10%;
+}
+
+a.label {
+  color: #204a87;
+  text-decoration: none;
+}
+
+.label {
+  color: #204a87;
+}
+
+.nobrk {
+ white-space: nowrap;
+}
+
+hr {
+  height: 1px;
+  border: 0;
+  background: #e6e6e6;
+}
+
+hr.attach {
+  visibility: visible;
+  border: 0;
+  background-color: #d3d7cf;
+  color: #d3d7cf;
+  width: 40%;
+}
+
+textarea {
+  font-family: monospace;
+}
+
+h1.title {
+  font-weight: normal;
+}
+
+h1.project-title {
+  float: right;
+  font-weight: normal;
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  text-align: right;
+  z-index: 100;
+  position: relative;
+  padding-right: 3px;
+}
+
+h1.project-title img.logo {
+  max-height: 22px;
+  vertical-align: text-bottom;
+  padding-left: 7px;
+}
+
+h1.project-title img.lock {
+  width: 12px;
+  position: absolute;
+  right: 1px;
+  top: 12px;
+}
+
+.note {
+  font-size: 80%;
+}
+
+.smaller {
+  font-size: 90%;
+}
+
+span.active {
+  font-weight: bold;
+}
+
+.helptext {
+  font-size: 80%;
+  color: #555753;
+  max-width: 600px;
+  margin-top: 0.25em;
+  display: inline-block;
+}
+
+div.container {
+  clear: both;
+}
+
+.sep {
+  margin: 0 0.3em;
+}
+
+/**
+ * Tabs
+ */
+#main-tabs {
+  line-height: normal;
+}
+
+#main-tabs a {
+  background-color: #d3d7cf;
+  -moz-border-radius: 3px 3px 0 0;
+  -webkit-border-radius: 3px;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+  padding: 4px 4px 0 4px;
+  text-decoration: none;
+  color: #2e3436;
+  font-weight: 600;
+}
+
+#main-tabs a.active {
+  background-color: #a5e26a;
+}
+
+#sub-tabs {
+  background-color: #a5e26a;
+  -moz-border-radius: 0 3px 3px 3px;
+  -webkit-border-radius: 3px;
+  -webkit-border-top-left-radius: 0;
+  padding: 4px;
+}
+
+#sub-tabs a {
+  color: #2e3436;
+}
+
+#sub-tabs a.active {
+  text-decoration: none;
+}
+/**
+ * Tree list
+ */
+table.tree-list {
+  width: 100%;
+}
+
+table.tree-list th {
+  background-color: #e4e8E0;
+  vertical-align: top;
+  border-color: #d3d7cf;
+}
+
+table.tree-list tr {
+  border-left: 1px solid #d3d7cf;
+  border-right: 1px solid #d3d7cf;
+  border-bottom: 1px solid #d3d7cf;
+}
+
+table.tree-list td {
+  border: none;
+  vertical-align: top;
+}
+
+table.tree-list tfoot th, table.code tfoot th {
+  text-align: right;
+  font-weight: normal;
+}
+
+table.tree-list tfoot th a, table.code tfoot th a {
+  color: #000;
+  font-weight: normal;
+}
+
+table.tree-list tfoot th ul, table.code tfoot th ul {
+  text-align: left;
+  font-size: 85%;
+}
+
+table.tree-list tr.log {
+  border-bottom: 1px solid #e7ebe3;
+  /* background-color: #eef2ea !important; */
+}
+
+table.tree-list tr.extra {
+/*  border-bottom: 1px solid #e7ebe3;  */
+/*  background-color: #eef2ea !important; */
+}
+
+table td.fileicon {
+  width: 20px;
+
+}
+
+/**
+ * Autocomplete.
+ */
+.ac_results {
+  padding: 0px;
+  border: 1px solid black;
+  background-color: white;
+  overflow: hidden;
+  z-index: 99999;
+  text-align: left;
+}
+
+.ac_results ul {
+  width: 100%;
+  list-style-position: outside;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ac_results li {
+  margin: 0px;
+  padding: 2px 5px;
+  cursor: default;
+  display: block;
+  /*
+   if width will be 100% horizontal scrollbar will apear
+   when scroll mode will be used
+   */
+  /*width: 100%;*/
+  font: menu;
+  font-size: 12px;
+  /*
+   it is very important, if line-height not setted or setted
+   in relative units scroll will be broken in firefox
+   */
+  line-height: 16px;
+  overflow: hidden;
+}
+
+.ac_loading {
+  background: white url('../img/indicator.gif') right center no-repeat;
+}
+
+.ac_odd {
+  background-color: #eee;
+}
+
+.ac_over {
+  background-color: #4e9a06;
+  color: white;
+}
+
+table.disp th, table.disp td {
+  border: none;
+  vertical-align: top;
+}
+
+/**
+ * Commit
+ */
+table.commit th, table.commit td {
+  border: none;
+  vertical-align: top;
+}
+table.commit th {
+  text-align: right;
+  font-weight: normal;
+}
+table.commit td, table.commit th {
+  padding: 3px;
+}
+table.commit table.changes td {
+  padding: 2px;
+}
+table.commit table.changes table.properties {
+  margin: 0;
+}
+table.commit table.changes table.properties tr:nth-child(even) {
+  background: #E4E8E0;
+}
+table.commit table.changes table.properties td {
+  white-space: pre-wrap;
+}
+table.commit table.changes table.properties td.removed {
+  font-style: italic;
+}
+
+/**
+ * syntax highlighting of diffs
+ */
+span.ctrl-char {
+  color: white;
+  background: black;
+  text-align: center;
+  display: inline-block;
+  padding: 1px 1px 0px 1px;
+  margin-left: 1px;
+  margin-right: 1px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  cursor: default;
+}
+
+/* special formatting for the TAB character: make it wider, so it is rendered more properly */ 
+span.ctrl-char[title="0x09"] {
+  width: 24px;
+}
+
+/* override any prettify css rule */
+span.ctrl-char > * {
+  color: white;
+}
+
+table.diff {
+  width: 100%;
+  table-layout: fixed;
+}
+
+table.diff td {
+  border: none;
+  vertical-align: top;
+  padding: 0;
+}
+
+table.diff.unified > tbody > tr > td + td,
+table.diff.context > tbody > tr > td + td + td + td {
+    border-right: 1px solid #d3d7cf;
+}
+
+table.diff th {
+  background-color: #e4e8E0;
+  vertical-align: top;
+  border-color: #d3d7cf;
+}
+
+table.diff div.scroll {
+  overflow: auto;
+}
+
+table.diff-contents td,
+table.diff-linecounts td {
+  vertical-align: top;
+  border-color: inherit;
+  padding: 0;
+}
+
+table.diff-contents td.next,
+table.diff-linecounts td.next  {
+  background-color: #e4e8E0;
+  vertical-align: top;
+  text-align: right;
+  border-color: #d3d7cf;
+  padding: 1px 10px;
+}
+
+table.diff-linecounts {
+  margin: 0;
+}
+
+table.diff-contents {
+  border-bottom: 1px solid #d3d7cf;
+  width: 100%;
+  margin: 0;
+}
+
+table.diff-linecounts tr,
+table.diff-contents tr {
+  height: 22px;
+}
+
+table.diff-linecounts tr {
+  border: 1px solid #d3d7cf;
+}
+
+table.diff-linecounts tr:first-child {
+  border-top: 0px;
+}
+
+table.diff-linecounts td {
+  line-height: 12px;
+  font-size: 90%;
+  padding: 2px 10px;
+  text-align: right;
+  border-left: 1px solid #d3d7cf;
+}
+
+table.diff-linecounts.left-hidden tr > td:first-child,
+table.diff-linecounts.right-hidden tr > td + td {
+  display: none;
+}
+
+table.diff-contents td {
+  line-height: 12px;
+  padding: 2px;
+  font-size: 90%; 
+  border: none;
+  white-space: pre;
+}
+
+table.diff-contents td.added {
+  background-color: #dfd;
+}
+
+table.diff-contents td.removed {
+  background-color: #fdd;
+}
+
+table.diff-contents td > span.ctrl-char {
+  visibility: hidden;
+}
+
+table.diff-contents td:hover > span.ctrl-char {
+  visibility: visible;
+}
+
+table.diff-contents td.added > span.ctrl-char {
+  background: #0A0;   
+}
+
+table.diff-contents td.removed > span.ctrl-char {
+  background: #A00;
+}
+
+/**
+ * view file content
+ */
+table.code {
+  border-bottom: 1px solid #d3d7cf;
+  border-top: 1px solid #d3d7cf;
+  width: 100%;
+}
+
+table.code th {
+  background-color: #e4e8E0;
+  vertical-align: top;
+  border-color: #d3d7cf;
+}
+
+table.code tr {
+  border-left: 1px solid #d3d7cf;
+  border-right: 1px solid #d3d7cf;
+  border-bottom: none;
+  border-top: none;
+}
+
+table.code td {
+  font-size: 90%;
+  vertical-align: top;
+  padding: 1px;
+  border-color: inherit;
+}
+
+table.code td.code {
+  border: none;
+  /* Whitespace hacking from: http://ln.hixie.ch/ */
+  white-space: pre; /* CSS2 */
+  white-space: -moz-pre-wrap; /* Mozilla */
+  white-space: -hp-pre-wrap; /* HP printers */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: pre-wrap; /* CSS 2.1 */
+  word-wrap: break-word; /* IE */
+  padding-left: 5px;
+}
+
+table.code td.code span.ctrl-char {
+  visibility: hidden;
+}
+
+table.code td.code:hover span.ctrl-char {
+  visibility: visible;
+}
+
+table.code td.code-lc {
+  text-align: right;
+  padding: 1px 5px;
+  border-color: inherit;
+  border-top: 1px solid #d3d7cf;
+  border-bottom: 1px solid #d3d7cf;
+  width: 3em;
+}
+
+table.code td.code-lc a {
+  color: #555753;
+  text-decoration: none;
+}
+
+/**
+ * Download
+ */
+div.download-file {
+  padding: 1em 1em 1em 3em;
+  background: url("../img/down-large.png");
+  background-repeat: no-repeat;
+  background-position: 1em 1em;
+  font-size: 140%;
+  margin-bottom: 1.5em;
+  background-color: #bbe394;
+  width: 40%;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+table.download {
+  margin-top: 1.5em;
+}
+
+/**
+ * Wiki
+ */
+p.desc {
+  background-color: #eeeeec;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 4px;
+  width: 60%;
+}
+
+p.preview img {
+  max-width: 60%;
+}
+
+p.preview iframe {
+  width: 60%;
+  height: 300px;
+}
+
+div.old-rev {
+  padding: 1em 1em 0.1em 1em;
+  margin-bottom: 1em;
+  background-color: #bbe394;
+  width: 40%;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+div.deprecated-page {
+  padding: 1em 1em 0.1em 3em;
+  margin-bottom: 1em;
+  background: url("../img/warning-large.png");
+  background-repeat: no-repeat;
+  background-position: 1em 1em;
+  font-size: 120%;
+  background-color: #bbe394;
+  width: 40%;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+li.old-rev {
+  font-style: italic;    
+}
+
+.delp {
+  float: right;
+  position: relative;
+}
+
+.delp a {
+  color: #a00;
+}
+
+ul > li {
+  list-style: disc outside none;
+}
+
+ol > li {
+  list-style: decimal outside none;
+}
+
+#branding {
+  float: right;
+  position: relative;
+  margin-right: -10px;
+  margin-bottom: 10px;
+  width: 115px;
+  font-size: 8px;
+  text-align: right;
+  padding-right: 20px;
+  padding-left: 0px;
+  background-color: #eeeeec;
+  -moz-border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 3px;
+  -webkit-border-top-right-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+  color: #888a85;
+  clear: both;
+  background-image: url("../img/ceondo.png");
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+
+#branding a {
+  color: #777;
+}
+
+#branding a:visited {
+  color: #777;
+}
+
+#ft {
+  padding: 0px;
+  margin: 0px;
+}
+
+#wiki-toc {
+  float: right;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  max-width: 33%;
+}
+
+#wiki-toc-content {
+  border:  1px solid #999999;
+  border-width: 1px 0;
+  padding: 10px 0;
+  padding-bottom: 15px;
+  background-color: #ffffff;
+  display: block;
+}
+
+#wiki-toc-content a {
+  display: block;
+  margin-top: 0.5em;
+  font-size: 90%;
+}
+
+#wiki-toc-content a:first-child {
+  margin-top: 0;
+}
+
+#wiki-toc-content a.wiki-h2 {
+  margin-left: 1em;
+}
+
+#wiki-toc-content a.wiki-h3 {
+  margin-left: 2em;
+}
+
+.resource-container {
+  border: 1px solid #EEE;
+  padding: 5px;
+}
+
+.resource-container + * {
+  clear: both;
+}
+
+.resource-container .preview {
+  margin-bottom: 5px;
+}
+
+.resource-container .preview * {
+  width: 100%;
+  height: 100%;
+}
+
+.resource-container .preview img {
+  height: auto;
+}
+
+.resource-container .preview + .title {
+  font-size: 80%;
+}
+
+.resource-container .title * {
+  vertical-align: middle;
+}
+
+.resource-container .title .download {
+  display: inline-block;
+  margin-right: 5px;
+  background: url("../img/down-large.png") no-repeat;
+  width: 22px;
+  height: 22px;
+}
+
+/**
+ * main menu
+ */
+#main-menu {
+  padding: 0;
+  margin: 5px 0 13px;
+}
+
+#main-menu > li {
+  list-style-type: none;
+  margin-left: 5px;
+  padding-left: 5px;
+  border-left: 1px solid black;
+  display: inline-block;
+  line-height: 1em;
+}
+
+#main-menu > li:first-child {
+  margin-left: 0;
+  padding-left: 0;
+  border-left: none;
+}
+
+/**
+ * project list popup
+ */
+#project-list {
+  position: relative;
+  padding-left: 0 !important;
+}
+
+#project-list > a {
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-top: -3px;
+  padding-top: 3px;
+}
+
+#project-list + li {
+  margin-left: 0;
+}
+
+#project-list ul {
+  display: none;
+  background: #A5E26A;
+  border-top: 0;
+  position: absolute;
+  margin: 0;
+  z-index: 1000;
+  top: 1.1em;
+  -moz-border-radius: 0 0 3px 3px;
+  border-radius: 0 0 3px 3px;
+  -moz-box-shadow: 0 10px 20px #333;
+  -webkit-box-shadow: 0 10px 20px #333;
+  box-shadow: 0 10px 20px #333;
+  max-height: 400px;
+  min-width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#project-list ul li {
+  margin: 7px;
+  white-space: nowrap;
+  font-size: 0.95em;
+  list-style-type: none;
+  position: relative;
+}
+
+#project-list ul li img.logo {
+  max-height: 16px;
+  vertical-align: text-bottom;
+  padding-right: 5px;
+}
+
+#project-list ul li img.lock {
+  position: absolute;
+  width: 9px;
+  left: 9px;
+  top: 9px;
+}
+
+#project-list ul li:first-child {
+  margin-top: 10px;
+}
+
+#project-list ul li a {
+  text-decoration: none;
+}
+
+#project-list:hover > a {
+  background: #A5E26A;
+  text-decoration: none;
+}
+
+#project-list:hover a {
+  color: #2E3436;
+}
+
+/**
+ * List expander for tag and branch view
+ */
+.context > .expander {
+  position: relative;
+  overflow: hidden;
+  background: white;
+}
+
+.context > .expander > ul {
+  margin: 5px;
+}
+
+.context > .expander > ul > li {
+  white-space: nowrap;
+  list-style-type: none;
+}
+
+.context > .expander > ul > li.active {
+  font-weight: bold;
+}
+
+.context > .expander > .gradient {
+  position: absolute;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  z-index: 998;
+  background: url(../img/white_gradient.png) repeat-y;
+}
+
+.context > .expander:hover,
+.context > .expander.activated {
+  position: absolute;
+  z-index: 999;
+  overflow: visible;
+  -moz-border-radius: 0 10px 10px 0;
+  -webkit-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
+  -moz-box-shadow: 3px 3px 5px #333;
+  -webkit-box-shadow: 3px 3px 5px #333;
+  box-shadow: 3px 3px 5px #333;
+  padding: 5px 10px;
+  margin: -5px -10px;
+  min-width: 180px;
+}
+
+.context > .expander:hover > .gradient,
+.context > .expander.activated > .gradient {
+  display: none;
+}
+
+.context > .expander span.input-with-delete {
+  padding: 1px;
+  border: 1px dotted #474747;
+  display: none;
+  float: right;
+  margin-left: 10px;
+  margin-top: -3px;
+}
+
+.context > .expander span.input-with-delete * {
+  vertical-align: middle;
+}
+
+.context > .expander span.input-with-delete span {
+  display: inline-block;
+  width: 13px;
+  height: 12px;
+  background: url(../img/clear.png) left top no-repeat;
+  cursor: pointer;
+}
+
+.context > .expander span.input-with-delete input.filter-list {
+  font-size: 11px;
+  font-weight: normal;
+  color: #333;
+  border: 0;
+  width: 100px;
+  height: 11px;
+}
+
+.context > .expander:hover span.input-with-delete.activated,
+.context > .expander.activated span.input-with-delete.activated {
+  display: block;
+}
+
+.context > .expander div.input-with-delete.default {
+  opacity: 0.5;
+}
+
+/**
+ * SCM action icons in the commit view
+ */
+span.scm-action {
+  display: inline-block;
+  line-height: 9px;
+  font-size: 9px;
+  text-align: center;
+  padding: 2px;
+  width: 9px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: white;
+  cursor: default;
+  margin-top: 2px;
+}
+
+span.scm-action.added {
+  background-color: darkgreen;
+}
+
+span.scm-action.deleted {
+  background-color: darkred;
+}
+
+span.scm-action.patched {
+  background-color: orange;
+}
+
+span.scm-action.renamed {
+  background-color: purple;
+}
+
+span.scm-action.copied {
+  background-color: orchid;
+}
+
+span.scm-action.property-changed {
+  background-color: blue;
+}
+
+/*
+ *  Stats on index
+ */
+#stats > h3 {
+  text-decoration : underline;
+}
+
+#stats table tr td {
+  border-style: none;
+}
+
+#stats td {
+  padding: .2em;
+}
+
+/*
+ *  Project list
+ */
+div.p-list-prj {
+  width: 24em;
+  min-height: 5em;
+  float: left;
+  margin: 0 1em 0.5em 0;
+}
+
+div.p-list-prj div.logo {
+  float: left;
+  width: 32px;
+  height: 32px;
+  position: relative;
+}
+
+div.p-list-prj div.logo img {
+  max-width: 32px;
+  max-height: 32px;
+}
+
+div.p-list-prj div.logo .private {
+  top: 18px;
+  right: -3px;
+  position: absolute;
+}
+
+div.p-list-prj div.logo .activity {
+  height: 4px;
+  width: 32px;
+  margin-top: 5px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  background: #E6E6E6;
+}
+
+div.p-list-prj div.logo .activity .bar {
+  background: #A5E26A;
+  height: 100%;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+}
+
+div.p-list-prj p {
+  margin: 0;
+  margin-left: 42px;
+}
+
+div.p-list-prj .smaller {
+  font-size: 85%;
+}
+
+a.external-link {
+	background: url(../img/external_link.png) no-repeat right center;
+	padding-right: 15px;
+	text-decoration: none;
+}
+
+/*
+ * Issue summary
+ */
+div.issue-summary {
+  float: left;
+  width: 50%;
+}
+
+div.issue-summary > div {
+  margin-right: 3em;
+  padding-top: 1em;
+}
+
+div.issue-summary h2 {
+  border-bottom: 1px solid #A5E26A;
+}
+
+table.issue-summary {
+  width: 100%;
+}
+
+table.issue-summary tr td {
+  border: 0;
+  padding: .1em .005em;
+}
+
+table.issue-summary td.graph {
+  width: 60%;
+}
+
+table.issue-summary td.count {
+  text-align: right;
+  padding-right: .5em;
+}
+
+table.graph {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+table.issue-summary td.graph-color {
+  background: #3C78B5;
+}
+
+table.issue-summary td.graph-percent {
+  padding-left: 1em;
+}
+
+table.form.access-rights {}
+
+table.form.access-rights th + th,
+table.form.access-rights td + td {
+  padding-left: 1em;
+}
+
+table.form.access-rights td + td label {
+  padding-right: 0.5em;
+}
+
+table.form.access-rights th *,
+table.form.access-rights td * {
+  vertical-align: middle;
+}

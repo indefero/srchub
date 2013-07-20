@@ -1,0 +1,18 @@
+{extends "idf/base-simple.html"}
+{block docclass}yui-t7{/block}
+{block tabhome} class="active"{/block}
+{block subtabs}
+<a href="{url 'IDF_Views::index'}" class="active">{trans 'Home'}</a> |
+<a href="{url 'IDF_Views::listProjects', array('all', 'name')}" class="active">{trans 'Projects'}</a>
+{/block}
+{block body}
+<div class="forge-page">
+{markdown_forge $content, $request}
+</div>
+{/block}
+
+{block context}{/block}
+
+{block foot}<div id="branding">Powered by <a href="http://www.indefero.net" title="InDefero, bug tracking and more">InDefero</a>,
+		<br />a <a href="http://www.ceondo.com">Céondo Ltd</a> initiative.<br />
+		srchub.org is ran by <br /><a href="mailto:adamsna[at]datanethost.net">Nathan Adams</a>.</div>{/block}

@@ -1,0 +1,58 @@
+{extends "idf/gadmin/usher/base.html"}
+
+{block docclass}yui-t3{assign $inUsher=true}{/block}
+
+{block body}
+<table class="recent-issues">
+<tr>
+    <th>{trans "server name"}</th>
+    <th>{trans "status"}</th>
+    <th>{trans "action"}</th>
+</tr>
+{if count($servers) == 0}
+<tr>
+    <td colspan="3" align="center">{trans 'No monotone servers configured.'}</td>
+</tr>
+{else}
+{foreach $servers as $server}
+<tr>
+    <td>{$server.name}</td>
+    <td>{$server.status}</td>
+    <td>
+        {if preg_match("/ACTIVE|WAITING|RUNNING|SLEEPING/", $server.status)}
+           <a href="{url 'IDF_Views_Admin::usherServerControl', array($server.name, 'stop')}">
+             {trans 'stop'}</a>
+        {elseif $server.status == "STOPPED"}
+           <a href="{url 'IDF_Views_Admin::usherServerControl', array($server.name, 'start')}">
+             {trans 'start'}</a>
+        {/if}
+        {if preg_match("/ACTIVE|WAITING|SLEEPING|STOPPING/", $server.status)}
+          | <a href="{url 'IDF_Views_Admin::usherServerControl', array($server.name, 'kill')}">
+              {trans 'kill'}</a>
+        {/if}
+        {if preg_match("/STOPPING|ACTIVE/", $server.status)}
+          | <a href="{url 'IDF_Views_Admin::usherServerConnections', array($server.name)}">
+              {trans 'active connections'}</a>
+        {/if}
+</tr>
+{/foreach}
+{/if}
+</table>
+{/block}
+
+{block context}
+<div class="issue-submit-info">
+<p><strong>{trans 'Status explanation'}</strong></p>
+<ul>
+<li>REMOTE: {trans 'remote server without open connections'}</li>
+<li>ACTIVE n: {trans 'server with n open connections'}</li>
+<li>WAITING: {trans 'local server running, without open connections'}</li>
+<li>SLEEPING: {trans 'local server not running, waiting for connections'}</li>
+<li>STOPPING n: {trans 'local server is about to stop, n connections still open'}</li>
+<li>STOPPED: {trans 'local server not running, not accepting connections'}</li>
+<li>SHUTDOWN: {trans 'usher is shut down, not running and not accepting connections'}</li>
+</ul>
+
+</div>
+{/block}
+

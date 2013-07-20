@@ -1,0 +1,41 @@
+<div class="p-list">
+    {foreach $projects as $p}
+    <div class="p-list-prj">
+        <div class="logo">
+            <a href="{url 'IDF_Views_Project::home', array($p.shortname)}">
+            <img src="{url 'IDF_Views_Project::logo', array($p.shortname)}" alt="{trans 'Project logo'}" />
+            </a>
+            {if $p.private}
+            <div class="private">
+                <a href="{url 'IDF_Views_Project::home', array($p.shortname)}">
+                    <img style="float:right" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />
+                </a>
+            </div>
+            {/if}
+            {if $p.current_activity_value}
+            {assign $activity = $p.current_activity_value * 100}
+            <div class="activity" title="{blocktrans}Project activity: {$activity}%{/blocktrans}"><div class="bar" style="width: {$activity}%"></div></div>
+            {/if}
+        </div>
+        <p>
+            <a href="{url 'IDF_Views_Project::home', array($p.shortname)}"><strong>{$p}</strong></a>
+            {assign $url = $p.external_project_url}
+            {if $url != ''}
+                <a href="{$url}" target="_blank" class="external-link" title="{trans 'External link to project'}" />&nbsp;</a>
+            {/if}
+            {if $p.private} - <span class="smaller">{trans 'Private project'}</span>{/if}
+        </p>
+        <p class="smaller">{$p.shortdesc}</p>
+        <p class="smaller">{trans 'Labels:'}
+        {assign $tags = $p.get_tags_list()}
+        {if count($tags) == 0}{trans 'n/a'}{else}
+            {foreach $p.get_tags_list() as $idx => $label}
+                {if $idx != 0}, {/if}
+                <a class="label" href="{url 'IDF_Views::listProjectsByLabel', array($label->id, $order)}">{$label}</a>
+            {/foreach}
+        {/if}
+        </p>
+    </div>
+    {/foreach}
+    <div style="clear:both"></div>
+</div>

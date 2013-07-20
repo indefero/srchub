@@ -1,0 +1,25 @@
+{extends "idf/gadmin/usher/base.html"}
+
+{block docclass}yui-t3{assign $inUsherServerConnections=true}{/block}
+
+{block body}
+<table class="recent-issues">
+<tr>
+    <th>{trans "address"}</th>
+    <th>{trans "port"}</th>
+</tr>
+{if count($connections) == 0}
+<tr>
+    <td colspan="2" align="center">{trans 'No connections found.'}</td>
+</tr>
+{else}
+{foreach $connections as $connection}
+<tr>
+    <td>{$connection.address}</td>
+    <td>{$connection.port}</td>
+</tr>
+{/foreach}
+{/if}
+</table>
+{/block}
+

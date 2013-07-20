@@ -1,0 +1,5 @@
+{extends "idf/gadmin/base.html"}
+{block tabforge} class="active"{/block}
+{block subtabs}
+<a {if $inIndex}class="active" {/if}href="{url 'IDF_Views_Admin::forge'}">{trans 'Frontpage'}</a>
+{/block}

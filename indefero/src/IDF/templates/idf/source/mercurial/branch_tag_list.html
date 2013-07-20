@@ -1,0 +1,39 @@
+{if !$view_url}
+{assign $view_url = 'IDF_Views_Source::treeBase'}
+{/if}
+<div class="expander">
+<div class="gradient"></div>
+<h3>
+  {trans 'Branches'}
+  <span class="input-with-delete">
+    <input type="text" rel="branch-list" class="filter-list"  title="{trans 'filter branches'}" />
+    <span></span>
+  </span>
+</h3>
+<ul id="branch-list">
+{foreach $branches as $branch => $path}
+{aurl 'url', $view_url, array($project.shortname, $branch)}
+<li class="label{if in_array($branch, $tree_in)} active{/if}">
+  <a href="{$url}" class="label">{$branch}</a>
+</li>
+{/foreach}
+</ul>
+{if $tags}
+<h3>
+  {trans 'Tags'}
+  <span class="input-with-delete">
+    <input type="text" rel="tag-list" class="filter-list"  title="{trans 'filter tags'}" />
+    <span></span>
+  </span>
+</h3>
+<ul id="tag-list">
+{foreach $tags as $tag => $path}
+{aurl 'url', $view_url, array($project.shortname, $tag)}
+<li class="label{if in_array($tag, $tags_in)} active{/if}">
+  <a href="{$url}" class="label">{$tag}</a>
+</li>
+{/foreach}
+</ul>
+{/if}
+</div>
+

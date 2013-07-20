@@ -1,0 +1,58 @@
+{extends "idf/wiki/base.html"}
+
+{block extraheader}
+{if !$rev.is_head}<meta name="ROBOTS" content="NOINDEX" />{/if}
+<link rel="stylesheet" type="text/css" media="print" href="{media '/idf/css/print-wiki.css'}" />
+{/block}
+
+{block docclass}yui-t3{assign $inPageView=true}{/block}
+
+{block body}
+{if $deprecated}{* deprecated page *}
+<div class="deprecated-page">
+<p>{blocktrans}<strong>Attention!</strong> This page is marked as deprecated, 
+use it as reference only if you are sure you need these specific information.{/blocktrans}</p>
+</div>
+{/if}
+{if !$rev.is_head}
+{ashowuser 'submitter', $rev.get_submitter(), $request}{aurl 'url', 'IDF_Views_Wiki::viewPage', array($project.shortname, $page.title)}
+<div class="old-rev">
+<p>{blocktrans}You are looking at an old revision of the page 
+<a href="{$url}">{$page.title}</a>. This revision was created
+by {$submitter}.{/blocktrans}</p>
+</div>
+{/if}
+
+<div id="wiki-content">
+<div id="wiki-toc"><span id="contentheader">{trans 'Table of Content'}</span><div id="wiki-toc-content"></div></div>
+<script type="text/javascript" src="{media '/idf/js/wiki-toc.js'}"></script>
+<p class="desc">{$page.summary}</p>
+
+{markdown $rev.content, $request}
+
+{if !$rev.is_head and ($isOwner or $isAdmin)}
+{aurl 'url', 'IDF_Views_Wiki::deletePageRev', array($project.shortname, $rev.id)}
+<p class="delp"><a href="{$url}" title="{trans 'Delete this revision'}"><img src="{media '/idf/img/trash.png'}" style="vertical-align: text-bottom;" alt="{trans 'Trash'}" /></a> <a href="{$url}">{trans 'Delete this revision'}</a></p>
+{/if}
+
+</div>
+{/block}
+{block context}
+{ashowuser 'submitter', $page.get_submitter(), $request}
+<p><strong>{trans 'Created:'}</strong> <span class="nobrk">{$page.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>
+{if $rev.creation_dtime != $page.creation_dtime}<p>{ashowuser 'submitter', $rev.get_submitter(), $request}
+<strong>{trans 'Updated:'}</strong> <span class="nobrk">{$rev.creation_dtime|dateago}</span><br /><span class="nobrk">{blocktrans}by {$submitter}{/blocktrans}</span></p>{/if}
+{if $tags.count()}
+<p>
+<strong>{trans 'Labels:'}</strong><br />
+{foreach $tags as $tag}
+<span class="label"><strong>{$tag.class}:</strong>{$tag.name}</span><br />
+{/foreach}
+</p>{/if}
+{if $revs.count() > 0}
+<p><strong>{trans 'Old Revisions'}</strong></p>
+<ul>{foreach $revs as $old}
+<li><a href="{url 'IDF_Views_Wiki::viewPage', array($project.shortname, $page.title), array('rev'=>$old.id)}">{$old.summary}</a></li>
+{/foreach}</ul>
+{/if}
+{/block}

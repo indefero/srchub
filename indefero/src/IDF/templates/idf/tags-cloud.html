@@ -1,0 +1,6 @@
+<dl class="tagscloud smaller">{foreach $project.getTagCloud($cloud) as $class => $labels}
+<dt class="label">{$class}</dt>
+{foreach $labels as $idx => $label}
+{aurl 'url', $cloud_url, array($project.shortname, $label.id, 'open')}
+<dd><a href="{$url}" class="label">{$label.name}{if $idx != count($labels) - 1},{/if}</a></dd>
+{/foreach}{/foreach}</dl>

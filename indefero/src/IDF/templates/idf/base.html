@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{*
+# ***** BEGIN LICENSE BLOCK *****
+# This file is part of InDefero, an open source project management application.
+# Copyright (C) 2008-2011 Céondo Ltd and contributors.
+#
+# InDefero is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# InDefero is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ***** END LICENSE BLOCK *****
+*}
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="{media '/idf/css/yui.css'}" />
+  <link rel="stylesheet" type="text/css" href="{media '/idf/css/style.css'}" />
+  <link rel="icon" type="image/png" href="{media '/idf/img/favicon.png'}" />
+  <!--[if lt IE 7]>
+  <link rel="stylesheet" type="text/css" href="{media '/idf/css/ie6.css'}" />
+  <![endif]-->
+  {block extraheader}{/block}
+  <title>{block pagetitle}{$page_title|strip_tags}{/block}{if $project} - {$project.shortdesc}{/if}</title>
+  <script type="text/javascript" src="{media '/idf/js/jquery-1.7.2.min.js'}"></script>
+  {appversion}
+</head>
+<body>
+ 
+<div id="{block docid}doc3{/block}" class="{block docclass}yui-t3{/block}">
+  <div id="hd">
+    {if $project}
+<h1 class="project-title">{$project}<img class="logo" src="{url 'IDF_Views_Project::logo', array($project.shortname)}" alt="{trans 'Project logo'}" />{if $project.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}{assign $url = $project.external_project_url}{if $url != ''}<a href="{$url}" target="_blank" class="external-link" title="{trans 'External link to project'}" />&nbsp;</a>{/if}</h1>{/if}
+    {include 'idf/main-menu.html'}
+<div id="header">
+<div id="main-tabs">
+{if $project}
+  <a accesskey="1" href="{url 'IDF_Views_Project::home', array($project.shortname)}"{block tabhome}{/block}>{trans 'Project Home'}</a>
+{if $hasDownloadsAccess}  <a href="{url 'IDF_Views_Download::index', array($project.shortname)}"{block tabdownloads}{/block}>{trans 'Downloads'}</a>{/if}
+{if $hasWikiAccess}  <a href="{url 'IDF_Views_Wiki::listPages', array($project.shortname)}"{block tabwiki}{/block}>{trans 'Documentation'}</a>{/if}
+{if $hasIssuesAccess} <a href="{url 'IDF_Views_Issue::index', array($project.shortname)}"{block tabissues}{/block}>{trans 'Issues'}</a>{/if}
+{if $hasSourceAccess} <a href="{url 'IDF_Views_Source::treeBase', array($project.shortname, $project.getScmRoot())}"{block tabsource}{/block}>{trans 'Source'}</a>{/if}
+{if $hasReviewAccess} <a href="{url 'IDF_Views_Review::index', array($project.shortname)}"{block tabreview}{/block}>{trans 'Code Review'}</a>{/if}
+{if $isOwner}
+  <a href="{url 'IDF_Views_Project::admin', array($project.shortname)}"{block tabadmin}{/block}>{trans 'Project Management'}</a>{/if}{/if}
+</div>
+{block subtabs}{if $user.isAnonymous()} | {aurl 'url', 'IDF_Views::login'}{blocktrans}<a href="{$url}">Sign in or create your account</a> to create issues or add comments{/blocktrans}{/if}{/block}
+</div>
+
+{if $project.enableads}<p><center>
+
+ 
+
+</center></p>{/if}
+      <h1 class="title" id="title">{block titleicon}{/block}{block title}{$page_title}{/block}</h1>
+<br/>
+  </div>
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+    <div class="yui-g">
+          {if $user and $user.id}{getmsgs $user}{/if}
+      <div class="content">{block body}{/block}</div>
+    </div>
+      </div>
+    </div>
+    <div class="yui-b context" id="context">{block context}{/block}</div>
+  </div>
+  <div id="ft">{block foot}{/block}</div>
+</div>
+{include 'idf/js-hotkeys.html'}
+{include 'idf/list-filter.html'}
+{block javascript}{/block}
+{if $project}
+<script type="text/javascript" charset="utf-8">{literal}
+//<![CDATA[
+$(document).ready(function(){
+    var frag = location.hash;
+    if ($('#preview').length) {
+        location.hash = '#preview';
+    }
+    else if (frag.length > 3 && frag.substring(0, 3) == '#ic') {
+        $(frag).addClass("issue-comment-focus");
+    }
+
+    var contextTop = $('div#context').position().top;
+    var contextFixEnabled = true;
+    $(window).scroll(function() {
+         if (!contextFixEnabled || $(window).scrollTop() < contextTop)
+             $('div#context').css('position', 'relative');
+         else
+             $('div#context').css('position', 'fixed');
+    });
+    $(window).resize(function() {
+         contextFixEnabled =
+             $('div#context').offset().top + $('div#context').height() <
+             $(window).height();
+    });
+    $(window).resize();
+});
+//]]>{/literal}
+</script>{/if}
+</body>
+</html>
