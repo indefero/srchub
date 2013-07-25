@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+<link rel="icon" href="/repo/hg-stable/static/hgicon.png" type="image/png" />
+<meta name="robots" content="index, nofollow" />
+<link rel="stylesheet" href="/repo/hg-stable/static/style-paper.css" type="text/css" />
+<script type="text/javascript" src="/repo/hg-stable/static/mercurial.js"></script>
+
+<title>Mercurial (stable branch): 04eb7d7e115b hgweb.cgi</title>
+</head>
+<body>
+
+<div class="container">
+<div class="menu">
+<div class="logo">
+<a href="http://mercurial.selenic.com/">
+<img src="/repo/hg-stable/static/hglogo.png" alt="mercurial" /></a>
+</div>
+<ul>
+<li><a href="/repo/hg-stable/shortlog/04eb7d7e115b">log</a></li>
+<li><a href="/repo/hg-stable/graph/04eb7d7e115b">graph</a></li>
+<li><a href="/repo/hg-stable/tags">tags</a></li>
+<li><a href="/repo/hg-stable/branches">branches</a></li>
+</ul>
+<ul>
+<li><a href="/repo/hg-stable/rev/04eb7d7e115b">changeset</a></li>
+<li><a href="/repo/hg-stable/file/04eb7d7e115b/">browse</a></li>
+</ul>
+<ul>
+<li class="active">file</li>
+<li><a href="/repo/hg-stable/file/tip/hgweb.cgi">latest</a></li>
+<li><a href="/repo/hg-stable/diff/04eb7d7e115b/hgweb.cgi">diff</a></li>
+<li><a href="/repo/hg-stable/comparison/04eb7d7e115b/hgweb.cgi">comparison</a></li>
+<li><a href="/repo/hg-stable/annotate/04eb7d7e115b/hgweb.cgi">annotate</a></li>
+<li><a href="/repo/hg-stable/log/04eb7d7e115b/hgweb.cgi">file log</a></li>
+<li><a href="/repo/hg-stable/raw-file/04eb7d7e115b/hgweb.cgi">raw</a></li>
+</ul>
+<ul>
+<li><a href="/repo/hg-stable/help">help</a></li>
+</ul>
+</div>
+
+<div class="main">
+<h2 class="breadcrumb"><a href="/">Mercurial</a> &gt; <a href="/repo">repo</a> &gt; <a href="/repo/hg-stable">hg-stable</a> </h2>
+<h3>view hgweb.cgi @ 19161:04eb7d7e115b</h3>
+
+<form class="search" action="/repo/hg-stable/log">
+
+<p><input name="rev" id="search1" type="text" size="30" /></p>
+<div id="hint">find changesets by author, revision,
+files, or words in the commit message</div>
+</form>
+
+<div class="description">Added signature for changeset cceaf7af4c9e</div>
+
+<table id="changesetEntry">
+<tr>
+ <th class="author">author</th>
+ <td class="author">&#77;&#97;&#116;&#116;&#32;&#77;&#97;&#99;&#107;&#97;&#108;&#108;&#32;&#60;&#109;&#112;&#109;&#64;&#115;&#101;&#108;&#101;&#110;&#105;&#99;&#46;&#99;&#111;&#109;&#62;</td>
+</tr>
+<tr>
+ <th class="date">date</th>
+ <td class="date age">Sat, 01 Jun 2013 17:10:24 -0500</td>
+</tr>
+<tr>
+ <th class="author">parents</th>
+ <td class="author"><a href="/repo/hg-stable/file/227b9f13db13/hgweb.cgi">227b9f13db13</a> </td>
+</tr>
+<tr>
+ <th class="author">children</th>
+ <td class="author"></td>
+</tr>
+
+</table>
+
+<div class="overflow">
+<div class="sourcefirst"> line source</div>
+
+<div class="parity0 source"><a href="#l1" id="l1">     1</a> #!/usr/bin/env python
+</div>
+<div class="parity1 source"><a href="#l2" id="l2">     2</a> #
+</div>
+<div class="parity0 source"><a href="#l3" id="l3">     3</a> # An example hgweb CGI script, edit as necessary
+</div>
+<div class="parity1 source"><a href="#l4" id="l4">     4</a> # See also http://mercurial.selenic.com/wiki/PublishingRepositories
+</div>
+<div class="parity0 source"><a href="#l5" id="l5">     5</a> 
+</div>
+<div class="parity1 source"><a href="#l6" id="l6">     6</a> # Path to repo or hgweb config to serve (see 'hg help hgweb')
+</div>
+<div class="parity0 source"><a href="#l7" id="l7">     7</a> config = &quot;/path/to/repo/or/config&quot;
+</div>
+<div class="parity1 source"><a href="#l8" id="l8">     8</a> 
+</div>
+<div class="parity0 source"><a href="#l9" id="l9">     9</a> # Uncomment and adjust if Mercurial is not installed system-wide
+</div>
+<div class="parity1 source"><a href="#l10" id="l10">    10</a> # (consult &quot;installed modules&quot; path from 'hg debuginstall'):
+</div>
+<div class="parity0 source"><a href="#l11" id="l11">    11</a> #import sys; sys.path.insert(0, &quot;/path/to/python/lib&quot;)
+</div>
+<div class="parity1 source"><a href="#l12" id="l12">    12</a> 
+</div>
+<div class="parity0 source"><a href="#l13" id="l13">    13</a> # Uncomment to send python tracebacks to the browser if an error occurs:
+</div>
+<div class="parity1 source"><a href="#l14" id="l14">    14</a> #import cgitb; cgitb.enable()
+</div>
+<div class="parity0 source"><a href="#l15" id="l15">    15</a> 
+</div>
+<div class="parity1 source"><a href="#l16" id="l16">    16</a> from mercurial import demandimport; demandimport.enable()
+</div>
+<div class="parity0 source"><a href="#l17" id="l17">    17</a> from mercurial.hgweb import hgweb, wsgicgi
+</div>
+<div class="parity1 source"><a href="#l18" id="l18">    18</a> application = hgweb(config)
+</div>
+<div class="parity0 source"><a href="#l19" id="l19">    19</a> wsgicgi.launch(application)
+</div>
+<div class="sourcelast"></div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript">process_dates()</script>
+
+
+</body>
+</html>
+

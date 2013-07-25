@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# This hook informs IDF that new revisions arrived in the database
+# of the specified project.
+#
+# This hook is normally installed automatically at the creation of your
+# repository if you have everything configured correctly. If you want
+# to enable it later, you need to call it into your monotonerc file
+# from the hook "note_netsync_end". (See chapter "Event Notifications
+# and Triggers" on <http://monotone.ca/docs/Hooks.html#Hooks>.)
+#
+
+dir=$(dirname "$0")
+res=$(cd "$dir" && /bin/pwd || "$dir")
+SCRIPTDIR="$res/$(readlink $0)"
+PHP_POST_PUSH=$SCRIPTDIR/mtnpostpush.php
+
+TMPFILE=$(mktemp /tmp/mtn-post-push.XXXXXX) || exit 1
+while read rev; do echo $rev >> $TMPFILE; done
+
+echo php $PHP_POST_PUSH "$1" \< $TMPFILE \&\& rm -f $TMPFILE |\
+    at now > /dev/null 2>&1

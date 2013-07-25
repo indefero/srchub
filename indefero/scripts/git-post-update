@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# This hook does only one thing:
+#
+# 1. It calls the gitpostupdate.php script with the current $GIT_DIR 
+#    as argument. The gitpostupdate.php script will then trigger
+#    the 'gitpostupdate.php::run' event with the $GIT_DIR as argument
+#    together with merged $_ENV and $_SERVER array.
+#
+# This hook is normally installed automatically at the creation of your
+# repository if you have everything configured correctly. If you want
+# to enable it later, you need to symlink it as "post-update" in your 
+# $GIT_DIR/hooks folder.
+#
+# www$ chmod +x /home/www/indefero/scripts/git-post-update
+# git$ cd /home/git/repositories/project.git/hooks
+# git$ ln -s /home/www/indefero/scripts/git-post-update post-update
+#
+
+SCRIPTDIR=$(dirname $(readlink $0))
+FULL_GIT_DIR=$(cd "$GIT_DIR" && /bin/pwd || "$GIT_DIR")
+PHP_POST_UPDATE=$SCRIPTDIR/gitpostupdate.php
+
+echo php $PHP_POST_UPDATE $FULL_GIT_DIR | at now > /dev/null 2>&1
