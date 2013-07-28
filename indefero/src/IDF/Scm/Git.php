@@ -77,8 +77,6 @@ class IDF_Scm_Git extends IDF_Scm
 
             if ($line != '') {
                 $action = $line[0];
-                #echo "line = " . $line . "\n";
-                #echo "action = " . $action;
                 if ($action == 'A') {
                     $filename = trim(substr($line, 1));
                     $return->additions[] = $filename;
