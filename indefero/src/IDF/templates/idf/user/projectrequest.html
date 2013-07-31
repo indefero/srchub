@@ -1,0 +1,60 @@
+{extends "idf/base-simple.html"}
+{block body}
+
+{if $form.errors}
+<div class="px-message-error">
+    <p>{trans 'Oops, please check the errors on the form.'}</p>
+    {if $form.get_top_errors}
+    {$form.render_top_errors|unsafe}
+    {/if}
+</div>
+{/if}
+{if $success}
+<div>
+    <p>
+        Thank you - your request has been received and will be approved by an admin shortly.
+    </p>
+</div>
+{/if}
+{if $error}
+<div class="px-message-error">
+{$error}
+</div>
+{/if}
+
+<form method="post" action=".">
+    <table class="form" summary="">
+        <tr>
+            <th><strong>{$form.f.shortname.labelTag}:</strong></th>
+            <td>{if $form.f.shortname.errors}{$form.f.shortname.fieldErrors}{/if}
+                {$form.f.shortname|unsafe}<br />
+                <span class="helptext">{$form.f.shortname.help_text}</span>
+            </td>
+        </tr>
+        <tr>
+            <th><strong>{$form.f.repotype.labelTag}:</strong></th>
+            <td>{if $form.f.repotype.errors}{$form.f.repotype.fieldErrors}{/if}
+                {$form.f.repotype|unsafe}<br />
+                <span class="helptext">{$form.f.repotype.help_text}</span>
+            </td>
+        </tr>
+        <tr>
+            <th><strong>{$form.f.desc.labelTag}:</strong></th>
+            <td>{if $form.f.desc.errors}{$form.f.desc.fieldErrors}{/if}
+                {$form.f.desc|unsafe}<br />
+                <span class="helptext">{$form.f.desc.help_text}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="Request Project" name="submit" /></td>
+        </tr>
+    </table>
+
+</form>
+
+{/block}
+{block context}
+
+
+{/block}
