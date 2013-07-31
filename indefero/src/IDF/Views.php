@@ -460,6 +460,29 @@ class IDF_Views
         ));
     }
 
+    public static function getOwnedProjects($user)
+    {
+        $db =& Pluf::db();
+        $false = Pluf_DB_BooleanToDb(false, $db);
+        $permSql = new Pluf_SQL(
+            "model_class='IDF_Project' AND owner_class='Pluf_User' ".
+            "AND owner_id=%s AND negative=".$false, $user->id
+        );
+        $rows = Pluf::factory('Pluf_RowPermission')->getList(array('filter' => $permSql->gen()));
+        $ids = array();
+        if ($rows->count() > 0) {
+            foreach ($rows as $row) {
+                if (in_array($row->model_id, $ids))
+                    continue;
+                $ids[] = $row->model_id;
+            }
+        }
+        $sql = new Pluf_SQL(sprintf("id IN (%s)", implode(", ", $ids)));
+        return Pluf::factory('IDF_Project')->getList(array(
+            'filter'=> $sql->gen(),
+        ));
+    }
+
     /**
      * Returns a list of global tags each carrying the number of projects that have the
      * particular tag set

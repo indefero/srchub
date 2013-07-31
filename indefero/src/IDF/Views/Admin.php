@@ -174,6 +174,63 @@ class IDF_Views_Admin
                                                $request);
     }
 
+    public $projectRequestCreate_precond = array('Pluf_Precondition::staffRequired');
+    public function projectRequestCreate($request, $match)
+    {
+        $title = __('Create Requested Project');
+        $createdtext = "";
+        $form = null;
+        $errors = null;
+        if (count($match) == 2)
+        {
+
+            $projreqobj = new IDF_ProjectRequest($match[1]);
+            $form = new IDF_Form_Admin_ProjectCreate(array(
+                "name" => $projreqobj->shortname,
+                "shortname" => $projreqobj->shortname,
+                "shortdesc" => $projreqobj->desc,
+                "scm" => $projreqobj->repotype,
+                "owners" => $projreqobj->get_submitter->login,
+                "template" => "--"
+            ), array("user" => $projreqobj->get_submitter));
+            if ($form->isValid())
+            {
+
+
+
+                Pluf::loadFunction('Pluf_HTTP_URL_urlForView');
+                $from_email = Pluf::f('from_email');
+                $tmpl = new Pluf_Template('idf/admin/request-email.txt');
+                $context = new Pluf_Template_Context(array("user" => $projreqobj->get_submitter, "shortname" => $projreqobj->shortname));
+                $text_email = $tmpl->render($context);
+                $email = new Pluf_Mail($from_email, $projreqobj->get_submitter->email,
+                    __('Status of repository request'));
+                $email->addTextMessage($text_email);
+                $email->sendMail();
+
+                $form->save();
+                $projreqobj->delete();
+                $createdtext = "Repo was created!";
+            } else {
+                $errors = $form->errors;
+                $createdtext = "There was an error creating the repo!";
+            }
+        }
+
+        $projectreqs = Pluf::factory("IDF_ProjectRequest")->getList();
+        //$projectreqs[0]->creation_dtime = "123";
+        //print_r($projectreqs[0]->creation_dtime);
+        foreach($projectreqs as $p) {
+            $p->creation_dtime = Pluf_Date::gmDateToString($p->creation_dtime);
+        }
+        return Pluf_Shortcuts_RenderToResponse('idf/admin/approveprojects.html', array (
+            'page_title' => $title,
+            'requests' => $projectreqs,
+            'createdtext' => $createdtext,
+            'form' => $form,
+            'errors' => $errors
+        ), $request);
+    }
     /**
      * Creation of a project.
      *

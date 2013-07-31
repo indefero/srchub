@@ -94,7 +94,7 @@ class Pluf_Cache_Apc extends Pluf_Cache
     public function get($key, $default=null)
     {
         $success = false;
-        $value = apc_fetch($this->keyprefix.$key, &$success);
+        $value = apc_fetch($this->keyprefix.$key, $success);
         if (!$success) return $default;
         if ($this->compress) $value = gzinflate($value);
         return unserialize($value);

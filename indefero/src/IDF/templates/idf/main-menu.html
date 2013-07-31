@@ -3,7 +3,9 @@
 {if !$user.isAnonymous()}
 {aurl 'url', 'idf_dashboard'}
 <li>{blocktrans}Welcome, <strong><a class="userw" href="{$url}">{$user}</a></strong>.{/blocktrans}
-<a href="{url 'IDF_Views::logout'}">{trans 'Sign Out'}</a></li>{else}<li>
+    <a href="{url 'IDF_Views::logout'}">{trans 'Sign Out'}</a></li>
+    <li><a href="{url 'IDF_Views_User::requestproject'}">Request Project</a></li>
+    {else}
 <a href="{url 'IDF_Views::login'}">{trans 'Sign in or create your account'}</a></li>
 {/if}{if $customForgePageEnabled}
 <li><a href="{url 'IDF_Views::index'}">{trans 'Home'}</a></li>

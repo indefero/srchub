@@ -32,6 +32,37 @@ Pluf::loadFunction('Pluf_Shortcuts_RenderToResponse');
  */
 class IDF_Views_User
 {
+    public $requestproject_precond = array('Pluf_Precondition::loginRequired');
+    public function requestproject($request)
+    {
+        $params = array("user" => $request->user);
+        $title = __('Request Project');
+        $success = false;
+        $error = false;
+        if ($request->method == 'POST') {
+            $form = new IDF_Form_ProjectRequest((array)$request->POST, $params);
+            if ($form->isValid()) {
+                $check = $form->save();
+                if ($check)
+                {
+                    $form = new IDF_Form_ProjectRequest(null, $params);
+                    $success = true;
+                } else {
+                    $error = "Repository shortname has already been taken.";
+                }
+            }
+
+        } else {
+            $form = new IDF_Form_ProjectRequest(null, $params);
+        }
+        return Pluf_Shortcuts_RenderToResponse('idf/user/projectrequest.html',
+                                                    array('page_title' => $title,
+                                                        'form' => $form,
+                                                        'success' => $success,
+                                                        'error' => $error),
+                                                            $request);
+
+    }
     /**
      * Dashboard of a user.
      *
@@ -83,7 +114,7 @@ class IDF_Views_User
              array('summary', 'IDF_Views_IssueSummaryAndLabels', __('Summary')),
              array('status', 'IDF_Views_Issue_ShowStatus', __('Status')),
              array('modif_dtime', 'Pluf_Paginator_DateAgo', __('Last Updated')),
-                              );
+        );
         $pag->configure($list_display, array(), array('status', 'modif_dtime'));
         $pag->items_per_page = 10;
         $pag->no_results_text = ($working) ? __('No issues are assigned to you, yeah!') : __('All the issues you submitted are fixed, yeah!');
@@ -240,6 +271,7 @@ class IDF_Views_User
      */
     public function view($request, $match)
     {
+        $db =& Pluf::db();
         $sql = new Pluf_SQL('login=%s', array($match[1]));
         $users = Pluf::factory('Pluf_User')->getList(array('filter'=>$sql->gen()));
         if (count($users) != 1 or !$users[0]->active) {
@@ -248,20 +280,46 @@ class IDF_Views_User
 
         $user = $users[0];
         $user_data = IDF_UserData::factory($user);
-	//$projects = $request->user->getAllPermissions();
-	//print_r($request->user->permissions);
-	//print_r($projects[0]);
-	//$projects = array();
-        //foreach (IDF_Views::getProjects($request->user) as $project) {
-	//	$projects[] = $project; 
-	//}
-	$projects = IDF_Views::getProjects($request->user);
-	//print_r($projects);
-	return Pluf_Shortcuts_RenderToResponse('idf/user/public.html',
+
+        $false = Pluf_DB_BooleanToDb(false, $db);
+        $sql_results = $db->select(
+            'SELECT id FROM '.$db->pfx.'idf_projects '.
+            'WHERE '.$db->qn('private').'='.$false
+        );
+
+        $ids = array();
+        foreach ($sql_results as $id) {
+            $ids[] = $id['id'];
+        }
+        $f_sql = new Pluf_SQL('owner=%s AND project IN (' . implode(', ', $ids) . ' )', array($user->id));
+
+        $pag = new Pluf_Paginator(new IDF_Issue());
+        $pag->class = 'recent-issues';
+        $pag->item_extra_props = array('current_user' => $request->user);
+        $pag->summary = __('This table shows the open issues.');
+        $pag->forced_where = $f_sql;
+        $pag->action = 'idf_dashboard';
+        $pag->sort_order = array('modif_dtime', 'ASC'); // will be reverted
+        $pag->sort_reverse_order = array('modif_dtime');
+        $list_display = array(
+            'id' => __('Id'),
+            array('project', 'Pluf_Paginator_FkToString', __('Project')),
+            array('summary', 'IDF_Views_IssueSummaryAndLabels', __('Summary')),
+            array('status', 'IDF_Views_Issue_ShowStatus', __('Status')),
+            array('modif_dtime', 'Pluf_Paginator_DateAgo', __('Last Updated')),
+        );
+        $pag->configure($list_display, array(), array('status', 'modif_dtime'));
+        $pag->items_per_page = 10;
+        $pag->no_results_text = __('This user has no issues assigned to them!');
+        $pag->setFromRequest($request);
+
+	    $projects = IDF_Views::getOwnedProjects($user);
+	    return Pluf_Shortcuts_RenderToResponse('idf/user/public.html',
                                                array('page_title' => (string) $user,
                                                      'member' => $user,
                                                      'user_data' => $user_data,
-						     'projects' => $projects
+						                             'projects' => $projects,
+                                                     'issues' => $pag
                                                      ),
                                                $request);
     }

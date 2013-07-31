@@ -27,7 +27,8 @@
  */
 class Pluf_Search_ResultSet implements Iterator
 {
-    protected $results = array();
+    // Needs to be public for using in Wiki when there are over 100 pages
+    public $results = array();
 
     public function __construct($search_res)
     {

@@ -61,9 +61,11 @@ class IDF_Views_Issue
              'id' => __('Id'),
              array('summary', 'IDF_Views_Issue_SummaryAndLabels', __('Summary')),
              array('status', 'IDF_Views_Issue_ShowStatus', __('Status')),
+             array('submitter', 'Pluf_Paginator_FkToString', __('submitter')),
+             array('owner', 'Pluf_Paginator_FkToString', __('owner')),
              array('modif_dtime', 'Pluf_Paginator_DateAgo', __('Last Updated')),
                               );
-        $pag->configure($list_display, array(), array('id', 'status', 'modif_dtime'));
+        $pag->configure($list_display, array(), array('id', 'status', 'owner', 'submitter', 'modif_dtime'));
         $pag->items_per_page = 10;
         $pag->no_results_text = __('No issues were found.');
         $pag->setFromRequest($request);
