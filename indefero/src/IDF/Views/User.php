@@ -281,6 +281,13 @@ class IDF_Views_User
         $user = $users[0];
         $user_data = IDF_UserData::factory($user);
 
+        $otags = array();
+        // Note that this approach does not scale, we will need to add
+        // a table to cache the meaning of the tags for large forges.
+        foreach (IDF_Views::getProjects($user) as $project) {
+            $otags = array_merge($otags, $project->getTagIdsByStatus('open'));
+        }
+
         $false = Pluf_DB_BooleanToDb(false, $db);
         $sql_results = $db->select(
             'SELECT id FROM '.$db->pfx.'idf_projects '.
@@ -291,7 +298,7 @@ class IDF_Views_User
         foreach ($sql_results as $id) {
             $ids[] = $id['id'];
         }
-        $f_sql = new Pluf_SQL('owner=%s AND project IN (' . implode(', ', $ids) . ' )', array($user->id));
+        $f_sql = new Pluf_SQL('owner=%s AND status IN (' .implode(', ', $otags) . ') AND project IN (' . implode(', ', $ids) . ' )', array($user->id));
 
         $pag = new Pluf_Paginator(new IDF_Issue());
         $pag->class = 'recent-issues';
