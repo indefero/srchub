@@ -1,0 +1,60 @@
+{extends "idf/gadmin/base.html"}
+{block request} class="active"{/block}
+
+{block body}
+{if $createdtext}
+{$createdtext}
+        <br/>
+        <br/>
+{/if}
+{if $errors}
+{foreach $errors as $error}
+{$error}
+{/foreach}
+{/if}
+<table>
+    <tr>
+        <th>
+            Short Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Repotype
+        </th>
+        <th>
+            Submitter
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Approve
+        </th>
+    </tr>
+{foreach $requests as $req}
+<tr>
+    <td>
+        {$req.shortname}
+    </td>
+    <td>
+        {$req.desc}
+    </td>
+    <td>
+        {$req.repotype}
+    </td>
+    <td>
+        {$req.get_submitter.login}
+    </td>
+    <td>
+        {$req.creation_dtime}
+    </td>
+    <td>
+        <a href="{url 'IDF_Views_Admin::projectRequestCreate'}{$req.id}/">Approve</a>
+    </td>
+</tr>
+{/foreach}
+</table>
+
+{/block}

@@ -109,7 +109,7 @@ class IDF_Project extends Pluf_Model
                                   'default' => null,
                                   'verbose' => __('current project activity'),
                                   ),
-			    'enableads' =>
+			                'enableads' =>
                             array(
                                   'type' => 'Pluf_DB_Field_Integer',
                                   'blank' => false,

@@ -55,12 +55,6 @@ class IDF_Form_Register extends Pluf_Form
                                             'help_text' => __('We will never send you any unsolicited emails. We hate spam too!'),
                                             ));
 
-	$this->fields['regkey'] = new Pluf_Form_Field_Varchar(
-                                      array('required' => true,
-                                            'label' => __('Registration Key'),
-                                            'initial' => '',
-                                            'help_text' => __('Please enter the key given to you by adamsna[at]datanethost.net'),
-                                            ));
 
         $this->fields['terms'] = new Pluf_Form_Field_Boolean(
                                       array('required' => true,
@@ -71,8 +65,7 @@ class IDF_Form_Register extends Pluf_Form
 
     public function clean_regkey()
     {
-	if ($this->cleaned_data['regkey'] != "2rv9o4nb5")
-		throw new Pluf_Form_Invalid("The regkey was incorrect - please contact Nathan for the key!");
+
     }
 
     /**

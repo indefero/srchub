@@ -55,6 +55,7 @@ function IDF_Migrations_Install_setup($params=null)
                     'IDF_Gconf',
                     'IDF_EmailAddress',
                     'IDF_IssueRelation',
+                    'IDF_ProjectRequest'
                     );
     $db = Pluf::db();
     $schema = new Pluf_DB_Schema($db);
@@ -121,6 +122,7 @@ function IDF_Migrations_Install_teardown($params=null)
                     'IDF_Project',
                     'IDF_EmailAddress',
                     'IDF_IssueRelation',
+                    'IDF_ProjectRequest'
                     );
     $db = Pluf::db();
     $schema = new Pluf_DB_Schema($db);

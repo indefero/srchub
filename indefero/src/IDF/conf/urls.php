@@ -56,6 +56,12 @@ $ctl[] = array('regex' => '#^/dashboard/$#',
                'method' => 'dashboard',
                'name' => 'idf_dashboard');
 
+$ctl[] = array('regex' => '#^/requestproject/$#',
+                'base' => $base,
+                'model' => 'IDF_Views_User',
+                'method' => 'requestproject',
+                'name' => 'idf_requestproject');
+
 $ctl[] = array('regex' => '#^/dashboard/submitted/$#',
                'base' => $base,
                'model' => 'IDF_Views_User',
@@ -502,6 +508,16 @@ $ctl[] = array('regex' => '#^/admin/projects/create/$#',
                'base' => $base,
                'model' => 'IDF_Views_Admin',
                'method' => 'projectCreate');
+
+$ctl[] = array('regex' => '#^/admin/projects/createrequest/$#',
+                'base' => $base,
+                'model' => 'IDF_Views_Admin',
+                'method' => 'projectRequestCreate');
+
+$ctl[] = array('regex' => '#^/admin/projects/createrequest/(\d+/)?$#',
+                'base' => $base,
+                'model' => 'IDF_Views_Admin',
+                'method' => 'projectRequestCreate');
 
 $ctl[] = array('regex' => '#^/admin/projects/(\d+)/delete/$#',
                'base' => $base,

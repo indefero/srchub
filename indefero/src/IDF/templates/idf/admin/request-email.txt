@@ -1,0 +1,10 @@
+Hello {$user},
+
+You are receiving this email because you have requested a repository.
+Your request for {$shortname|safe} was approved!
+
+If you have any questions please feel free to email a member of the development team.
+
+Yours faithfully,
+The development team.
+

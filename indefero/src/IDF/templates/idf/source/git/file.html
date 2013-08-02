@@ -1,5 +1,5 @@
 {extends "idf/source/base.html"}
-{block extraheader}<link rel="stylesheet" type="text/css" href="{media '/idf/css/prettify.css'}" />{/block}
+{block extraheader} {/block}
 {block docclass}yui-t1{assign $inSourceTree=true}{/block}
 {block body}
 <h2 class="top"><a href="{url 'IDF_Views_Source::treeBase', array($project.shortname, $commit)}">{trans 'Root'}</a><span class="sep">/</span>{if $breadcrumb}{$breadcrumb|safe}{/if}</h2>
@@ -26,6 +26,5 @@
 {/block}
 
 {block javascript}
-<script type="text/javascript" src="{media '/idf/js/prettify.js'}"></script>
-<script type="text/javascript">prettyPrint();</script>
+
 {/block}

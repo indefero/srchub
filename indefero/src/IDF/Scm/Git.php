@@ -74,9 +74,9 @@ class IDF_Scm_Git extends IDF_Scm
 
         foreach ($out as $line) {
             $line = trim($line);
+
             if ($line != '') {
                 $action = $line[0];
-
                 if ($action == 'A') {
                     $filename = trim(substr($line, 1));
                     $return->additions[] = $filename;
@@ -87,8 +87,19 @@ class IDF_Scm_Git extends IDF_Scm
                     $filename = trim(substr($line, 1));
                     $return->patches[] = $filename;
                 } else if ($action == 'R') {
+                    // This patch is needed because it seems
+                    // that under a merge git may show a status
+                    // of RC and not say the location of the original file
                     $matches = preg_split("/\t/", $line);
-                    $return->renames[$matches[1]] = $matches[2];
+                    if (count($matches) != 3)
+                    {
+                        $return->additions[] = $matches[1];
+                    }
+                    else
+                    {
+                        $return->renames[$matches[1]] = $matches[2];
+                    }
+
                 } else if ($action == 'C') {
                     $matches = preg_split("/\t/", $line);
                     $return->copies[$matches[1]] = $matches[2];
