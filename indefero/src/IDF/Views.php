@@ -477,10 +477,15 @@ class IDF_Views
                 $ids[] = $row->model_id;
             }
         }
-        $sql = new Pluf_SQL(sprintf("id IN (%s)", implode(", ", $ids)));
-        return Pluf::factory('IDF_Project')->getList(array(
-            'filter'=> $sql->gen(),
-        ));
+        if (count($ids) > 0)
+        {
+            $sql = new Pluf_SQL(sprintf("id IN (%s)", implode(", ", $ids)));
+            return Pluf::factory('IDF_Project')->getList(array(
+                'filter'=> $sql->gen(),
+            ));
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -46,6 +46,7 @@
 </table>
 Projects:
 <table class="form">
+{if $projects}
 {foreach $projects as $p}
 {if $p.private == 0}
 <tr>
@@ -55,6 +56,13 @@ Projects:
 </tr>
 {/if}
 {/foreach}
+{else}
+    <tr>
+        <td>
+            This user is not working on any projects
+        </td>
+    </tr>
+{/if}
 </table>
 Issues user is working on:<br/><br/>
 {$issues.render}
