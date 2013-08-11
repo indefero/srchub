@@ -100,6 +100,16 @@
 <span class="helptext">{$form.f.public_key.help_text}</span>
 </td>
 </tr>
+    <tr>
+        <th>{$form.f.otpkey.labelTag}:</th>
+        <td>{if $form.f.otpkey.errors}{$form.f.otpkey.fieldErrors}{/if}
+            {$form.f.otpkey|unsafe} <a id="id_otpgen" href="#">Generate</a><br />
+            <span class="helptext">{$form.f.otpkey.help_text}</span>
+            <br/>
+            <br/>
+            <div id="QRcode"></div>
+        </td>
+    </tr>
 <tr><td colspan="2" class="separator">{trans "Secondary Emails"}</td></tr>
 <tr>
 <th>{$form.f.secondary_mail.labelTag}:</th>
@@ -153,8 +163,10 @@
 <p>{trans 'The extra password is used to access some of the external systems and the API key is used to interact with this website using a program.'}</p>
 </div>{/block}
 
-{block javascript}<script type="text/javascript">
+{block javascript}
+<script type="text/javascript">
 document.getElementById('id_first_name').focus();
+var user = "{$user.login}";
 {literal}
 $(document).ready(function() {
     // Hide the key password by default.
@@ -165,6 +177,32 @@ $(document).ready(function() {
         return false;
     });
     $(".pass-info").hide();
+    $("#id_otpkey").bind('input', function ()
+    {
+        if ($("#id_otpkey").val() != "")
+        {
+            var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2F" + user + "?secret=" + $("#id_otpkey").val() + "%26issuer=srchub&choe=UTF-8";
+            $("#QRcode").html('<img src="' + url + '" />');
+        } else {
+            $("#QRcode").html('');
+        }
+    });
+    $("#id_otpgen").click(function ()
+    {
+        var chars = "abcdefghijklmnopqrstuvwxyz234567";
+        var key = "";
+        for(var i = 0; i < 32; i++)
+            key += chars[Math.floor(Math.random() * 32)];
+        $("#id_otpkey").val(key);
+        var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2F" + user + "?secret=" + $("#id_otpkey").val().toUpperCase() + "%26issuer=srchub&choe=UTF-8";
+        $("#QRcode").html('<img src="' + url + '" />')
+        return false;
+    });
+    if ($("#id_otpkey").val() != "")
+    {
+        var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2F" + user + "?secret=" + $("#id_otpkey").val().toUpperCase() + "%26issuer=srchub&choe=UTF-8";
+        $("#QRcode").html('<img src="' + url + '" />')
+    }
 });{/literal}
 </script>
 {/block}

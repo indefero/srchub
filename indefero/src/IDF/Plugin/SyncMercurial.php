@@ -231,6 +231,8 @@ class IDF_Plugin_SyncMercurial
                 $fcontent .= '<Location '. sprintf(Pluf::f('idf_plugin_syncmercurial_private_url'), $project->shortname).'>'."\n";
                 $fcontent .= 'AuthType Basic'."\n";
                 $fcontent .= 'AuthName "Restricted"'."\n";
+                $fcontent .= 'AuthExternal otpauth\n';
+                $fcontent .= 'AuthBasicProvider external\n';
                 $fcontent .= sprintf('AuthUserFile %s', Pluf::f('idf_plugin_syncmercurial_passwd_file'))."\n";
                 $fcontent .= sprintf('Require user %s', $user)."\n";
                 $fcontent .= '</Location>'."\n\n";

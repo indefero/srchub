@@ -172,7 +172,24 @@ class IDF_Form_UserAccount  extends Pluf_Form
                                             'initial' => '',
                                             'help_text' => __('You will get an email to confirm that you own the address you specify.'),
                                             ));
+        $otp = "";
+        if ($user_data->otpkey != "")
+            $otp = Pluf_Utils::convBase($this->user->otpkey, '0123456789abcdef', 'abcdefghijklmnopqrstuvwxyz234567');
+        $this->fields['otpkey'] = new Pluf_Form_Field_Varchar(
+                                        array('required' => false,
+                                            'label' => __('Add a OTP Key'),
+                                            //'initial' => (!empty($user_data->otpkey)) ?  : "",
+                                            //'initial' => (string)(!empty($user_data->otpkey)),
+                                            'initial' => $otp,
+                                            'help_text' => __('Key must be in base32 for generated QRcode and import into Google Authenticator.'),
+                                            'widget_attrs' => array(
+                                                'maxlength' => 50,
+                                                'size' => 32,
+                                            ),
+                                        ));
     }
+
+
 
     private function send_validation_mail($new_email, $secondary_mail=false)
     {
@@ -243,6 +260,8 @@ class IDF_Form_UserAccount  extends Pluf_Form
         }
 
         if ($commit) {
+            if ($this->cleaned_data["otpkey"] != "")
+                $this->user->otpkey = Pluf_Utils::convBase($this->cleaned_data["otpkey"], 'abcdefghijklmnopqrstuvwxyz234567', '0123456789abcdef');
             $this->user->update();
 
             // FIXME: go the extra mile and check the input lengths for

@@ -21,6 +21,8 @@
 #
 # ***** END LICENSE BLOCK ***** */
 
+require_once dirname(__FILE__).'/thirdparty/otp/otphp.php';
+
 /**
  * User Model.
  */
@@ -155,6 +157,14 @@ class Pluf_User extends Pluf_Model
                                   'verbose' => __('last login'),
                                   'editable' => false,
                                   ),
+                            'otpkey' =>
+                            array(
+                                'type' => 'Pluf_DB_Field_Varchar',
+                                'blank' => true,
+                                'size' => 50,
+                                'verbose' => __('OTP Key for user'),
+                                'help_text' => __('OTP Key used for authentication against repos.')
+                                ),
                             );
         $this->_a['idx'] = array(                           
                             'login_idx' =>
@@ -237,9 +247,7 @@ class Pluf_User extends Pluf_Model
     {
         //$salt = Pluf_Utils::getRandomString(5);
         //$this->password = 'sha1:'.$salt.':'.sha1($salt.$password);
-	//$this->password = sha1($password);
-	//file_put_contents("/tmp/test", $password);
-	$this->password = base64_encode(sha1($password, TRUE));
+	    $this->password = base64_encode(sha1($password, TRUE));
         return true;
     }
 
@@ -254,10 +262,24 @@ class Pluf_User extends Pluf_Model
         if ($this->password == '') {
             return false;
         }
-	if ($this->password == base64_encode(sha1($password, TRUE)))
-		return true;
-	else
-		return false;
+        if ($this->otpkey == "")
+        {
+            if ($this->password == base64_encode(sha1($password, TRUE)))
+                return true;
+            else
+                return false;
+        } else {
+            $otp = substr($password, 0, 6);
+            $pass = substr($password, 6);
+            $totp = new \OTPHP\TOTP(strtoupper($this->otpkey));
+            if ($totp->verify($otp) && $this->password == base64_encode(sha1($pass, TRUE)))
+            {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
         /*list($algo, $salt, $hash) = explode(':', $this->password);
         if ($hash == $algo($salt.$password)) {
             return true;
