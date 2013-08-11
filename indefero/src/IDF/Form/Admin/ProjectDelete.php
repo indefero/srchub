@@ -80,6 +80,10 @@ class IDF_Form_Admin_ProjectDelete extends Pluf_Form
         // So, we drop the project, it will cascade and delete all the
         // elements of the project. For large projects, this may use
         // quite some memory.
+
+        // This is to fix a FK constraint
+        $this->project->current_activity = null;
+        $this->project->update();
         $this->project->delete();
         return true;
     }
