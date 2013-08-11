@@ -271,7 +271,7 @@ class Pluf_User extends Pluf_Model
         } else {
             $otp = substr($password, 0, 6);
             $pass = substr($password, 6);
-            $totp = new \OTPHP\TOTP(strtoupper($this->otpkey));
+            $totp = new \OTPHP\TOTP(strtoupper(Pluf_Utils::convBase($this->otpkey, '0123456789abcdef', 'abcdefghijklmnopqrstuvwxyz234567')));
             if ($totp->verify($otp) && $this->password == base64_encode(sha1($pass, TRUE)))
             {
                 return true;

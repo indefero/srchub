@@ -94,7 +94,9 @@ class IDF_Plugin_SyncSvn
                                         'output' => $output)));
             return;
         }
-        $p = realpath(dirname(__FILE__).'/../../../scripts/svn-post-commit');
+        // FIX ME
+        //$p = realpath(dirname(__FILE__).'/../../../scripts/svn-post-commit');
+        $p = "/home/www/indefero/scripts/svn-post-commit";
         exec(sprintf(Pluf::f('idf_exec_cmd_prefix', '').'ln -s %s %s', 
                      escapeshellarg($p), 
                      escapeshellarg($svn_path.'/'.$shortname.'/hooks/post-commit')),
@@ -105,7 +107,8 @@ class IDF_Plugin_SyncSvn
                                  $svn_path.'/'.$shortname.'/hooks/post-commit'));
             return;
         }
-        $p = realpath(dirname(__FILE__).'/../../../scripts/svn-post-revprop-change');
+        //$p = realpath(dirname(__FILE__).'/../../../scripts/svn-post-revprop-change');
+        $p = "/home/www/indefero/scripts/svn-post-revprop-change";
         exec(sprintf(Pluf::f('idf_exec_cmd_prefix', '').'ln -s %s %s', 
                      escapeshellarg($p), 
                      escapeshellarg($svn_path.'/'.$shortname.'/hooks/post-revprop-change')),

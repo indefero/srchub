@@ -173,7 +173,7 @@ class IDF_Form_UserAccount  extends Pluf_Form
                                             'help_text' => __('You will get an email to confirm that you own the address you specify.'),
                                             ));
         $otp = "";
-        if ($user_data->otpkey != "")
+        if ($this->user->otpkey != "")
             $otp = Pluf_Utils::convBase($this->user->otpkey, '0123456789abcdef', 'abcdefghijklmnopqrstuvwxyz234567');
         $this->fields['otpkey'] = new Pluf_Form_Field_Varchar(
                                         array('required' => false,
