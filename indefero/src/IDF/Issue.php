@@ -35,6 +35,7 @@ class IDF_Issue extends Pluf_Model
 
     function init()
     {
+        //$tagtbl = "indefero_idf_tags";
         $this->_a['table'] = 'idf_issues';
         $this->_a['model'] = __CLASS__;
         $this->_a['cols'] = array(
@@ -119,7 +120,18 @@ class IDF_Issue extends Pluf_Model
                                   ),
                             );
         $table = $this->_con->pfx.'idf_issue_idf_tag_assoc';
+
+        $tagtbl = $this->_con->pfx . "idf_tags";
+        $projtbl = $this->_con->pfx . "idf_projects";
         $this->_a['views'] = array(
+                              'project_find' => array (
+                                    'where' => '( lcname = "new" or lcname = "accepted" or lcname = "started" )',
+                                    'join' => "INNER JOIN " . $tagtbl . " on " . $this->getSqlTable() . ".status = " . $tagtbl . ".id"
+                              ),
+                            'project_find_private' => array (
+                                'where' => 'private = 0 AND ( lcname = "new" or lcname = "accepted" or lcname = "started" )',
+                                'join' => "INNER JOIN " . $tagtbl . " on " . $this->getSqlTable() . ".status = " . $tagtbl . ".id INNER JOIN " . $projtbl . " ON " . $this->getSqlTable() . ".project = " . $projtbl . ".id"
+                            ),
                               'join_tags' =>
                               array(
                                     'join' => 'LEFT JOIN '.$table

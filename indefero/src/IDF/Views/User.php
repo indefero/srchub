@@ -79,32 +79,37 @@ class IDF_Views_User
     public function dashboard($request, $match, $working=true)
     {
 
-        $otags = array();
-        // Note that this approach does not scale, we will need to add
-        // a table to cache the meaning of the tags for large forges.
-        foreach (IDF_Views::getProjects($request->user) as $project) {
-            $otags = array_merge($otags, $project->getTagIdsByStatus('open'));
-        }
-        if (count($otags) == 0) $otags[] = 0;
-        if ($working) {
-            $title = __('Your Dashboard - Working Issues');
-            $f_sql = new Pluf_SQL('owner=%s AND status IN ('.implode(', ', $otags).')', array($request->user->id));
-        } else {
-            $title = __('Your Dashboard - Submitted Issues');
-            $f_sql = new Pluf_SQL('submitter=%s AND status IN ('.implode(', ', $otags).')', array($request->user->id));
-        }
+        /*
+         * This is a little bit better - but still not perfect
+         * It has a N*3 SQL query for each issue that is assigned to the user
+         * As long as the user isn't assigned 100+ issues - it should hold
+         */
+        $ownedissues = Pluf::factory("IDF_Issue")->getList(array('filter' => "owner = " . $request->user->id, 'view' => 'project_find'));
+        $submittedissues = Pluf::factory("IDF_Issue")->getList(array('filter' => "submitter = " . $request->user->id, 'view' => 'project_find'));
+        $nb_owner = count($ownedissues);
+        $nb_submit = count($submittedissues);
 
-        // Get stats about the issues
-        $sql = new Pluf_SQL('submitter=%s AND status IN ('.implode(', ', $otags).')', array($request->user->id));
-        $nb_submit = Pluf::factory('IDF_Issue')->getCount(array('filter'=>$sql->gen()));
-        $sql = new Pluf_SQL('owner=%s AND status IN ('.implode(', ', $otags).')', array($request->user->id));
-        $nb_owner = Pluf::factory('IDF_Issue')->getCount(array('filter'=>$sql->gen()));
         // Paginator to paginate the issues
-        $pag = new Pluf_Paginator(new IDF_Issue());
+        $pag = null;
+        if ($working)
+        {
+            $pag = new Pluf_Paginator(new IDF_Issue());
+            $title = __('Your Dashboard - Working Issues');
+            $pag->forced_where = new Pluf_SQL("owner = " . $request->user->id);
+
+
+        }
+        else
+        {
+            $pag = new Pluf_Paginator(new IDF_Issue());
+            $title = __('Your Dashboard - Submitted Issues');
+            $pag->forced_where = new Pluf_SQL("submitter = " . $request->user->id);
+
+        }
         $pag->class = 'recent-issues';
+        $pag->model_view = 'project_find';
         $pag->item_extra_props = array('current_user' => $request->user);
         $pag->summary = __('This table shows the open issues.');
-        $pag->forced_where = $f_sql;
         $pag->action = ($working) ? 'idf_dashboard' : 'idf_dashboard_submit';
         $pag->sort_order = array('modif_dtime', 'ASC'); // will be reverted
         $pag->sort_reverse_order = array('modif_dtime');
@@ -281,36 +286,41 @@ class IDF_Views_User
         $user = $users[0];
         $user_data = IDF_UserData::factory($user);
 
-        $otags = array();
-        // Note that this approach does not scale, we will need to add
-        // a table to cache the meaning of the tags for large forges.
-        foreach (IDF_Views::getProjects($user) as $project) {
-            $otags = array_merge($otags, $project->getTagIdsByStatus('open'));
+        $ownedprojects = IDF_Views::getOwnedProjects($request->user);
+
+        $pubprojects = array();
+        $privprojects = 0;
+
+        foreach($ownedprojects as $proj)
+        {
+            if ($proj->private == 1)
+            {
+                $privprojects += 1;
+                continue;
+            } else {
+                $pubprojects[] = $proj;
+            }
         }
 
-        $false = Pluf_DB_BooleanToDb(false, $db);
-        $sql_results = $db->select(
-            'SELECT id FROM '.$db->pfx.'idf_projects '.
-            'WHERE '.$db->qn('private').'='.$false
-        );
+        $projectstats = IDF_Views::getProjectsStatistics($pubprojects);
+        //print_r($projectstats);
+        //echo $privprojects;
 
-        $ids = array();
-        foreach ($sql_results as $id) {
-            $ids[] = $id['id'];
-        }
-        $f_sql = new Pluf_SQL('owner=%s AND status IN (' .implode(', ', $otags) . ') AND project IN (' . implode(', ', $ids) . ' )', array($user->id));
+        //$pubprojects = Pluf::factory("IDF_Project")->getList(array('filter' => ""));
 
         $pag = new Pluf_Paginator(new IDF_Issue());
+        $pag->model_view = "project_find_private";
         $pag->class = 'recent-issues';
         $pag->item_extra_props = array('current_user' => $request->user);
         $pag->summary = __('This table shows the open issues.');
-        $pag->forced_where = $f_sql;
+        $pag->forced_where = new Pluf_SQL("owner = " . $request->user->id);
         $pag->action = 'idf_dashboard';
         $pag->sort_order = array('modif_dtime', 'ASC'); // will be reverted
         $pag->sort_reverse_order = array('modif_dtime');
         $list_display = array(
-            'id' => __('Id'),
-            array('project', 'Pluf_Paginator_FkToString', __('Project')),
+            //'id' => __('Id'),
+            //array('project', 'Pluf_Paginator_FkToString', __('Project')),
+            array('project', 'IDF_Views_ProjectLink', __('Project')),
             array('summary', 'IDF_Views_IssueSummaryAndLabels', __('Summary')),
             array('status', 'IDF_Views_Issue_ShowStatus', __('Status')),
             array('modif_dtime', 'Pluf_Paginator_DateAgo', __('Last Updated')),
@@ -320,17 +330,48 @@ class IDF_Views_User
         $pag->no_results_text = __('This user has no issues assigned to them!');
         $pag->setFromRequest($request);
 
+        $pag2 = new Pluf_Paginator(new IDF_Commit());
+        $pag->model_view = "project_find_private";
+        $pag2->class = 'recent-issues';
+        $pag2->summary = __('This table shows the latest commits of this user.');
+        $pag2->forced_where = new Pluf_SQL("author = " . $request->user->id);
+        $pag2->action = 'idf_dashboard';
+        $pag2->sort_order = array('creation_dtime', 'ASC'); // will be reverted
+        $pag2->sort_reverse_order = array('creation_dtime');
+        $list_display = array(
+            //'id' => __('Id'),
+            array('project', 'IDF_Views_ProjectLink', __('Project')),
+            'summary' => __('Summary'),
+            array('creation_dtime', 'Pluf_Paginator_DateAgo', __('Commit sent')),
+        );
+        $pag2->configure($list_display, array(), array('creation_dtime'));
+        $pag2->items_per_page = 10;
+        $pag2->no_results_text = __('This user has not made any commits yet!');
+        $pag2->setFromRequest($request);
+
 	    $projects = IDF_Views::getOwnedProjects($user);
 	    return Pluf_Shortcuts_RenderToResponse('idf/user/public.html',
                                                array('page_title' => (string) $user,
                                                      'member' => $user,
                                                      'user_data' => $user_data,
 						                             'projects' => $projects,
-                                                     'issues' => $pag
+                                                     'issues' => $pag,
+                                                     'commits' => $pag2,
+                                                     'stats' => new Pluf_Template_ContextVars($projectstats),
+                                                     'privatecount' => $privprojects
                                                      ),
                                                $request);
     }
 
+}
+
+function IDF_Views_ProjectLink($field, $issue, $extra='')
+{
+    $project = $issue->get_project();
+    $edit = Pluf_HTTP_URL_urlForView('IDF_Views_Project::home',
+        array($project->shortname));
+
+    return sprintf('<a href="%s">%s</a>', $edit, $project->shortname);
 }
 
 /**

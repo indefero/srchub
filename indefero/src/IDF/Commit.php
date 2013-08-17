@@ -102,6 +102,14 @@ class IDF_Commit extends Pluf_Model
                                   'help_text' => 'Date of creation by the scm',
                                   ),
                             );
+
+        $projtbl = $this->_con->pfx . "idf_projects";
+        $this->_a['views'] = array(
+            'project_find_private' => array (
+                'where' => 'private = 0',
+                'join' => "INNER JOIN " . $projtbl . " ON " . $this->getSqlTable() . ".project = " . $projtbl . ".id"
+            )
+        );
     }
 
     function __toString()

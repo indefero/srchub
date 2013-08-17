@@ -44,33 +44,48 @@
 <td>{$member.date_joined|date}</td>
 </tr>
 </table>
+
+Issues user is working on:<br/><br/>
+{$issues.render}
+
+Last commits of user:<br /><br/>
+{$commits.render}
+{/block}
+{block context}
+<div class="issue-submit-info">
+<p>{blocktrans}You are looking at the public profile of {$member}.{/blocktrans}</p>
+
+</div>
 Projects:
 <table class="form">
-{if $projects}
-{foreach $projects as $p}
-{if $p.private == 0}
-<tr>
-<td>
-<a href="{url 'IDF_Views_Project::home', array($p.name)}">{$p.name} - {$p.shortdesc}</a>
-</td>
-</tr>
-{/if}
-{/foreach}
-{else}
+    {if $projects}
+    {foreach $projects as $p}
+    {if $p.private == 0}
+    <tr>
+        <td>
+            <a href="{url 'IDF_Views_Project::home', array($p.name)}">{$p.name} - {$p.shortdesc}</a>
+        </td>
+    </tr>
+    {/if}
+    {/foreach}
+    {else}
     <tr>
         <td>
             This user is not working on any projects
         </td>
     </tr>
-{/if}
+    {/if}
 </table>
-Issues user is working on:<br/><br/>
-{$issues.render}
-{/block}
-{block context}
-<div class="issue-submit-info">
-<p>{blocktrans}You are looking at the public profile of {$member}.{/blocktrans}</p>
-</div>
+<strong>Project Stats</strong>
+<dl class="statistics smaller">
+<dt>{trans 'Issues:'}</dt><dd>{$stats.issues}</dd>
+<dt>{trans 'Commits:'}</dt><dd>{$stats.commits}</dd>
+<dt>{trans 'Documentations:'}</dt><dd>{$stats.docpages}</dd>
+<dt>{trans 'Downloads:'}</dt><dd>{$stats.downloads}</dd>
+<dt>{trans 'Code reviews:'}</dt><dd>{$stats.reviews}</dd>
+<dt>{trans 'Private Projects:'}</dt><dd>{$privatecount}</dd>
+<dt>Public Projects:</dt><dd>{$stats.proj_count}</dd>
+</dl>
 {/block}
 
 
