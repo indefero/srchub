@@ -125,6 +125,8 @@ class Pluf_Text_HTML_Filter
      */
     public $allow_hexadecimal_entities = 1;
 
+    public $check_tags_flag = 0;
+
     public $allowed_entities = array(
                                      'amp',
                                      'gt',
@@ -173,10 +175,13 @@ class Pluf_Text_HTML_Filter
 
     function check_tags($data)
     {
-        $data = preg_replace("/<(.*?)>/se", "\$this->process_tag(\$this->StripSingle('\\1'))",	$data);
-        foreach (array_keys($this->tag_counts) as $tag) {
-            for ($i=0; $i<$this->tag_counts[$tag]; $i++) {
-                $data .= "</$tag>";
+        if ($this->check_tags_flag)
+        {
+            $data = preg_replace("/<(.*?)>/se", "\$this->process_tag(\$this->StripSingle('\\1'))",	$data);
+            foreach (array_keys($this->tag_counts) as $tag) {
+                for ($i=0; $i<$this->tag_counts[$tag]; $i++) {
+                    $data .= "</$tag>";
+                }
             }
         }
         return $data;
