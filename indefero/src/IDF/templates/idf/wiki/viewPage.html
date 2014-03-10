@@ -27,6 +27,9 @@ by {$submitter}.{/blocktrans}</p>
 <div id="wiki-toc"><span id="contentheader">{trans 'Table of Content'}</span><div id="wiki-toc-content"></div></div>
 <script type="text/javascript" src="{media '/idf/js/wiki-toc.js'}"></script>
 <p class="desc">{$page.summary}</p>
+    {literal}
+    <script type="syntaxhighlighter" class="brush: js"> for(i = 0; i < 10; i++) { } </script>
+    {/literal}
 
 {markdown $rev.content, $request}
 

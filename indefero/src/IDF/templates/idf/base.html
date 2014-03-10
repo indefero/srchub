@@ -28,12 +28,19 @@
   <link rel="stylesheet" type="text/css" href="{media '/idf/css/style.css'}" />
   <link rel="icon" type="image/png" href="{media '/idf/img/favicon.png'}" />
    <link rel="stylesheet" type="text/css" href="{media '/idf/css/prettify.css'}" />
+
+
   <!--[if lt IE 7]>
   <link rel="stylesheet" type="text/css" href="{media '/idf/css/ie6.css'}" />
   <![endif]-->
   {block extraheader}{/block}
   <title>{block pagetitle}{$page_title|strip_tags}{/block}{if $project} - {$project.shortdesc}{/if}</title>
   <script type="text/javascript" src="{media '/idf/js/jquery-1.7.2.min.js'}"></script>
+  <script type="text/javascript" src="{media '/idf/js/syntaxhighlight/shCore.js'}"></script>
+  <script type="text/javascript" src="{media '/idf/js/syntaxhighlight/shAutoloader.js'}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shCore.css'}" />
+    <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shCoreDefault.css'}" />
   {appversion}
 </head>
 <body>
@@ -114,5 +121,51 @@ $(document).ready(function(){
 <script type="text/javascript" src="{media '/idf/js/prettify.js'}"></script>
 <script type="text/javascript">prettyPrint();</script>
 <script type="text/javascript" src="{media '/idf/js/allowtabs.js'}"></script>
+<script type="application/javascript">
+    {literal}
+    function path()
+    {
+        var args = arguments,
+        result = [];
+
+        for(var i = 0; i < args.length; i++)
+            result.push(args[i].replace('@', '/media/idf/js/syntaxhighlight/'));
+
+        return result
+    };
+$(function() {
+
+
+    SyntaxHighlighter.autoloader.apply(null, path(
+            'applescript            @shBrushAppleScript.js',
+            'actionscript3 as3      @shBrushAS3.js',
+            'bash shell             @shBrushBash.js',
+            'coldfusion cf          @shBrushColdFusion.js',
+            'cpp c                  @shBrushCpp.js',
+            'c# c-sharp csharp      @shBrushCSharp.js',
+            'css                    @shBrushCss.js',
+            'delphi pascal          @shBrushDelphi.js',
+            'diff patch pas         @shBrushDiff.js',
+            'erl erlang             @shBrushErlang.js',
+            'groovy                 @shBrushGroovy.js',
+            'java                   @shBrushJava.js',
+            'jfx javafx             @shBrushJavaFX.js',
+            'js jscript javascript  @shBrushJScript.js',
+            'perl pl                @shBrushPerl.js',
+            'php                    @shBrushPhp.js',
+            'text plain             @shBrushPlain.js',
+            'py python              @shBrushPython.js',
+            'ruby rails ror rb      @shBrushRuby.js',
+            'sass scss              @shBrushSass.js',
+            'scala                  @shBrushScala.js',
+            'sql                    @shBrushSql.js',
+            'vb vbnet               @shBrushVb.js',
+            'xml xhtml xslt html    @shBrushXml.js'
+    ));
+    SyntaxHighlighter.all();
+
+    });
+    {/literal}
+</script>
 </body>
 </html>
