@@ -181,7 +181,7 @@ $(document).ready(function() {
     {
         if ($("#id_otpkey").val() != "")
         {
-            var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2F" + user + "?secret=" + $("#id_otpkey").val() + "%26issuer=srchub&choe=UTF-8";
+            var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2Fsrchub:" + user + "?secret=" + $("#id_otpkey").val() + "%26issuer=srchub&choe=UTF-8";
             $("#QRcode").html('<img src="' + url + '" />');
         } else {
             $("#QRcode").html('');
@@ -194,13 +194,13 @@ $(document).ready(function() {
         for(var i = 0; i < 32; i++)
             key += chars[Math.floor(Math.random() * 32)];
         $("#id_otpkey").val(key);
-        var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2F" + user + "?secret=" + $("#id_otpkey").val().toUpperCase() + "%26issuer=srchub&choe=UTF-8";
+        var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%srchub:" + user + "?secret=" + $("#id_otpkey").val().toUpperCase() + "%26issuer=srchub&choe=UTF-8";
         $("#QRcode").html('<img src="' + url + '" />')
         return false;
     });
     if ($("#id_otpkey").val() != "")
     {
-        var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2F" + user + "?secret=" + $("#id_otpkey").val().toUpperCase() + "%26issuer=srchub&choe=UTF-8";
+        var url = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=otpauth%3A%2F%2Ftotp%2Fsrchub:" + user + "?secret=" + $("#id_otpkey").val().toUpperCase() + "%26issuer=srchub&choe=UTF-8";
         $("#QRcode").html('<img src="' + url + '" />')
     }
 });{/literal}
