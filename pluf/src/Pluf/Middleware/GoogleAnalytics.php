@@ -43,8 +43,8 @@ class Pluf_Middleware_GoogleAnalytics
         if (!Pluf::f('google_analytics_id', false)) {
             return $response;
         }
-        if (!in_array($response->status_code, 
-                     array(200, 201, 202, 203, 204, 205, 206, 404, 501))) {
+        if (!in_array($response->status_code,
+            array(200, 201, 202, 203, 204, 205, 206, 404, 501))) {
             return $response;
         }
         $ok = false;
@@ -58,14 +58,20 @@ class Pluf_Middleware_GoogleAnalytics
         if ($ok == false) {
             return $response;
         }
-        $js = '<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+        $track = Pluf::f('google_analytics_id', '');
+        $domain =  Pluf::f('google_analytics_domain', '');
+        $js = <<<EOT
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '$track', '$domain');
+  ga('send', 'pageview');
+
 </script>
-<script type="text/javascript"> try {
-var pageTracker = _gat._getTracker("'.Pluf::f('google_analytics_id').'");
-pageTracker._trackPageview(); } catch(err) {}
-</script>';
+EOT;
         $response->content = str_replace('</body>', $js.'</body>', $response->content);
         return $response;
     }
