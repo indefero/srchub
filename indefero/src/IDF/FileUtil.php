@@ -65,12 +65,15 @@ class IDF_FileUtil
         }
         $table = array();
         $i = 1;
-        foreach (self::splitIntoLines($content) as $line) {
+        /*foreach (self::splitIntoLines($content) as $line) {
             $table[] = '<tr class="c-line"><td class="code-lc" id="L'.$i.'"><a href="#L'.$i.'">'.$i.'</a></td>'
                 .'<td class="code mono'.$pretty.'">'.self::emphasizeControlCharacters(Pluf_esc($line)).'</td></tr>';
             $i++;
         }
-        return Pluf_Template::markSafe(implode("\n", $table));
+        return Pluf_Template::markSafe(implode("\n", $table));*/
+        //var_dump($fileinfo);
+        $content = '<script type="syntaxhighlighter" class="brush: ' . $fileinfo[2] . '">' . $content . '</script>';
+        return  Pluf_Template::markSafe($content);
     }
 
     /**

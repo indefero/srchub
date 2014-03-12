@@ -380,10 +380,11 @@ class IDF_Views_Source
         $props = $scm->getProperties($commit, $request_file);
         $cache = Pluf_Cache::factory();
         $key = sha1($request_file.$commit);
-        if (null === ($content=$cache->get($key))) {
-            $content = IDF_FileUtil::highLight($extra['mime'], $scm->getFile($request_file_info));
+        $content = IDF_FileUtil::highLight($extra['mime'], $scm->getFile($request_file_info));
+        /*if (null === ($content=$cache->get($key))) {
+
             $cache->set($key, $content);
-        }
+        }*/
         return Pluf_Shortcuts_RenderToResponse('idf/source/'.$scmConf.'/file.html',
                                                array(
                                                      'page_title' => $page_title,

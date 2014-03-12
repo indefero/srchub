@@ -133,6 +133,28 @@ $(document).ready(function(){
 
         return result
     };
+function gotoline()
+{
+    if ($('.number' + window.location.hash.substring(1)).first().offset() == null)
+    {
+        window.setTimeout(gotoline, 100);
+        return;
+    }
+ $('html, body').animate({
+    scrollTop: ($('.number' + window.location.hash.substring(1)).first().offset().top)
+},500);
+    changegutter();
+    }
+    function changegutter()
+    {
+        if ($('.gutter > [class*=number]').first().offset() == null)
+        {
+            window.setTimeout(changegutter, 100);
+            return;
+        }
+        $(".gutter > [class*=number]").each(function(){  $(this).html('<a href="https://' + window.location.hostname + window.location.pathname + '#' + $(this).html() +'">' + $(this).html() + '</a>');  });
+
+    }
 $(function() {
 
 
@@ -164,7 +186,17 @@ $(function() {
     ));
     SyntaxHighlighter.all();
 
+        if(window.location.hash)
+        {
+            window.setTimeout(gotoline, 100);
+        } else {
+            window.setTimeout(changegutter, 100);
+        }
+
+
+
     });
+
     {/literal}
 </script>
 </body>

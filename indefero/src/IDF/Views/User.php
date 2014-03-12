@@ -56,11 +56,11 @@ class IDF_Views_User
             $form = new IDF_Form_ProjectRequest(null, $params);
         }
         return Pluf_Shortcuts_RenderToResponse('idf/user/projectrequest.html',
-                                                    array('page_title' => $title,
-                                                        'form' => $form,
-                                                        'success' => $success,
-                                                        'error' => $error),
-                                                            $request);
+            array('page_title' => $title,
+                'form' => $form,
+                'success' => $success,
+                'error' => $error),
+            $request);
 
     }
     /**
@@ -114,24 +114,24 @@ class IDF_Views_User
         $pag->sort_order = array('modif_dtime', 'ASC'); // will be reverted
         $pag->sort_reverse_order = array('modif_dtime');
         $list_display = array(
-             'id' => __('Id'),
-             array('project', 'Pluf_Paginator_FkToString', __('Project')),
-             array('summary', 'IDF_Views_IssueSummaryAndLabels', __('Summary')),
-             array('status', 'IDF_Views_Issue_ShowStatus', __('Status')),
-             array('modif_dtime', 'Pluf_Paginator_DateAgo', __('Last Updated')),
+            'id' => __('Id'),
+            array('project', 'Pluf_Paginator_FkToString', __('Project')),
+            array('summary', 'IDF_Views_IssueSummaryAndLabels', __('Summary')),
+            array('status', 'IDF_Views_Issue_ShowStatus', __('Status')),
+            array('modif_dtime', 'Pluf_Paginator_DateAgo', __('Last Updated')),
         );
         $pag->configure($list_display, array(), array('status', 'modif_dtime'));
         $pag->items_per_page = 10;
         $pag->no_results_text = ($working) ? __('No issues are assigned to you, yeah!') : __('All the issues you submitted are fixed, yeah!');
         $pag->setFromRequest($request);
         return Pluf_Shortcuts_RenderToResponse('idf/user/dashboard.html',
-                                               array(
-                                                     'page_title' => $title,
-                                                     'nb_submit' => $nb_submit,
-                                                     'nb_owner' => $nb_owner,
-                                                     'issues' => $pag,
-                                                     ),
-                                               $request);
+            array(
+                'page_title' => $title,
+                'nb_submit' => $nb_submit,
+                'nb_owner' => $nb_owner,
+                'issues' => $pag,
+            ),
+            $request);
     }
 
     /**
@@ -147,9 +147,9 @@ class IDF_Views_User
         $params = array('user' => $request->user);
         if ($request->method == 'POST') {
             $form = new IDF_Form_UserAccount(array_merge(
-                                                (array)$request->POST,
-                                                (array)$request->FILES
-                                                ), $params);
+                (array)$request->POST,
+                (array)$request->FILES
+            ), $params);
             if ($form->isValid()) {
                 $user = $form->save();
                 $url = Pluf_HTTP_URL_urlForView('IDF_Views_User::myAccount');
@@ -166,13 +166,13 @@ class IDF_Views_User
         $mailaddrs = Pluf::factory('IDF_EmailAddress')->get_email_addresses_for_user($request->user);
 
         return Pluf_Shortcuts_RenderToResponse('idf/user/myaccount.html',
-                                               array('page_title' => __('Your Account'),
-                                                     'api_key' => $api_key,
-                                                     'ext_pass' => $ext_pass,
-                                                     'keys' => $keys,
-                                                     'mailaddrs' => $mailaddrs,
-                                                     'form' => $form),
-                                               $request);
+            array('page_title' => __('Your Account'),
+                'api_key' => $api_key,
+                'ext_pass' => $ext_pass,
+                'keys' => $keys,
+                'mailaddrs' => $mailaddrs,
+                'form' => $form),
+            $request);
     }
 
     /**
@@ -233,9 +233,9 @@ class IDF_Views_User
             $form = new IDF_Form_UserChangeEmail();
         }
         return Pluf_Shortcuts_RenderToResponse('idf/user/changeemail.html',
-                                               array('page_title' => __('Confirm The Email Change'),
-                                                     'form' => $form),
-                                               $request);
+            array('page_title' => __('Confirm The Email Change'),
+                'form' => $form),
+            $request);
 
     }
 
@@ -286,22 +286,24 @@ class IDF_Views_User
         $user = $users[0];
         $user_data = IDF_UserData::factory($user);
 
-        $ownedprojects = IDF_Views::getOwnedProjects($request->user);
+        $ownedprojects = IDF_Views::getOwnedProjects($user);
 
         $pubprojects = array();
         $privprojects = 0;
 
-        foreach($ownedprojects as $proj)
+        if ($ownedprojects != null && count($ownedprojects) > 0 )
         {
-            if ($proj->private == 1)
+            foreach($ownedprojects as $proj)
             {
-                $privprojects += 1;
-                continue;
-            } else {
-                $pubprojects[] = $proj;
+                if ($proj->private == 1)
+                {
+                    $privprojects += 1;
+                    continue;
+                } else {
+                    $pubprojects[] = $proj;
+                }
             }
         }
-
         $projectstats = IDF_Views::getProjectsStatistics($pubprojects);
         //print_r($projectstats);
         //echo $privprojects;
@@ -311,10 +313,10 @@ class IDF_Views_User
         $pag = new Pluf_Paginator(new IDF_Issue());
         $pag->model_view = "project_find_private";
         $pag->class = 'recent-issues';
-        $pag->item_extra_props = array('current_user' => $request->user);
+        $pag->item_extra_props = array('current_user' => $user);
         $pag->summary = __('This table shows the open issues.');
-        $pag->forced_where = new Pluf_SQL("owner = " . $request->user->id);
-        $pag->action = 'idf_dashboard';
+        $pag->forced_where = new Pluf_SQL("owner = " . $user->id);
+        $pag->action = array('idf_user_view', array($user->login));
         $pag->sort_order = array('modif_dtime', 'ASC'); // will be reverted
         $pag->sort_reverse_order = array('modif_dtime');
         $list_display = array(
@@ -326,16 +328,17 @@ class IDF_Views_User
             array('modif_dtime', 'Pluf_Paginator_DateAgo', __('Last Updated')),
         );
         $pag->configure($list_display, array(), array('status', 'modif_dtime'));
-        $pag->items_per_page = 10;
+        $pag->items_per_page = 20;
         $pag->no_results_text = __('This user has no issues assigned to them!');
         $pag->setFromRequest($request);
 
         $pag2 = new Pluf_Paginator(new IDF_Commit());
-        $pag->model_view = "project_find_private";
+        $pag2->nb_items = 20;
+        $pag2->model_view = "project_find_private";
         $pag2->class = 'recent-issues';
         $pag2->summary = __('This table shows the latest commits of this user.');
-        $pag2->forced_where = new Pluf_SQL("author = " . $request->user->id);
-        $pag2->action = 'idf_dashboard';
+        $pag2->forced_where = new Pluf_SQL("author = " . $user->id);
+        $pag2->action = array('idf_user_view', array($user->login));
         $pag2->sort_order = array('creation_dtime', 'ASC'); // will be reverted
         $pag2->sort_reverse_order = array('creation_dtime');
         $list_display = array(
@@ -349,18 +352,18 @@ class IDF_Views_User
         $pag2->no_results_text = __('This user has not made any commits yet!');
         $pag2->setFromRequest($request);
 
-	    $projects = IDF_Views::getOwnedProjects($user);
-	    return Pluf_Shortcuts_RenderToResponse('idf/user/public.html',
-                                               array('page_title' => (string) $user,
-                                                     'member' => $user,
-                                                     'user_data' => $user_data,
-						                             'projects' => $projects,
-                                                     'issues' => $pag,
-                                                     'commits' => $pag2,
-                                                     'stats' => new Pluf_Template_ContextVars($projectstats),
-                                                     'privatecount' => $privprojects
-                                                     ),
-                                               $request);
+        $projects = IDF_Views::getOwnedProjects($user);
+        return Pluf_Shortcuts_RenderToResponse('idf/user/public.html',
+            array('page_title' => (string) $user,
+                'member' => $user,
+                'user_data' => $user_data,
+                'projects' => $projects,
+                'issues' => $pag,
+                'commits' => $pag2,
+                'stats' => new Pluf_Template_ContextVars($projectstats),
+                'privatecount' => $privprojects
+            ),
+            $request);
     }
 
 }
@@ -384,11 +387,11 @@ function IDF_Views_IssueSummaryAndLabels($field, $issue, $extra='')
 {
     $project = $issue->get_project();
     $edit = Pluf_HTTP_URL_urlForView('IDF_Views_Issue::view',
-                                     array($project->shortname, $issue->id));
+        array($project->shortname, $issue->id));
     $tags = array();
     foreach ($issue->get_tags_list() as $tag) {
         $url = Pluf_HTTP_URL_urlForView('IDF_Views_Issue::listLabel',
-                                        array($project->shortname, $tag->id, 'open'));
+            array($project->shortname, $tag->id, 'open'));
         $tags[] = sprintf('<a class="label" href="%s">%s</a>', $url, Pluf_esc((string) $tag));
     }
     $out = '';
@@ -397,3 +400,4 @@ function IDF_Views_IssueSummaryAndLabels($field, $issue, $extra='')
     }
     return sprintf('<a href="%s">%s</a>', $edit, Pluf_esc($issue->summary)).$out;
 }
+
