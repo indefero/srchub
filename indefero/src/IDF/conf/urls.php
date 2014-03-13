@@ -29,6 +29,13 @@ $ctl[] = array('regex' => '#^/$#',
                'model' => 'IDF_Views',
                'method' => 'index');
 
+$ctl[] = array('regex' => '#^/u/(.*)/$#',
+    'base' => $base,
+    'model' => 'IDF_Views_User',
+    'method' => 'view',
+    'name' => 'idf_user_view');
+
+
 $ctl[] = array('regex' => '#^/projects/$#',
                'base' => $base,
                'model' => 'IDF_Views',

@@ -33,7 +33,17 @@ class IDF_Form_ProjectConf extends Pluf_Form
     {
         $this->project = $extra['project'];
         $this->user = $extra["user"];
-	$conf = $this->project->getConf();
+	    $conf = $this->project->getConf();
+        $options = array(
+            'Default' => __('Default'),
+            'Django' => __('Django'),
+            'Eclipse' => __('Eclipse'),
+            'Emacs' => __('Emacs'),
+            'FadeToGrey' => __('FadeToGrey'),
+            'MDUltra' => __('MDUltra'),
+            'Midnight' => __('Midnight'),
+            'RDark' => __('RDark'),
+        );
 
         // Basic part
         $this->fields['name'] = new Pluf_Form_Field_Varchar(array('required' => true,
@@ -59,6 +69,15 @@ class IDF_Form_ProjectConf extends Pluf_Form
                                                                  'initial' => $conf->getVal('external_project_url'),
 
         ));
+
+        $this->fields['syntaxtheme'] = new Pluf_Form_Field_Varchar(
+            array('required' => true,
+                'label' => __('Syntax Highlight Theme'),
+                'initial' => ($this->project->syntaxtheme) ? $this->project->syntaxtheme : "Default",
+                'widget_attrs' => array('choices' => $options),
+                'widget' => 'Pluf_Form_Widget_SelectInput',
+            ));
+
 	if ($this->user->administrator)
 	{
 		$this->fields['enableads'] = new Pluf_Form_Field_Boolean(
@@ -208,6 +227,7 @@ class IDF_Form_ProjectConf extends Pluf_Form
         $this->project->shortdesc = $this->cleaned_data['shortdesc'];
         $this->project->description = $this->cleaned_data['description'];
         $this->project->batchAssoc('IDF_Tag', $tagids);
+        $this->project->syntaxtheme = $this->cleaned_data["syntaxtheme"];
 	if ($this->user->administrator)
 		$this->project->enableads = $this->cleaned_data['enableads'];
         $this->project->update();

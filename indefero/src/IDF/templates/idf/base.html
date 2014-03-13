@@ -40,7 +40,16 @@
   <script type="text/javascript" src="{media '/idf/js/syntaxhighlight/shAutoloader.js'}"></script>
 
     <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shCore.css'}" />
-    <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shCoreDefault.css'}" />
+    {if $project}
+        {if $project.syntaxtheme}
+    <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shTheme'}{$project.syntaxtheme}.css" />
+        {else}
+    <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shThemeDefault.css'}" />
+        {/if}
+    {else}
+    <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shThemeDefault.css'}" />
+    {/if}
+
   {appversion}
 </head>
 <body>

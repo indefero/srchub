@@ -116,6 +116,15 @@ class IDF_Project extends Pluf_Model
                                   'verbose' => __('enableads'),
                                   'default' => 1,
                                   ),
+
+                            'syntaxtheme' =>
+                            array(
+                                'type' => 'Pluf_DB_Field_Text',
+                                'blank' => false,
+                                'verbose' => __('syntaxtheme'),
+                                'default' => "Default",
+                                "size" => 50
+                            )
                             );
         $activityTable = $this->_con->pfx.'idf_projectactivities';
         $tagTable = $this->_con->pfx.'idf_project_idf_tag_assoc';

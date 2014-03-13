@@ -38,6 +38,10 @@ class IDF_FileUtil
               'skin', 'sln', 'svc', 'vala', 'vb', 'vbproj', 'vbs', 'wsdl', 'xhtml',
               'xml', 'xsd', 'xsl', 'xslt');
 
+    public static $map = array("h" => "cpp", "hpp" => "cpp", "rc"=>"text", "sh"=>"bash", "cs"=>"csharp");
+
+    public static $syntaxhighlightext = array("as3", "cf", "cpp", "c", "css", "pas", "diff", "patch", "erl", "java", "jfx", "js", "pl", "php", "py", "rb", "sass", "scss", "scala", "sql", "vb", );
+
     /**
      * Test if an extension is supported by the syntax highlighter.
      *
@@ -72,7 +76,14 @@ class IDF_FileUtil
         }
         return Pluf_Template::markSafe(implode("\n", $table));*/
         //var_dump($fileinfo);
-        $content = '<script type="syntaxhighlighter" class="brush: ' . $fileinfo[2] . '">' . $content . '</script>';
+        $ext = "";
+        if (in_array($fileinfo[2], self::$syntaxhighlightext))
+            $ext = $fileinfo[2];
+        elseif (array_key_exists($fileinfo[2], self::$map))
+            $ext = self::$map[$fileinfo[2]];
+        else
+            $ext = "text";
+        $content = '<script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script>';
         return  Pluf_Template::markSafe($content);
     }
 
