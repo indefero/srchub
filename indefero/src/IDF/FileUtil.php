@@ -38,7 +38,7 @@ class IDF_FileUtil
               'skin', 'sln', 'svc', 'vala', 'vb', 'vbproj', 'vbs', 'wsdl', 'xhtml',
               'xml', 'xsd', 'xsl', 'xslt');
 
-    public static $map = array("h" => "cpp", "hpp" => "cpp", "rc"=>"text", "sh"=>"bash", "cs"=>"csharp");
+    public static $map = array("cxx" => "cpp", "h" => "cpp", "hpp" => "cpp", "rc"=>"text", "sh"=>"bash", "cs"=>"csharp");
 
     public static $syntaxhighlightext = array("as3", "cf", "cpp", "c", "css", "pas", "diff", "patch", "erl", "java", "jfx", "js", "pl", "php", "py", "rb", "sass", "scss", "scala", "sql", "vb", );
 
@@ -63,6 +63,7 @@ class IDF_FileUtil
      */
     public static function highLight($fileinfo, $content)
     {
+
         $pretty = '';
         if (self::isSupportedExtension($fileinfo[2])) {
             $pretty = ' prettyprint';
@@ -83,7 +84,8 @@ class IDF_FileUtil
             $ext = self::$map[$fileinfo[2]];
         else
             $ext = "text";
-        $content = '<script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script>';
+
+        $content = '<div id="highlight"><script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script></div>';
         return  Pluf_Template::markSafe($content);
     }
 
