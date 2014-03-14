@@ -156,12 +156,13 @@ function gotoline()
     }
     function changegutter()
     {
-        if ($('.gutter > [class*=number]').first().offset() == null)
+        if ($('#highlight').find('.gutter > [class*=number]').first().offset() == null)
         {
             window.setTimeout(changegutter, 100);
             return;
         }
-        $(".gutter > [class*=number]").each(function(){  $(this).html('<a href="https://' + window.location.hostname + window.location.pathname + '#' + $(this).html() +'">' + $(this).html() + '</a>');  });
+
+        $('#highlight').find('.gutter > [class*=number]').each(function(){  $(this).html('<a href="https://' + window.location.hostname + window.location.pathname + '#' + $(this).html() +'">' + $(this).html() + '</a>');  });
 
     }
 $(function() {
@@ -191,7 +192,9 @@ $(function() {
             'scala                  @shBrushScala.js',
             'sql                    @shBrushSql.js',
             'vb vbnet               @shBrushVb.js',
-            'xml xhtml xslt html    @shBrushXml.js'
+            'xml xhtml xslt html    @shBrushXml.js',
+            'objc                   @shBrushObjC.js',
+            'asm                    @shBrushAsm.js'
     ));
     SyntaxHighlighter.all();
 
