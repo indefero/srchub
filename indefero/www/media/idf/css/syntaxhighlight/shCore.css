@@ -224,3 +224,41 @@
 .syntaxhighlighter.printing .break, .syntaxhighlighter.printing .break a {
   color: black !important;
 }
+
+/* From - http://www.chlankboot.com/blog/asm-brush */
+
+/* Registers */
+.syntaxhighlighter .registers
+{ color: #ff8000; font-weight: normal !important; }
+
+/* User Instructions */
+.syntaxhighlighter .usr_inst
+{ color: #ff0080; font-weight: normal !important; }
+
+/* System Instructions */
+.syntaxhighlighter .sys_inst
+{ color: #0000ff; font-weight: normal !important; }
+
+/* FPU Instructions */
+.syntaxhighlighter .fpu_inst
+{ color: #ff8040; font-weight: normal !important; }
+
+/* Multimedia Instructions */
+.syntaxhighlighter .mul_inst
+{ color: #cbd601; font-weight: normal !important; }
+
+/* Masm Specific */
+.syntaxhighlighter .masm_spc
+{ color: #0080c0; font-weight: normal !important; }
+
+/* Numbers */
+.syntaxhighlighter .numbers
+{ color: #8000ff; font-weight: normal !important; }
+
+/* IDA labels */
+.syntaxhighlighter .labels
+{ color: blue; font-weight: normal !important; }
+
+/* Strings */
+.syntaxhighlighter .asmstring
+{ color: #b0002d; font-weight: normal !important; }
