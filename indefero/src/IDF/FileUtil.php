@@ -84,8 +84,10 @@ class IDF_FileUtil
             $ext = self::$map[$fileinfo[2]];
         else
             $ext = "text";
-
-        $content = '<div id="highlight"><script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script></div>';
+        if ($ext == "php" || $ext == "html" || $ext == "htm" || $ext == "js")
+            $content = '<div id="highlight"><pre class="brush: ' . $ext . '">' . str_replace("<", "&lt;", $content)  . '</pre></div>';
+        else
+            $content = '<div id="highlight"><script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script></div>';
         return  Pluf_Template::markSafe($content);
     }
 

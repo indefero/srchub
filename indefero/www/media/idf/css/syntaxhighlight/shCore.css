@@ -262,3 +262,7 @@
 /* Strings */
 .syntaxhighlighter .asmstring
 { color: #b0002d; font-weight: normal !important; }
+
+body .syntaxhighlighter .line {
+    white-space: pre-wrap !important; /* make code wrap */
+}
