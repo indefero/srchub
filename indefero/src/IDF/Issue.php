@@ -128,6 +128,14 @@ class IDF_Issue extends Pluf_Model
                                     'where' => '( lcname = "new" or lcname = "accepted" or lcname = "started" )',
                                     'join' => "INNER JOIN " . $tagtbl . " on " . $this->getSqlTable() . ".status = " . $tagtbl . ".id"
                               ),
+            'project_find_open' => array (
+                'where' => '( lcname = "new" or lcname = "accepted" or lcname = "started" )',
+                'join' => "INNER JOIN " . $tagtbl . " on " . $this->getSqlTable() . ".status = " . $tagtbl . ".id"
+            ),
+            'project_find_closed' => array (
+                'where' => '( lcname = "fixed" or lcname = "verified" or lcname = "invalid" or lcname = "wontfix" )',
+                'join' => "INNER JOIN " . $tagtbl . " on " . $this->getSqlTable() . ".status = " . $tagtbl . ".id"
+            ),
                             'project_find_private' => array (
                                 'where' => 'private = 0 AND ( lcname = "new" or lcname = "accepted" or lcname = "started" )',
                                 'join' => "INNER JOIN " . $tagtbl . " on " . $this->getSqlTable() . ".status = " . $tagtbl . ".id INNER JOIN " . $projtbl . " ON " . $this->getSqlTable() . ".project = " . $projtbl . ".id"
