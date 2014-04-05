@@ -325,6 +325,53 @@ class IDF_Views_Project
                                                $request);
     }
 
+    public $backup_precond = array('IDF_Precondition::projectOwner');
+    public function backup($request, $match)
+    {
+        $prj = $request->project;
+
+        $to_json = array();
+        $to_json["IDF_Project"] = Pluf_Test_Fixture::prepare(Pluf::factory("IDF_Project")->getOne(array("filter" => "id=" . $prj->id)));
+
+        $to_json["IDF_Issue"] = array();
+        $to_json["IDF_Upload"] = array();
+        $to_json["IDF_Wiki_Page"] = array();
+
+
+        foreach(Pluf::factory("IDF_Issue")->getList(array("filter"=>"project=".$prj->id)) as $item)
+        {
+            $tmp = array();
+            $tmp = Pluf_Test_Fixture::dump($item, false);
+            $tmp = $tmp[0];
+            $tmp["comments"] = array();
+            foreach($item->get_comments_list() as $item2)
+                $tmp["comments"][] =  Pluf_Test_Fixture::dump($item2, false)[0];
+            $to_json["IDF_Issue"][] = $tmp;
+        }
+        foreach(Pluf::factory("IDF_Upload")->getList(array("filter"=>"project=".$prj->id)) as $item)
+        {
+            $path = $item->getFullPath();
+            $file = file_get_contents($path);
+
+            $tmp = Pluf_Test_Fixture::dump($item, false);
+            $tmp[0]["file_encoded"] = base64_encode($file);
+            $to_json["IDF_Upload"][] = $tmp[0];
+
+        }
+
+        foreach(Pluf::factory("IDF_Wiki_Page")->getList(array("filter"=>"project=".$prj->id)) as $item)
+        {
+            $tmp = Pluf_Test_Fixture::dump($item, false)[0];
+            $tmp["WikiPageRevs"] = array();
+            foreach($item->get_revisions_list() as $item2)
+                $tmp["WikiPageRevs"][] = Pluf_Test_Fixture::dump($item2, false)[0];
+            $to_json["IDF_Wiki_Page"][] = $tmp;
+        }
+        $render = new Pluf_HTTP_Response(json_encode($to_json), "application/json");
+        $render->headers['Content-Disposition'] = 'attachment; filename="backup-' . $prj->name . '-' . date("YmdGis") . '.json"';
+        return $render;
+    }
+
     /**
      * Administrate the issue tracking of a project.
      */
