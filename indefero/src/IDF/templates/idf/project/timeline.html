@@ -4,7 +4,7 @@
 {block tabhome} class="active"{/block}
 {block subtabs}
 <div id="sub-tabs">
-<a href="{url 'IDF_Views_Project::home', array($project.shortname)}">{trans 'Welcome'}</a> | <strong><a href="{url 'IDF_Views_Project::timeline', array($project.shortname, 'all')}" class="active">{trans 'Latest Updates'}</a></strong>{superblock}
+<a href="{url 'IDF_Views_Project::home', array($project.shortname)}">{trans 'Welcome'}</a> | <a href="{$feedurl}"><img src="{media '/idf/img/feediconorig.png'}" alt="{trans 'RSS'}" /></a> <strong><a href="{url 'IDF_Views_Project::timeline', array($project.shortname, 'all')}" class="active">{trans 'Latest Updates'}</a>  </strong>{superblock}
 </div>
 {/block}
 
@@ -22,7 +22,8 @@
 {/foreach}
 </p>
 <p><strong>{trans 'Subscribe to this timeline'}</strong><br />
-<span class="label"><img src="{media '/idf/img/rss.png'}" alt="{trans 'RSS'}" /> <a href="{$feedurl}">{trans 'Atom feed'}</a></span>
+
+<span class="label"><img src="{media '/idf/img/feediconorig.png'}" alt="{trans 'RSS'}" /> <a href="{$feedurl}">{trans 'Atom feed'}</a></span>
 </p>
 {/block}
 
