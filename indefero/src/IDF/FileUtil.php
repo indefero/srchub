@@ -40,7 +40,8 @@ class IDF_FileUtil
 
     public static $map = array("cxx" => "cpp", "h" => "cpp", "hpp" => "cpp", "rc"=>"text", "sh"=>"bash", "cs"=>"csharp");
 
-    public static $syntaxhighlightext = array("as3", "cf", "cpp", "c", "css", "pas", "diff", "patch", "erl", "java", "jfx", "js", "pl", "php", "py", "rb", "sass", "scss", "scala", "sql", "vb", );
+    public static $syntaxhighlightext = array("html", "as3", "cf", "cpp", "c", "css", "pas", "diff", "patch", "erl", "java", "jfx", "js", "pl", "php", "py", "rb", "sass", "scss", "scala", "sql", "vb", );
+
 
     /**
      * Test if an extension is supported by the syntax highlighter.

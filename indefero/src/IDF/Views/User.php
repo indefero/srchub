@@ -304,7 +304,9 @@ class IDF_Views_User
                 }
             }
         }
-        $projectstats = IDF_Views::getProjectsStatistics($pubprojects);
+        //$projectstats = IDF_Views::getProjectsStatistics($pubprojects);
+        $projectstats = IDF_Views::getProjectsStatisticsByUser($user->id);
+        $projectstats["proj_count"] = count($pubprojects);
         //print_r($projectstats);
         //echo $privprojects;
 

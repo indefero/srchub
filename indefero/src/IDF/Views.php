@@ -565,4 +565,40 @@ class IDF_Views
 	    $forgestats['proj_count'] = count($projects);
         return $forgestats;
     }
+
+    /**
+     * Returns statistics by a userID
+     *
+     * @param ArrayObject IDF_Project
+     * @return Associative array of statistics
+     */
+    public static function getProjectsStatisticsByUser($uid)
+    {
+        $forgestats = array();
+
+        // count overall project stats
+        $forgestats['total'] = 0;
+        $what = array(
+            'downloads' => 'IDF_Upload',
+            'reviews'   => 'IDF_Review',
+            'issues'    => 'IDF_Issue',
+            'docpages'  => 'IDF_Wiki_Page',
+
+        );
+        foreach ($what as $key => $model) {
+            $count = Pluf::factory($model)->getCount(array(
+                'filter' => sprintf('submitter = %d', $uid)
+            ));
+            $forgestats[$key] = $count;
+            $forgestats['total'] += $count;
+        }
+        //             'commits'   => 'IDF_Commit',
+        $count = Pluf::factory('IDF_Commit')->getCount(array(
+            'filter' => sprintf('author = %d', $uid)
+        ));
+        $forgestats['commits'] = $count;
+        $forgestats['total'] += $count;
+
+        return $forgestats;
+    }
 }
