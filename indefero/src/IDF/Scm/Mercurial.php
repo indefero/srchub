@@ -248,7 +248,7 @@ class IDF_Scm_Mercurial extends IDF_Scm
                 continue;
             }
             if ($folder) {
-                preg_match('|^'.$folder.'[/]?([^/]+)?$|', $file,$match);
+                preg_match('|^'.$folder.'[/]([^/]+)?$|', $file,$match);
                 if (count($match) > 1) {
                     $file = $match[1];
                 } else {
