@@ -1,0 +1,30 @@
+InDefero was originally created during summer 2008 
+by Loïc d'Anterroches with the support of Céondo Ltd.
+ 
+Much appreciated contributors:
+ 
+    Nicolas Lassalle <http://www.beroot.org/> - Subversion support
+    bohwaz <http://bohwaz.net/>
+    Benjamin Jorand <benjamin.jorand@gmail.com> - Mercurial support
+    Baptiste Michaud <bactisme@gmail.com> - Subversion synchronization
+    Julien Issler 
+    Manuel Eidenberger <eidenberger@gmail.com>
+    Ciaran Gultnieks
+    Mehdi Kabab <http://pioupioum.fr/>
+    Sindre R. Myren
+    Patrick Georgi <patrick.georgi@coresystems.de>
+    Adrien Bustany
+    Charles Melbye
+    Baptiste Durand-Bret
+    Andrew Nguyen
+    David Feeney
+    Denis Kot <denis.kot@gmail.com>
+    Samuel Suther
+    Ludovic Bellière
+    Brian Armstrong
+    Raphaël Emourgeon
+    Jakub Viták
+    Vladimir Solomatin
+ 
+And all the nice users who spent time reporting issues and promoting
+the project. The project could not live without them.
