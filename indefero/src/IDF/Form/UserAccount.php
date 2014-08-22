@@ -479,6 +479,7 @@ class IDF_Form_UserAccount  extends Pluf_Form
             if ($password1 != $password2) {
                 throw new Pluf_Form_Invalid(__('The passwords do not match. Please give them again.'));
             }
+			$this->cleaned_data["password"] =  base64_encode(sha1($this->cleaned_data['password'], true));
         }
 
         return $this->cleaned_data;
