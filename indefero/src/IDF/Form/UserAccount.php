@@ -473,7 +473,8 @@ class IDF_Form_UserAccount  extends Pluf_Form
     public function clean()
     {
         if (!isset($this->errors['password'])
-            && !isset($this->errors['password2'])) {
+            && !isset($this->errors['password2'])
+			&& strlen($this->cleaned_data["password"] > 0)) {
             $password1 = $this->cleaned_data['password'];
             $password2 = $this->cleaned_data['password2'];
             if ($password1 != $password2) {
