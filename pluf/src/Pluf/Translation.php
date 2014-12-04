@@ -70,7 +70,7 @@ class Pluf_Translation
 
     public static function getLocale()
     {
-        return $GLOBALS['_PX_current_locale'];
+        return (isset($GLOBALS['_PX_current_locale'])) ? $GLOBALS['_PX_current_locale'] : "en";
     }
 
     /**

@@ -62,8 +62,8 @@ class Pluf_HTTP_URL
         if (isset($_GET['_pluf_action'])) {
             return $_GET['_pluf_action'];
         }
-        return (isset($_SERVER['PATH_INFO'])) ?
-            $_SERVER['PATH_INFO'] : '/';
+        return (isset($_SERVER['REDIRECT_URL'])) ?
+            $_SERVER['REDIRECT_URL'] : '/';
     }
 }
 
