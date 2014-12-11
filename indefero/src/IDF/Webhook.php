@@ -1,4 +1,5 @@
 <?php
+require_once PLUF_PATH . '/Pluf/thirdparty/ccurl.php';
 /* -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
 # ***** BEGIN LICENSE BLOCK *****
@@ -39,39 +40,23 @@ class IDF_Webhook
     public static function processNotification($payload)
     {
         $data = json_encode($payload['to_send']);
-        $sign_header = 'Web-Hook-Hmac';
+        $sign_header = 'X-Web-Hook-Hmac';
         // use the old signature header if we're asked for
         if (Pluf::f('webhook_processing', '') === 'compat') {
-            $sign_header = 'Post-Commit-Hook-Hmac';
+            // This should really be X-HEADER
+            $sign_header = 'X-Post-Commit-Hook-Hmac';
         }
         $sign = hash_hmac('md5', $data, $payload['authkey']);
-        $params = array('http' => array(
-                      // fall-back to POST for old queue items
-                      'method' => empty($payload['method']) ? 'POST' : $payload['method'],
-                      'content' => $data,
-                      'user_agent' => 'Indefero Hook Sender (http://www.indefero.net)',
-                      'max_redirects' => 0,
-                      'timeout' => 15,
-                      'header'=> $sign_header.': '.$sign."\r\n"
-                                .'Content-Type: application/json'."\r\n",
-                                        )
-                        );
+
         $url = $payload['url'];
-        $ctx = stream_context_create($params);
-        $fp = @fopen($url, 'rb', false, $ctx);
-        if (!$fp) {
-            return false;
-        }
-        $meta = stream_get_meta_data($fp);
-        @fclose($fp);
-        if (!isset($meta['wrapper_data'][0]) or $meta['timed_out']) {
-            return false;
-        }
-        if (0 === strpos($meta['wrapper_data'][0], 'HTTP/1.1 2') or
-            0 === strpos($meta['wrapper_data'][0], 'HTTP/1.1 3')) {
-            return true;
-        }
-        return false;
+
+        $curl = new ccurl($url,true, 15, 0);
+        $curl->setPost($data);
+        $curl->addHeader("$sign_header: $sign");
+        $curl->addHeader("Content-Type: application/json");
+        $curl->createCurl();
+
+        return true;
     }
 
 
