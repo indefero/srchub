@@ -11,8 +11,11 @@
 <li><a href="{url 'IDF_Views::index'}">{trans 'Home'}</a></li>
 {/if}<li id="project-list"><a href="{url 'IDF_Views::listProjects'}">{trans 'Project List'} &#x25be;</a>
 {if $allProjects.count() != 0}
-<ul>{foreach $allProjects as $p}
-<li><a href="{url 'IDF_Views_Project::home', array($p.shortname)}"><img class="logo" src="{url 'IDF_Views_Project::logo', array($p.shortname)}" alt="{trans 'Project logo'}" />{if $p.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}</a></li>
+
+<ul class="prjlistclass">
+    <li id="searchkeep"><input size="15" type="text" id="prjname" name="prjname" value="Project Name..." /></li>
+    {foreach $allProjects as $p}
+<li class="projectitem"><a href="{url 'IDF_Views_Project::home', array($p.shortname)}"><img class="logo" src="{url 'IDF_Views_Project::logo', array($p.shortname)}" alt="{trans 'Project logo'}" />{if $p.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}</a></li>
 {/foreach}</ul>
 {/if}</li>{if $isAdmin}<li><a href="{url 'IDF_Views_Admin::forge'}">{trans 'Forge Management'}</a></li>{/if}<li>
 <a href="{url 'IDF_Views::faq'}" title="{trans 'Help and accessibility features'}">{trans 'Help'}</a></li>
@@ -22,6 +25,38 @@
 <script type="text/javascript" charset="utf-8">
 {literal}
 $(document).ready(function() {
+
+    $("#prjname").on("click", function() {
+       if ($("#prjname").val() == "Project Name...")
+           $("#prjname").val("");
+    });
+
+    $("#prjname").keydown(function(ev) {
+        if(ev.which === 13) {
+            var elements = $('.projectitem :visible');
+            var count = elements.size();
+            if (count > 0 && (count / 2) == 1)
+            {
+                window.location.replace($('.projectitem :visible').attr("href"));
+            }
+        }
+    });
+
+    $('#prjname').keyup(function(){
+        var valThis = $(this).val().toLowerCase();
+        if(valThis == ""){
+            $('.prjlistclass > li').show();
+        } else {
+            $('.prjlistclass > li').each(function(){
+                if ($(this).attr('id') && $(this).attr('id') == "searchkeep")
+                    return true;
+                var text = $(this).text().toLowerCase();
+                (text.indexOf(valThis) >= 0) ? $(this).show() : $(this).hide();
+            });
+        };
+    });
+
+
   $('#project-list').bind('mouseenter', function(ev) {
     $(this).find('ul').show();
   }).bind('mouseleave', function(ev) {
