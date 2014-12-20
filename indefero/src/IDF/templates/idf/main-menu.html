@@ -33,12 +33,7 @@ $(document).ready(function() {
 
     $("#prjname").keydown(function(ev) {
         if(ev.which === 13) {
-            var elements = $('.projectitem :visible');
-            var count = elements.size();
-            if (count > 0 && (count / 2) == 1)
-            {
-                window.location.replace($('.projectitem :visible').attr("href"));
-            }
+            window.location.replace($('.projectitem :visible').first().attr("href"));
         }
     });
 
