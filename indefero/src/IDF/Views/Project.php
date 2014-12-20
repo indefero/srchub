@@ -41,8 +41,10 @@ class IDF_Views_Project
 
         $logo = $prj->getConf()->getVal('logo');
         if (empty($logo)) {
-            $url = Pluf::f('url_media') . '/idf/img/no_logo.png';
-            return new Pluf_HTTP_Response_Redirect($url);
+            $file = "./media/idf/img/no_logo.png";
+            $info = IDF_FileUtil::getMimeType($file);
+            return new Pluf_HTTP_Response_File($file,
+                $info[0]);
         }
 
         $info = IDF_FileUtil::getMimeType($logo);
