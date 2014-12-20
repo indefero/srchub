@@ -13,7 +13,7 @@
 {if $allProjects.count() != 0}
 
 <ul class="prjlistclass">
-    <li id="searchkeep"><input size="15" type="text" id="prjname" name="prjname" value="Project Name..." /></li>
+    <li id="searchkeep"><input size="15" type="text" id="prjname" name="prjname" placeholder="Project Name..." /></li>
     {foreach $allProjects as $p}
 <li class="projectitem"><a href="{url 'IDF_Views_Project::home', array($p.shortname)}"><img class="logo" src="{url 'IDF_Views_Project::logo', array($p.shortname)}" alt="{trans 'Project logo'}" />{if $p.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}</a></li>
 {/foreach}</ul>
@@ -26,10 +26,6 @@
 {literal}
 $(document).ready(function() {
 
-    $("#prjname").on("click", function() {
-       if ($("#prjname").val() == "Project Name...")
-           $("#prjname").val("");
-    });
 
     $("#prjname").keydown(function(ev) {
         if(ev.which === 13) {
@@ -54,6 +50,7 @@ $(document).ready(function() {
 
   $('#project-list').bind('mouseenter', function(ev) {
     $(this).find('ul').show();
+      $("#prjname").focus();
   }).bind('mouseleave', function(ev) {
     $(this).find('ul').hide();
   });
