@@ -148,7 +148,7 @@ class IDF_FileUtil
         // a list of extensions that we know
         // And document the types best we can:
         // po is a translation file in indefero - tried text/plain but the syntax highlight JS library didn't like it
-        $ext_hack = array("po" => "application/octet-stream");
+        $ext_hack = array("po" => "text/plain");
         $info = pathinfo($file);
         $res = array('application/octet-stream',
                      $info['basename'],

@@ -50,6 +50,48 @@
     <link rel="stylesheet" type="text/css" href="{media '/idf/css/syntaxhighlight/shThemeDefault.css'}" />
     {/if}
 
+    {literal}
+    <script type="text/javascript">
+        $.event.special.tripleclick = {
+
+            setup: function(data, namespaces) {
+                var elem = this, $elem = jQuery(elem);
+                $elem.bind('click', jQuery.event.special.tripleclick.handler);
+            },
+
+            teardown: function(namespaces) {
+                var elem = this, $elem = jQuery(elem);
+                $elem.unbind('click', jQuery.event.special.tripleclick.handler)
+            },
+
+            handler: function(event) {
+                var elem = this, $elem = jQuery(elem), clicks = $elem.data('clicks') || 0, start = $elem.data('startTimeTC') || 0;
+                if ((new Date().getTime() - start)>= 1000) {
+                    clicks = 0;
+                }
+                clicks += 1;
+                if(clicks === 1) {
+                    start = new Date().getTime();
+                }
+
+                if ( clicks === 3 ) {
+                    clicks = 0;
+
+                    // set event type to "tripleclick"
+                    event.type = "tripleclick";
+
+                    // let jQuery handle the triggering of "tripleclick" event handlers
+                    jQuery.event.handle.apply(this, arguments)
+                }
+
+                $elem.data('clicks', clicks);
+                $elem.data('startTimeTC', start);
+            }
+
+        };
+    </script>
+    {/literal}
+
   {appversion}
 </head>
 <body>
@@ -133,6 +175,9 @@ $(document).ready(function(){
 <script type="text/javascript" src="{media '/idf/js/allowtabs.js'}"></script>
 <script type="application/javascript">
     {literal}
+
+
+
     function path()
     {
         var args = arguments,
@@ -209,34 +254,10 @@ $(function() {
 
 
     });
-    function lineWrap(){
-        var wrap = function () {
-            var elems = document.getElementsByClassName('syntaxhighlighter');
-            for (var j = 0; j < elems.length; ++j) {
-                var sh = elems[j];
-                var gLines = sh.getElementsByClassName('gutter')[0].getElementsByClassName('line');
-                var cLines = sh.getElementsByClassName('code')[0].getElementsByClassName('line');
-                var stand = 15;
-                for (var i = 0; i < gLines.length; ++i) {
-                    var h = $(cLines[i]).height();
-                    if (h != stand) {
-                        console.log(i);
-                        gLines[i].setAttribute('style', 'height: ' + h + 'px !important;');
-                    }
-                }
-            }
-        };
-        var whenReady = function () {
-            if ($('.syntaxhighlighter').length === 0) {
-                setTimeout(whenReady, 800);
-            } else {
-                wrap();
-            }
-        };
-        whenReady();
-    };
-    lineWrap();
-    $(window).resize(function(){lineWrap()});
+
+
+
+
 
     {/literal}
 </script>
