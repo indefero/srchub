@@ -26,7 +26,7 @@ function IDF_Migrations_22ProjectTagRelationTable_up($params=null)
     $db = Pluf::db();
     $table = $db->pfx.'idf_project_idf_tag_assoc';
     if (!in_array($db->engine, array('MySQL', 'PostgreSQL'))) {
-        throw new Exception('unsupported engine '.$engine);
+        throw new Exception('unsupported engine '.$db->engine);
     }
 
     $intro = new Pluf_DB_Introspect($db);
@@ -45,7 +45,7 @@ function IDF_Migrations_22ProjectTagRelationTable_down($params=null)
     $db = Pluf::db();
     $table = $db->pfx.'idf_project_idf_tag_assoc';
     if (!in_array($db->engine, array('MySQL', 'PostgreSQL'))) {
-        throw new Exception('unsupported engine '.$engine);
+        throw new Exception('unsupported engine '.$db->engine);
     }
 
     $intro = new Pluf_DB_Introspect($db);

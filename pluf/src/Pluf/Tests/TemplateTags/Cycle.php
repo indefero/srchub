@@ -156,11 +156,11 @@ class Pluf_Tests_Templatetags_Cycle extends Pluf_Test_TemplatetagsUnitTestCase
         $this->skip('Pluf has no support for applying filters to a variable of array');
         return;
 
-        $context = new Pluf_Template_Context(array('one' => 'A',
+        /*$context = new Pluf_Template_Context(array('one' => 'A',
                                                    'two' => '2'));
         $to_parse = '{cycle array($one|lower, $two), "counter"}{cycle $counter}';
         $expected = 'a2';
         $tpl = $this->getNewTemplate($to_parse);
-        $this->assertEqual($expected, $tpl->render($context));
+        $this->assertEqual($expected, $tpl->render($context));*/
     }
 }

@@ -597,7 +597,7 @@ class IDF_Plugin_SyncMonotone
                 catch (Exception $e) {
                     $this->_diagnoseProblem(sprintf(
                         __('Could not parse read-permissions for project "%1$s": %2$s'),
-                        $shortname, $e->getMessage()
+                        $project->shortname, $e->getMessage()
                     ));
                 }
 
@@ -716,7 +716,7 @@ class IDF_Plugin_SyncMonotone
                 catch (Exception $e) {
                     $this->_diagnoseProblem(sprintf(
                         __('Could not parse read-permissions for project "%1$s": %2$s'),
-                        $shortname, $e->getMessage()
+                        $project->shortname, $e->getMessage()
                     ));
                 }
 
@@ -789,7 +789,7 @@ class IDF_Plugin_SyncMonotone
             Pluf_Log::event(array(
                 'IDF_Plugin_SyncMonotone::processSyncTimeline',
                 'Project not found.',
-                array($project_name, $params)
+                array($project_name)
             ));
             return false; // Project not found
         }

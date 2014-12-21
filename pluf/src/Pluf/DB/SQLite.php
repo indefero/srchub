@@ -106,7 +106,7 @@ class Pluf_DB_SQLite
     function getLastID()
     {
         $this->debug('* GET LAST ID');
-        return (int) $this->con_id->lastInsertId();;
+        return (int) $this->con_id->lastInsertId();
     }
 
     /**
