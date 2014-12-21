@@ -142,10 +142,24 @@ class IDF_FileUtil
      */
     public static function getMimeTypeFromContent($file, $filedata)
     {
+        // There is a bug/memory leak in finfo_buffer
+        // finfo_buffer works 99% of the time - so rather than
+        // replacing it with some complex mime check system - just create
+        // a list of extensions that we know
+        // And document the types best we can:
+        // po is a translation file in indefero - tried text/plain but the syntax highlight JS library didn't like it
+        $ext_hack = array("po" => "application/octet-stream");
         $info = pathinfo($file);
         $res = array('application/octet-stream',
                      $info['basename'],
                      isset($info['extension']) ? $info['extension'] : 'bin');
+
+        if (array_key_exists($info["extension"], $ext_hack))
+        {
+            $res[0] = $ext_hack[$info["extension"]];
+            return $res;
+        }
+
         if (function_exists('finfo_open')) {
             $finfo = finfo_open(FILEINFO_MIME);
             $mime = finfo_buffer($finfo, $filedata);
