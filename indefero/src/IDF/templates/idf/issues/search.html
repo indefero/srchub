@@ -7,6 +7,7 @@
 <p><a href="{$url}"><img style="vertical-align: text-bottom;" src="{media '/idf/img/add.png'}" alt="+" align="bottom" /></a> <a href="{$url}">{trans 'New Issue'}</a></p>{/if}
 
 {/block}
+
 {block context}
 {aurl 'open_url',   'IDF_Views_Issue::searchStatus', array($project.shortname, 'open'),   array('q' => $query)}
 {aurl 'closed_url', 'IDF_Views_Issue::searchStatus', array($project.shortname, 'closed'), array('q' => $query)}
@@ -17,7 +18,7 @@
 {blocktrans}
 <p><strong>Found open issues:</strong> <a href="{$open_url}">{$open}</a></p>
 <p><strong>Found closed issues:</strong> <a href="{$closed_url}">{$closed}</a></p>{/blocktrans}
-{if $tag !== null}
+{if $tag != null}
 {blocktrans}<p><strong>Label:</strong>
 <a href="{$open_url}" class="label"><strong>{$tag.class}:</strong>{$tag.name}</a></p>{/blocktrans}
 {else}
