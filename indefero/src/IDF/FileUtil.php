@@ -154,7 +154,7 @@ class IDF_FileUtil
                      $info['basename'],
                      isset($info['extension']) ? $info['extension'] : 'bin');
 
-        if (array_key_exists($info["extension"], $ext_hack))
+        if ($info && isset($info["extension"]) && array_key_exists($info["extension"], $ext_hack))
         {
             $res[0] = $ext_hack[$info["extension"]];
             return $res;
