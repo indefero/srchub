@@ -628,14 +628,16 @@ function IDF_Views_Admin_getForgeSize($force=false)
     }
     $last_eval = $conf->getVal('downloads_size_check_date', 0);
     if (Pluf::f('idf_no_size_check', false) or
-              (!$force and $last_eval > time()-172800)) {
+        (!$force and $last_eval > time()-172800)) {
         $res['downloads'] = $conf->getVal('downloads_size', 0);
     } else {
         $conf->setVal('downloads_size_check_date', time());
-        $cmd = Pluf::f('idf_exec_cmd_prefix', '').'du -sk '
-            .escapeshellarg(Pluf::f('upload_path'));
-        $out = explode(' ', shell_exec($cmd), 2);
-        $res['downloads'] = $out[0]*1024;
+        $total = 0;
+        foreach(Pluf::factory("IDF_Upload")->getList() as $issuefile)
+        {
+            $total += $issuefile->filesize;
+        }
+        $res['downloads'] = $total;
         $conf->setVal('downloads_size', $res['downloads']);
     }
     $last_eval = $conf->getVal('attachments_size_check_date', 0);
@@ -643,11 +645,13 @@ function IDF_Views_Admin_getForgeSize($force=false)
         (!$force and $last_eval > time()-172800)) {
         $res['attachments'] = $conf->getVal('attachments_size', 0);
     } else {
+        $total = 0;
+        foreach(Pluf::factory("IDF_IssueFile")->getList() as $issuefile)
+        {
+            $total += $issuefile->filesize;
+        }
+        $res['attachments'] = $total;
         $conf->setVal('attachments_size_check_date', time());
-        $cmd = Pluf::f('idf_exec_cmd_prefix', '').'du -sk '
-            .escapeshellarg(Pluf::f('upload_path'));
-        $out = explode(' ', shell_exec($cmd), 2);
-        $res['attachments'] = $out[0]*1024;
         $conf->setVal('attachments_size', $res['attachments']);
     }
     $last_eval = $conf->getVal('database_size_check_date', 0);
