@@ -1,6 +1,11 @@
 {extends "idf/source/base.html"}
 {block docclass}yui-t1{assign $inChangeLog=true}{/block}
 {block body}
+        {if !$full}
+       <a href="?full=true">Click Here for the full changelog</a>
+        {/if}
+        <br/>
+        <br/>
 <table summary="" class="tree-list">
 <thead>
 <tr>

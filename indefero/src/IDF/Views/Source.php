@@ -106,7 +106,10 @@ class IDF_Views_Source
 
         $title = sprintf(__('%1$s %2$s Change Log'), (string) $request->project,
                          $this->getScmType($request));
-        $changes = $scm->getChangeLog($commit, 25);
+        if (isset($_GET["full"]))
+            $changes = $scm->getChangeLog($commit, null);
+        else
+            $changes = $scm->getChangeLog($commit, 25);
         $rchanges = array();
         // Sync with the database
         foreach ($changes as $change) {
@@ -128,6 +131,7 @@ class IDF_Views_Source
                                                      'tags' => $tags,
                                                      'tags_in' => $in_tags,
                                                      'scm' => $scmConf,
+                                                     'full' => isset($_GET["full"]) ? true : false
                                                      ),
                                                $request);
     }
