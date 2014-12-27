@@ -100,6 +100,12 @@ TEXT)) AS size FROM pg_class AS pgc, pg_namespace AS pgn
     return $total;
 }
 
+
+require dirname(__FILE__).'/../src/IDF/conf/path.php';
+require 'Pluf.php';
+Pluf::start(dirname(__FILE__).'/../src/IDF/conf/idf.php');
+
+
 $lock_file = Pluf::f('idf_queuecron_lock',
     Pluf::f('tmp_folder', '/tmp').'/calcforgecron.lock');
 
@@ -109,9 +115,6 @@ if (file_exists($lock_file)) {
 
 file_put_contents($lock_file, time(), LOCK_EX);
 
-require dirname(__FILE__).'/../src/IDF/conf/path.php';
-require 'Pluf.php';
-Pluf::start(dirname(__FILE__).'/../src/IDF/conf/idf.php');
 
 Pluf_Dispatcher::loadControllers(Pluf::f('idf_views'));
 
