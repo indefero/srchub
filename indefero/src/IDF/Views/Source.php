@@ -131,6 +131,7 @@ class IDF_Views_Source
                                                      'tags' => $tags,
                                                      'tags_in' => $in_tags,
                                                      'scm' => $scmConf,
+                                                     'numcommits' => count($rchanges),
                                                      'full' => isset($_GET["full"]) ? true : false
                                                      ),
                                                $request);

@@ -50,6 +50,17 @@ class IDF_Form_ProjectRequest extends Pluf_Form
             throw new Exception(__('Cannot save the model from an invalid form.'));
         }
 
+        $shortname = $this->cleaned_data['shortname'];
+        if (preg_match('/[^\-A-Za-z0-9]/', $shortname)) {
+            throw new Pluf_Form_Invalid(__('This shortname contains illegal characters, please use only letters, digits and dash (-).'));
+        }
+        if (mb_substr($shortname, 0, 1) == '-') {
+            throw new Pluf_Form_Invalid(__('The shortname cannot start with the dash (-) character.'));
+        }
+        if (mb_substr($shortname, -1) == '-') {
+            throw new Pluf_Form_Invalid(__('The shortname cannot end with the dash (-) character.'));
+        }
+
         $checksql = new Pluf_SQL(sprintf("shortname='%s'", $this->cleaned_data['shortname']));
         $requestcheck = Pluf::factory("IDF_Project")->getCount(array('filter'=>$checksql->gen()));
         if ($requestcheck == 1)
@@ -57,7 +68,9 @@ class IDF_Form_ProjectRequest extends Pluf_Form
         try
         {
             $request = new IDF_ProjectRequest();
-            $request->shortname = $this->cleaned_data['shortname'];
+
+            // The trim really isn't needed - but does ensure that no whitespace will end up in the name
+            $request->shortname = trim($shortname);
             $request->repotype = $this->cleaned_data['repotype'];
             $request->desc = $this->cleaned_data['desc'];
             $request->submitter = $this->user;
