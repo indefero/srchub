@@ -277,7 +277,10 @@ class IDF_Views_User
     public function view($request, $match)
     {
         $db =& Pluf::db();
-        $sql = new Pluf_SQL('login=%s or email=%s', array($match[1], $match[1]));
+        if (strrpos($match[0], "+") === false)
+            $sql = new Pluf_SQL('login=%s or email=%s ', array($match[1], $match[1]));
+        else
+            $sql = new Pluf_SQL('first_name=%s and last_name=%s', array(explode("+", $match[1])[0], explode("+", $match[1])[1]));
         $users = Pluf::factory('Pluf_User')->getList(array('filter'=>$sql->gen()));
         if (count($users) != 1 or !$users[0]->active) {
             throw new Pluf_HTTP_Error404();
