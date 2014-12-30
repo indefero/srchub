@@ -32,6 +32,9 @@
         <th>
             Approve
         </th>
+        <th>
+            Reject
+        </th>
     </tr>
 {foreach $requests as $req}
 <tr>
@@ -45,13 +48,18 @@
         {$req.repotype}
     </td>
     <td>
-        {$req.get_submitter.login}
+        {aurl 'url', 'IDF_Views_User::view', array($req.get_submitter.login)}
+        <a href="{$url}">{$req.get_submitter.login}</a>
     </td>
     <td>
         {$req.creation_dtime}
     </td>
     <td>
         <a href="{url 'IDF_Views_Admin::projectRequestCreate'}{$req.id}/">Approve</a>
+    </td>
+    <td>
+        {aurl 'url', 'IDF_Views_Admin::projectRequestReject', array($req.id)}
+        <a href="{$url}">Reject</a>
     </td>
 </tr>
 {/foreach}

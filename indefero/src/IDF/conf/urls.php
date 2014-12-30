@@ -531,6 +531,11 @@ $ctl[] = array('regex' => '#^/admin/projects/createrequest/(\d+/)?$#',
                 'model' => 'IDF_Views_Admin',
                 'method' => 'projectRequestCreate');
 
+$ctl[] = array('regex' => '#^/admin/projects/rejectrequest/(\d+)/$#',
+                'base' => $base,
+                'model' => 'IDF_Views_Admin',
+                'method' => 'projectRequestReject');
+
 $ctl[] = array('regex' => '#^/admin/projects/(\d+)/delete/$#',
                'base' => $base,
                'model' => 'IDF_Views_Admin',

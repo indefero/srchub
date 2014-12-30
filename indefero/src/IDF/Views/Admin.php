@@ -218,8 +218,6 @@ class IDF_Views_Admin
         }
 
         $projectreqs = Pluf::factory("IDF_ProjectRequest")->getList();
-        //$projectreqs[0]->creation_dtime = "123";
-        //print_r($projectreqs[0]->creation_dtime);
         foreach($projectreqs as $p) {
             $p->creation_dtime = Pluf_Date::gmDateToString($p->creation_dtime);
         }
@@ -231,6 +229,44 @@ class IDF_Views_Admin
             'errors' => $errors
         ), $request);
     }
+
+    public $projectRequestReject_precond = array('Pluf_Precondition::staffRequired');
+    public function projectRequestReject($request, $match)
+    {
+        $title = __('Reject Requested Project');
+        $createdtext = "";
+        $errors = null;
+        if (count($match) == 2)
+        {
+            $projreqobj = new IDF_ProjectRequest($match[1]);
+            Pluf::loadFunction('Pluf_HTTP_URL_urlForView');
+            $from_email = Pluf::f('from_email');
+            $tmpl = new Pluf_Template('idf/admin/request-email-reject.txt');
+            $context = new Pluf_Template_Context(array("user" => $projreqobj->get_submitter, "shortname" => $projreqobj->shortname));
+            $text_email = $tmpl->render($context);
+            $email = new Pluf_Mail($from_email, $projreqobj->get_submitter->email,
+                __('Status of repository request'));
+            $email->addTextMessage($text_email);
+            $email->sendMail();
+
+            $projreqobj->delete();
+            $createdtext = "Request was deleted!";
+
+        }
+
+        $projectreqs = Pluf::factory("IDF_ProjectRequest")->getList();
+        foreach($projectreqs as $p) {
+            $p->creation_dtime = Pluf_Date::gmDateToString($p->creation_dtime);
+        }
+        return Pluf_Shortcuts_RenderToResponse('idf/admin/approveprojects.html', array (
+            'page_title' => $title,
+            'requests' => $projectreqs,
+            'createdtext' => $createdtext,
+            'form' => null,
+            'errors' => $errors
+        ), $request);
+    }
+
     /**
      * Creation of a project.
      *

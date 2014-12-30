@@ -5,6 +5,8 @@ Your request for {$shortname|safe} was approved!
 
 If you have any questions please feel free to email a member of the development team.
 
+Happy hacking!
+
 Yours faithfully,
 The development team.
 

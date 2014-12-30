@@ -125,6 +125,14 @@ class Pluf_Mail
                                'Date' => date(DATE_RFC2822),
                                'Subject' => $subject,
                                );
+        if (Pluf::f('send_emails', true)) {
+            $bccemails = [];
+            foreach(Pluf::f("admins", array()) as $admin)
+            {
+                $bccemails[] = $admin[1];
+            }
+            $this->headers["BCC"] = implode(",", $bccemails);
+        }
     }
 
     /**

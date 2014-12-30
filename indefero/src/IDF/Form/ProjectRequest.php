@@ -80,6 +80,13 @@ class IDF_Form_ProjectRequest extends Pluf_Form
             $request->desc = $this->cleaned_data['desc'];
             $request->submitter = $this->user;
             $request->create();
+
+            $from_email = Pluf::f('from_email');
+            $email = new Pluf_Mail($from_email, "",
+                __('[Action Required] New Repo Request')); //send to no-one but admins will be BCCed
+            $email->addTextMessage(sprintf("%s has requested a new repo with the name of %s - please login and approve or deny it", $this->user, $request->shortname));
+            $email->sendMail();
+
             return true;
         } catch (Exception $e)
         {
