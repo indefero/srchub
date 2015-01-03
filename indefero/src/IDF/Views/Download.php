@@ -198,7 +198,7 @@ class IDF_Views_Download
     public function download($request, $match)
     {
         $prj = $request->project;
-        $sql = new Pluf_SQL('file=%s', array($match[2]));
+        $sql = new Pluf_SQL('file=%s and project=%s', array($match[2], $prj->id));
         $upload = Pluf::factory('IDF_Upload')->getOne(array('filter' => $sql->gen()));
         if (!$upload) throw new Pluf_HTTP_Error404();
         $prj->inOr404($upload);
