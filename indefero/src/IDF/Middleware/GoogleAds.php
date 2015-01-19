@@ -60,8 +60,12 @@ class IDF_Middleware_GoogleAds
         }
         $replacead1 = $this->makead(Pluf::f("google_ads")["AD1"]);
         $replacead2 = $this->makead(Pluf::f("google_ads")["AD2"]);
-        $response->content = substr_replace($response->content, $replacead1, strrpos($response->content,'<!--AD1-->'), strlen('<!--AD1-->'));
-        $response->content = substr_replace($response->content, $replacead2, strrpos($response->content,'<!--AD2-->'), strlen('<!--AD2-->'));
+        $pos1 = strpos($response->content,'<!--AD1-->');
+        if ($pos1 !== false)
+            $response->content = substr_replace($response->content, $replacead1, $pos1, strlen('<!--AD1-->'));
+        $pos2 = strpos($response->content,'<!--AD2-->');
+        if ($pos2 !== false)
+            $response->content = substr_replace($response->content, $replacead2, $pos2, strlen('<!--AD2-->'));
         return $response;
     }
 
