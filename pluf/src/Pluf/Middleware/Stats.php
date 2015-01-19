@@ -61,7 +61,7 @@ class Pluf_Middleware_Stats
 		$text = "Page rendered in " . sprintf('%.5f', (microtime(true) - $GLOBALS['_PX_starttime'])) . "s using " . count($GLOBALS['_PX_debug_data']['sql_queries']) . " queries.";
 	else
 		$text = "Page rendered in " . sprintf('%.5f', (microtime(true) - $GLOBALS['_PX_starttime'])) . "s.";
-        $response->content = str_replace('</body>', $text.'</body>', $response->content);
+        $response->content = substr_replace($response->content, $text.'</body>', strrpos($response->content,'</body>'), strlen('</body>'));
         return $response;
     }
 }
