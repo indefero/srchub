@@ -111,7 +111,7 @@ class IDF_Form_Admin_UserCreate extends Pluf_Form
         $user->active = true;
         $user->staff = false;
         $user->administrator = false;
-        $user->setPassword(base64_encode(sha1($password,TRUE)));
+        $user->setPassword($password);
         $user->create();
         /**
          * [signal]
