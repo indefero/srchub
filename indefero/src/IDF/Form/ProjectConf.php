@@ -86,6 +86,12 @@ class IDF_Form_ProjectConf extends Pluf_Form
                           	'initial' => $this->project->enableads,
                           	'widget' => 'Pluf_Form_Widget_CheckboxInput',
                           ));
+        $this->fields['disabled'] = new Pluf_Form_Field_Boolean(
+            array('required' => false,
+                'label' => __('Disable Project'),
+                'initial' => $this->project->disabled,
+                'widget' => 'Pluf_Form_Widget_CheckboxInput',
+            ));
 	} else {
 		$this->fields['enableads'] = new Pluf_Form_Field_Boolean(
                             array('required' => false,
@@ -94,6 +100,7 @@ class IDF_Form_ProjectConf extends Pluf_Form
                                 'widget' => 'Pluf_Form_Widget_CheckboxInput',
 				'widget_attrs' => array('disabled' => 'disabled')
                           ));
+
 	}
         $tags = $this->project->get_tags_list();
         for ($i=1;$i<7;$i++) {
@@ -228,8 +235,10 @@ class IDF_Form_ProjectConf extends Pluf_Form
         $this->project->description = $this->cleaned_data['description'];
         $this->project->batchAssoc('IDF_Tag', $tagids);
         $this->project->syntaxtheme = $this->cleaned_data["syntaxtheme"];
-	if ($this->user->administrator)
-		$this->project->enableads = $this->cleaned_data['enableads'];
+	    if ($this->user->administrator) {
+		    $this->project->enableads = $this->cleaned_data['enableads'];
+            $this->project->disabled = $this->cleaned_data["disabled"];
+        }
         $this->project->update();
 
         $conf = $this->project->getConf();

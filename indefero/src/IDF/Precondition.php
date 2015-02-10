@@ -34,6 +34,10 @@ class IDF_Precondition
      */
     static public function baseAccess($request)
     {
+        if ($request->user->administrator)
+            return true;
+        if ($request->project->disabled)
+            return false;
         if (!$request->project->private) {
             return true;
         }

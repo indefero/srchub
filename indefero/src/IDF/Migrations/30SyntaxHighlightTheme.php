@@ -18,7 +18,7 @@ function IDF_Migrations_30SyntaxHighlightTheme_up()
 
 }
 
-function IDF_Migrations_28OTPKey_down()
+function IDF_Migrations_30SyntaxHighlightTheme_down()
 {
     $table = Pluf::factory('IDF_Project')->getSqlTable();
 

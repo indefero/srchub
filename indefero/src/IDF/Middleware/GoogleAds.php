@@ -40,6 +40,8 @@ class IDF_Middleware_GoogleAds
      */
     function process_response($request, $response)
     {
+        if (isset($response) && !isset($response->status_code))
+            return $response;
         if (!Pluf::f('google_ads', false)) {
             return $response;
         }

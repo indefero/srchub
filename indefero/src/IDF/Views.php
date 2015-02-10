@@ -393,6 +393,15 @@ class IDF_Views
 
         // anonymous users can only see non-private projects
         $false = Pluf_DB_BooleanToDb(false, $db);
+        $true = Pluf_DB_BooleanToDb(true, $db);
+
+        $dbpfx = $db->pfx;
+        $disabled_results = $db->select("SELECT id FROM ${dbpfx}idf_projects WHERE disabled = $true");
+        $disabled_ids = [];
+        foreach($disabled_results as $id) {
+            $disabled_ids[] = $id['id'];
+        }
+
         $sql_results = $db->select(
             'SELECT id FROM '.$db->pfx.'idf_projects '.
             'WHERE '.$db->qn('private').'='.$false
@@ -400,8 +409,12 @@ class IDF_Views
 
         $ids = array();
         foreach ($sql_results as $id) {
-            $ids[] = $id['id'];
+            if (!in_array($id['id'], $disabled_ids)) {
+                $ids[] = $id['id'];
+            }
         }
+
+
 
         // registered users may additionally see private projects with which
         // they're somehow affiliated
@@ -418,7 +431,7 @@ class IDF_Views
             $rows = Pluf::factory('Pluf_RowPermission')->getList(array('filter' => $permSql->gen()));
             if ($rows->count() > 0) {
                 foreach ($rows as $row) {
-                    if (in_array($row->model_id, $ids))
+                    if (in_array($row->model_id, $ids) || in_array($row->model_id, $disabled_ids))
                         continue;
                     $ids[] = $row->model_id;
                 }

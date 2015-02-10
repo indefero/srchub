@@ -117,6 +117,14 @@ class IDF_Project extends Pluf_Model
                                   'default' => 1,
                                   ),
 
+                            'disabled' =>
+                                array(
+                                    'type' => 'Pluf_DB_Field_Integer',
+                                    'blank' => false,
+                                    'verbose' => __('disabled'),
+                                    'default' => 0,
+                                ),
+
                             'syntaxtheme' =>
                             array(
                                 'type' => 'Pluf_DB_Field_Text',

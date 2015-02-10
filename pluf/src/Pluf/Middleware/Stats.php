@@ -42,6 +42,8 @@ class Pluf_Middleware_Stats
      */
     function process_response($request, $response)
     {
+        if (isset($response) && !isset($response->status_code))
+            return $response;
         if (!in_array($response->status_code, 
                      array(200, 201, 202, 203, 204, 205, 206, 404, 501))) {
             return $response;

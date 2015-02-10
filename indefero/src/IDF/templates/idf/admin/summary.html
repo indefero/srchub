@@ -78,6 +78,12 @@
 </td>
 </tr>
     <tr>
+        <th>{$form.f.disabled.labelTag}:</th>
+        <td>{if $form.f.disabled.errors}{$form.f.disabled.fieldErrors}{/if}
+            {$form.f.disabled|unsafe}
+        </td>
+    </tr>
+    <tr>
         <th>{$form.f.syntaxtheme.labelTag}:</th>
         <td>{if $form.f.syntaxtheme.errors}{$form.f.syntaxtheme.fieldErrors}{/if}
             {$form.f.syntaxtheme|unsafe}
