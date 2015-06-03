@@ -40,6 +40,9 @@ class Pluf_Middleware_GoogleAnalytics
      */
     function process_response($request, $response)
     {
+        if (isset($response) && !isset($response->status_code))
+            return $response;
+        
         if (!Pluf::f('google_analytics_id', false)) {
             return $response;
         }
