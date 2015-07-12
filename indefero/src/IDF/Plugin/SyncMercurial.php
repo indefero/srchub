@@ -178,6 +178,7 @@ class IDF_Plugin_SyncMercurial
         $shortname = $project->shortname;
         $hgrc_file = Pluf::f('idf_plugin_syncmercurial_path').sprintf('/%s/.hg/hgrc', $shortname);
 
+
         // Get allow_push list
         $allow_push = '';
         $mem = $project->getMembershipData();
@@ -216,6 +217,7 @@ class IDF_Plugin_SyncMercurial
         foreach (Pluf::factory('IDF_Project')->getList() as $project) {
             $conf = new IDF_Conf();
             $conf->setProject($project);
+            $hide_file = Pluf::f('idf_plugin_syncmercurial_path').sprintf('/%s/.hide', $project->shortname);
             if ($project->private == true){
                 $mem = $project->getMembershipData();
                 $user = '';
@@ -236,6 +238,13 @@ class IDF_Plugin_SyncMercurial
                 $fcontent .= sprintf('AuthUserFile %s', Pluf::f('idf_plugin_syncmercurial_passwd_file'))."\n";
                 $fcontent .= sprintf('Require user %s', $user)."\n";
                 $fcontent .= '</Location>'."\n\n";
+                try {
+                    file_put_contents($hide_file, ' ');
+                } catch (Exception $e) { }
+            } else {
+                try {
+                    unlink($hide_file);
+                } catch (Exception $e) { }
             }
         }
         file_put_contents($private_file, $fcontent, LOCK_EX);
