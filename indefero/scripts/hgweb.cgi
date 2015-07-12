@@ -6,6 +6,7 @@
 # Path to repo or hgweb config to serve (see 'hg help hgweb')
 # config = "/path/to/repo/or/config"
 import os
+import sys
 config = "/home/www/indefero/scripts/hgweb.config"
 
 # Uncomment and adjust if Mercurial is not installed system-wide
@@ -20,7 +21,7 @@ from mercurial.hgweb import hgwebdir, wsgicgi
 application = hgwebdir(config)
 newrepos = []
 for repo in application.repos:
-    if not os.path.isfile(repo[1] + "/.hide"):
+    if not os.path.isfile(repo[1] + "/.hide") or repo[0] in os.environ["REQUEST_URI"]:
         newrepos.append(repo)
 application.repos = newrepos
 wsgicgi.launch(application)
