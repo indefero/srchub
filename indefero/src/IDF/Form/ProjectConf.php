@@ -101,6 +101,14 @@ class IDF_Form_ProjectConf extends Pluf_Form
 				'widget_attrs' => array('disabled' => 'disabled')
                           ));
 
+        $this->fields['disabled'] = new Pluf_Form_Field_Boolean(
+            array('required' => false,
+                'label' => __('Disable Project'),
+                'initial' => $this->project->disabled,
+                'widget' => 'Pluf_Form_Widget_CheckboxInput',
+                'widget_attrs' => array('disabled' => 'disabled')
+            ));
+
 	}
         $tags = $this->project->get_tags_list();
         for ($i=1;$i<7;$i++) {
