@@ -265,6 +265,16 @@ class IDF_Views_User
             $mailaddress->address = $email;
             $mailaddress->create();
         }
+
+        $sql = new Pluf_SQL('origauthor LIKE %s AND author is NULL', array("%" . $email . "%"));
+        $test = $sql->gen();
+        $commits = Pluf::factory("IDF_Commit")->getList(["filter" => $sql->gen()]);
+
+        foreach($commits as $commit) {
+                $commit->author = $request->user;
+                $commit->update();
+        }
+
         $request->user->setMessage(sprintf(__('Your new email address "%s" has been validated. Thank you!'), Pluf_esc($email)));
         $url = Pluf_HTTP_URL_urlForView('IDF_Views_User::myAccount');
         return new Pluf_HTTP_Response_Redirect($url);
