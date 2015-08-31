@@ -344,17 +344,21 @@ class IDF_Views_Admin
      *
      */
     public $users_precond = array('Pluf_Precondition::staffRequired');
-    public function users($request, $match, $not_validated=false)
+    public function users($request, $match, $pageType=null)
     {
         $pag = new Pluf_Paginator(new Pluf_User());
         $db =& Pluf::db();
         $true = Pluf_DB_BooleanToDb(true, $db);
-        if ($not_validated) {
+        if ($pageType === 0) {
             $pag->forced_where = new Pluf_SQL('first_name = \'---\' AND active!='.$true);
             $title = __('Not Validated User List');
             $pag->action = 'IDF_Views_Admin::usersNotValidated';
+        } elseif ($pageType == 1) {
+            $pag->forced_where = new Pluf_SQL('first_name != \'---\' AND active!='.$true);
+            $title = __('Not Active User List');
+            $pag->action = 'IDF_Views_Admin::usersNotValidated';
         } else {
-            $pag->forced_where = new Pluf_SQL('first_name != \'---\'');
+            $pag->forced_where = new Pluf_SQL('first_name != \'---\' AND active='.$true);
             $title = __('User List');
             $pag->action = 'IDF_Views_Admin::users';
         }
@@ -381,7 +385,6 @@ class IDF_Views_Admin
                                                array(
                                                      'page_title' => $title,
                                                      'users' => $pag,
-                                                     'not_validated' => $not_validated,
                                                      ),
                                                $request);
     }
@@ -392,7 +395,16 @@ class IDF_Views_Admin
     public $usersNotValidated_precond = array('Pluf_Precondition::staffRequired');
     public function usersNotValidated($request, $match)
     {
-        return $this->users($request, $match, true);
+        return $this->users($request, $match, 0);
+    }
+
+    /**
+     * Not validated users.
+     */
+    public $usersInActive_precond = array('Pluf_Precondition::staffRequired');
+    public function usersInActive($request, $match)
+    {
+        return $this->users($request, $match, 1);
     }
 
     /**

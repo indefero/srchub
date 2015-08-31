@@ -556,6 +556,11 @@ $ctl[] = array('regex' => '#^/admin/users/notvalid/$#',
                'model' => 'IDF_Views_Admin',
                'method' => 'usersNotValidated');
 
+$ctl[] = array('regex' => '#^/admin/users/inactive/$#',
+                'base' => $base,
+                'model' => 'IDF_Views_Admin',
+                'method' => 'usersInActive');
+
 $ctl[] = array('regex' => '#^/admin/users/(\d+)/$#',
                'base' => $base,
                'model' => 'IDF_Views_Admin',
