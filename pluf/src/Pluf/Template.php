@@ -144,9 +144,11 @@ public static function render($c) {$t = $c; ?>'.$this->template_content.'<?php }
             rewind($fp); 
             fwrite($fp, $this->template_content, strlen($this->template_content));
             // Lock released, read access is possible
-            flock($fp, LOCK_UN);  
+            flock($fp, LOCK_UN);
+            fflush($fp);
             fclose($fp);
             @chmod($this->compiled_template, 0777);
+            clearstatcache();
             return true;
         } else {
             throw new Exception(sprintf(__('Cannot write the compiled template: %s'), $this->compiled_template));
