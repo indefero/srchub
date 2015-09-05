@@ -512,11 +512,18 @@ class IDF_Scm_Mercurial extends IDF_Scm
         // hg accepts revision IDs as arguments to --branch / -b as well and
         // uses the branch of the revision in question to filter the other
         // revisions
-        $cmd = sprintf(Pluf::f('hg_path', 'hg').' log --debug -R %s -l%s --style %s -b %s',
-                       escapeshellarg($this->repo),
-                       $n,
-                       escapeshellarg($logStyle->get()),
-                       escapeshellarg($commit));
+        if ($n) {
+            $cmd = sprintf(Pluf::f('hg_path', 'hg').' log --debug -R %s -l%s --style %s -b %s',
+                           escapeshellarg($this->repo),
+                           $n,
+                           escapeshellarg($logStyle->get()),
+                           escapeshellarg($commit));
+        } else {
+            $cmd = sprintf(Pluf::f('hg_path', 'hg').' log --debug -R %s --style %s -b %s',
+                escapeshellarg($this->repo),
+                escapeshellarg($logStyle->get()),
+                escapeshellarg($commit));
+        }
         $out = array();
         $cmd = Pluf::f('idf_exec_cmd_prefix', '').$cmd;
         self::exec('IDF_Scm_Mercurial::getChangeLog', $cmd, $out);

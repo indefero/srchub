@@ -524,8 +524,13 @@ class IDF_Scm_Svn extends IDF_Scm
             $rev = 'HEAD';
         }
         $res = array();
-        $cmd = $this->svnCmd(array('log', '--xml', '-v', '--limit', $n),
+        if ($n) {
+            $cmd = $this->svnCmd(array('log', '--xml', '-v', '--limit', $n),
                              $this->repo.'@'.$rev);
+        } else {
+            $cmd = $this->svnCmd(array('log', '--xml', '-v'),
+                $this->repo.'@'.$rev);
+        }
         $xmlRes = self::shell_exec('IDF_Scm_Svn::getChangeLog', $cmd);
         $xml = simplexml_load_string($xmlRes);
         foreach ($xml->logentry as $entry) {
