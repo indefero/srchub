@@ -569,11 +569,26 @@ class IDF_Views
         );
 
         foreach ($what as $key => $model) {
-            $count = Pluf::factory($model)->getCount(array(
-                'filter' => sprintf('project IN (%s)', implode(', ', $projectIds))
-            ));
-            $forgestats[$key] = $count;
+            if ($key == "issues") {
+
+                $nb_open = Pluf::factory("IDF_Issue")->getCount(array('view'=>'project_find_open', 'filter' => sprintf('indefero_idf_issues.project IN (%s)', implode(', ', $projectIds))));
+                $nb_closed = Pluf::factory("IDF_Issue")->getCount(array('view'=>'project_find_closed', 'filter' => sprintf('indefero_idf_issues.project IN (%s)', implode(', ', $projectIds))));
+
+                $count = $nb_closed + $nb_open;
+
+                $forgestats["openissues"] = $nb_open;
+                $forgestats["closedissues"] = $nb_closed;
+            } else {
+                $count = Pluf::factory($model)->getCount(array(
+                    'filter' => sprintf('project IN (%s)', implode(', ', $projectIds))
+                ));
+
+                $forgestats[$key] = $count;
+
+            }
+
             $forgestats['total'] += $count;
+
         }
 	    $forgestats['proj_count'] = count($projects);
         return $forgestats;
