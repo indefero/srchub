@@ -35,6 +35,13 @@
 </td>
 </tr>
 <tr>
+    <th><strong>{$form.f.timezone.labelTag}:</strong></th>
+    <td>{if $form.f.timezone.errors}{$form.f.timezone.fieldErrors}{/if}
+        {$form.f.timezone|unsafe}<br />
+        <span class="helptext">{$form.f.timezone.help_text}</span>
+    </td>
+</tr>
+<tr>
 <th>{$form.f.language.labelTag}:</th>
 <td>{if $form.f.language.errors}{$form.f.language.fieldErrors}{/if}
 {$form.f.language|unsafe}

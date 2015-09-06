@@ -187,6 +187,13 @@ class IDF_Form_UserAccount  extends Pluf_Form
                                                 'size' => 32,
                                             ),
                                         ));
+
+        $this->fields['timezone'] = new Pluf_Form_Field_TimeZone(
+            array('required' => false,
+                'label' => __('Change Timezone'),
+                'initial' => $this->user->timezone,
+                'help_text' => __('This will change the way some of the date and times are displayed on the site.'),
+            ));
     }
 
 

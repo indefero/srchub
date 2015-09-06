@@ -22,12 +22,12 @@
 <img style="float:right; position: relative; max-height: 60px; max-width: 60px;" src="http://www.gravatar.com/avatar/{$submitter.email|md5}.jpg?s=60&amp;d={media}/idf/img/spacer.gif" alt=" " />
 {/if}
 {if $i == 0}
-<p>{blocktrans}Reported by {$submitter}, {$c.creation_dtime|date}{/blocktrans}</p>
+<p>{blocktrans}Reported by {$submitter}, {/blocktrans}<span title="{$c.creation_dtime} GMT">{$request.user.convertToUserTimezone($c.creation_dtime)}</span></p>
 {else}
 {aurl 'url', 'IDF_Views_Issue::view', array($project.shortname, $issue.id)}
 {assign $id = $c.id}
 {assign $url = $url~'#ic'~$c.id}
-<p>{blocktrans}Comment <a href="{$url}">{$i}</a> by {$submitter}, {$c.creation_dtime|date}{/blocktrans}</p>
+<p>{blocktrans}Comment <a href="{$url}">{$i}</a> by {$submitter}, {/blocktrans}<span title="{$c.creation_dtime} GMT">{$request.user.convertToUserTimezone($c.creation_dtime)}</span></p>
 {/if}
 
 

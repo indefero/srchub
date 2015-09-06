@@ -233,6 +233,12 @@ class Pluf_User extends Pluf_Model
         }
     }
 
+    public function convertToUserTimezone($date) {
+        $currentDateTime = new \DateTime(date('Y-m-d H:i:s', strtotime($date.' GMT')));
+        $currentDateTime->setTimezone(new \DateTimeZone($this->timezone));
+        return $currentDateTime->format("M, j Y g:i:s A");
+    }
+
     /**
      * Set the password of a user.
      *
