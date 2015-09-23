@@ -173,7 +173,7 @@ $(document).ready(function(){
 <script type="text/javascript" src="{media '/idf/js/prettify.js'}"></script>
 <script type="text/javascript">prettyPrint();</script>
 <script type="text/javascript" src="{media '/idf/js/allowtabs.js'}"></script>
-<script type="application/javascript">
+<script type="text/javascript">
     {literal}
 
 
@@ -186,19 +186,20 @@ $(document).ready(function(){
         for(var i = 0; i < args.length; i++)
             result.push(args[i].replace('@', '/media/idf/js/syntaxhighlight/'));
 
-        return result
-    };
-function gotoline()
-{
-    if ($('.number' + window.location.hash.substring(1)).first().offset() == null)
-    {
-        window.setTimeout(gotoline, 100);
-        return;
+        return result;
     }
- $('html, body').animate({
-    scrollTop: ($('.number' + window.location.hash.substring(1)).first().offset().top)
-},500);
-    changegutter();
+
+    function gotoline()
+    {
+        if ($('.number' + window.location.hash.substring(1)).first().offset() == null)
+        {
+            window.setTimeout(gotoline, 100);
+            return;
+        }
+         $('html, body').animate({
+            scrollTop: ($('.number' + window.location.hash.substring(1)).first().offset().top)
+        },500);
+            changegutter();
     }
     function changegutter()
     {
@@ -253,7 +254,7 @@ $(function() {
 
 
 
-    });
+});
 
 
 
