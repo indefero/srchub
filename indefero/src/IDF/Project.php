@@ -136,7 +136,17 @@ class IDF_Project extends Pluf_Model
                             );
         $activityTable = $this->_con->pfx.'idf_projectactivities';
         $tagTable = $this->_con->pfx.'idf_project_idf_tag_assoc';
+        $confTable = $this->_con->pfx.'idf_conf';
+        $thisTable = $this->_con->pfx.'idf_projects';
         $this->_a['views'] = array(
+            'repo_size' => [
+                'join' => "INNER JOIN $confTable ON $thisTable.id = $confTable.project",
+                'select' => $this->getSelect() . ', CAST(vdesc as UNSIGNED) as vdesc',
+                'where' => 'vkey = "repository_size"',
+                'props' => array(
+                    'vdesc' => 'vdesc',
+                ),
+            ],
             'join_activities_and_tags' =>
                 array(
                     'join' => 'LEFT JOIN '.$activityTable.' ON current_activity='.$activityTable.'.id '

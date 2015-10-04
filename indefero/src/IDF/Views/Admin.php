@@ -81,13 +81,15 @@ class IDF_Views_Admin
         $pag->action = 'IDF_Views_Admin::projects';
         $pag->edit_action = array('IDF_Views_Admin::projectUpdate', 'id');
         $pag->sort_order = array('shortname', 'ASC');
+        $pag->model_view = "repo_size";
         $list_display = array(
              'shortname' => __('Short Name'),
              'name' => __('Name'),
-             array('id', 'IDF_Views_Admin_projectSize', __('Repository Size')),
+             'vdesc' => ["vdesc", "IDF_Views_Admin_projectSize2", __('Repository Size')],
+
                               );
-        $pag->configure($list_display, array(),
-                        array('shortname' ));
+        $pag->configure($list_display, array('shortname', 'shortname'),
+                        array('shortname', 'name', 'vdesc' ));
         $pag->extra_classes = array('', '', 'right');
         $pag->items_per_page = 25;
         $pag->no_results_text = __('No projects were found.');
@@ -655,6 +657,11 @@ function IDF_Views_Admin_projectSize($field, $project)
         return '';
     }
     return Pluf_Utils::prettySize($size);
+}
+
+function IDF_Views_Admin_projectSize2($field, $project)
+{
+    return Pluf_Utils::prettySize($project->vdesc);
 }
 
 /**
