@@ -102,7 +102,7 @@ to propose more contributions</strong>.
 {if $submitter_data.avatar != ''}
     <img style="float:right; position: relative; max-height: 60px; max-width: 60px;" src="{upload}/avatars/{$submitter_data.avatar}" alt=" " />
 {else}
-    <img style="float:right; position: relative;" src="http://www.gravatar.com/avatar/{$submitter.email|md5}.jpg?s=60&amp;d={media}/idf/img/spacer.gif" alt=" " />
+    <img style="float:right; position: relative;" src="//www.gravatar.com/avatar/{$submitter.email|md5}.jpg?s=60&amp;d={media}/idf/img/spacer.gif" alt=" " />
 {/if}
 {aurl 'url', 'IDF_Views_Review::view', array($project.shortname, $review.id)}
 {assign $id = $c.id}
