@@ -39,7 +39,7 @@ class Pluf_DB_MySQL
         Pluf::loadFunction('Pluf_DB_defaultTypecast');
         $this->type_cast = Pluf_DB_defaultTypecast();
         $this->debug('* MYSQL CONNECT');
-        $this->con_id = mysql_connect($server, $user, $pwd);
+        $this->con_id = mysqli_connect($server, $user, $pwd);
         $this->debug = $debug;
         $this->pfx = $pfx;
         if (!$this->con_id) {
@@ -51,7 +51,7 @@ class Pluf_DB_MySQL
 
     function database($dbname)
     {
-        $db = mysql_select_db($dbname);
+        $db = mysqli_select_db($this->con_id, $dbname);
         $this->debug('* USE DATABASE '.$dbname);
         if (!$db) {
             throw new Exception($this->getError());
@@ -66,7 +66,7 @@ class Pluf_DB_MySQL
      */
     function getServerInfo()
     {
-        return mysql_get_server_info($this->con_id);
+        return mysqli_get_server_info($this->con_id);
     }
 
     /**
@@ -90,7 +90,7 @@ class Pluf_DB_MySQL
     function close()
     {
         if ($this->con_id) {
-            mysql_close($this->con_id);
+            mysqli_close($this->con_id);
             return true;
         } else {
             return false;
@@ -100,13 +100,13 @@ class Pluf_DB_MySQL
     function select($query)
     {
         $this->debug($query);
-        $cur = mysql_query($query, $this->con_id);
+        $cur = mysqli_query($this->con_id, $query);
         if ($cur) {
             $res = array();
-            while ($row = mysql_fetch_assoc($cur)) {
+            while ($row = mysqli_fetch_assoc($cur)) {
                 $res[] = $row;
             }
-            mysql_free_result($cur);
+            mysqli_free_result($cur);
             return $res;
         } else {
             throw new Exception($this->getError());
@@ -116,7 +116,7 @@ class Pluf_DB_MySQL
     function execute($query)
     {
         $this->debug($query);
-        $cur = mysql_query($query, $this->con_id);
+        $cur = mysqli_query($this->con_id, $query);
         if (!$cur) {
             throw new Exception($this->getError());
         } else {
@@ -127,7 +127,7 @@ class Pluf_DB_MySQL
     function getLastID()
     {
         $this->debug('* GET LAST ID');
-        return (int) mysql_insert_id($this->con_id);
+        return (int) mysqli_insert_id($this->con_id);
     }
 
     /**
@@ -139,17 +139,17 @@ class Pluf_DB_MySQL
     {
         
         if ($this->con_id) {
-            return mysql_errno($this->con_id).' - '
-                .mysql_error($this->con_id).' - '.$this->lastquery;
+            return mysqli_errno($this->con_id).' - '
+                .mysqli_error($this->con_id).' - '.$this->lastquery;
         } else {
-            return mysql_errno().' - '
-                .mysql_error().' - '.$this->lastquery;
+            return mysqli_errno($this->con_id).' - '
+                .mysqli_error($this->con_id).' - '.$this->lastquery;
         }
     }
 
     function esc($str)
     {
-        return '\''.mysql_real_escape_string($str, $this->con_id).'\'';
+        return '\''.mysqli_real_escape_string($this->con_id, $str).'\'';
     }
 
     /**
@@ -199,4 +199,5 @@ class Pluf_DB_MySQL
     }
 
 }
+
 
