@@ -143,4 +143,3 @@ class ccurl {
         return $this->_webpage;
     }
 }
-?>

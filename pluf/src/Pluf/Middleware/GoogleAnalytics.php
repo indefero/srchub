@@ -42,7 +42,7 @@ class Pluf_Middleware_GoogleAnalytics
     {
         if (isset($response) && !isset($response->status_code))
             return $response;
-        
+
         if (!Pluf::f('google_analytics_id', false)) {
             return $response;
         }

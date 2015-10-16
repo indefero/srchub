@@ -195,7 +195,7 @@ class Pluf_DB_MySQL
 
     function __toString()
     {
-        return '<Pluf_DB_MySQL('.$this->con_id.')>';
+        return '<Pluf_DB_MySQL('.$this->con_id->info.')>';
     }
 
 }

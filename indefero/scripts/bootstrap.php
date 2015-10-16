@@ -15,4 +15,3 @@ $user->administrator = true;
 $user->active = true;
 $user->create();
 print "Bootstrap ok\n";
-?>

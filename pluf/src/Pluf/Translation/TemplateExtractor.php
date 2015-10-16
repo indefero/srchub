@@ -402,7 +402,7 @@ class Pluf_Translation_TemplateExtractor
                     $result.=$tok;
                 } elseif ($tok ==']') {
                     $result.=$tok;
-                } elseif ($getAsArray && $tok == ',') {
+                } elseif ($tok == ',') { // $getAsArray not defined anywhere...
                     $results[]=$result;
                     $result='';
                 } else {

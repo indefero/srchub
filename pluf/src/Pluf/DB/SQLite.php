@@ -163,7 +163,8 @@ class Pluf_DB_SQLite
 
     function __toString()
     {
-        return '<Pluf_DB_SQLite('.$this->con_id.')>';
+        // According to PHPStorm \PDO does not define __toString
+        return '<Pluf_DB_SQLite()>';
     }
 
 }

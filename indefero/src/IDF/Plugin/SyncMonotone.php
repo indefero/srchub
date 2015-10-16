@@ -568,6 +568,7 @@ class IDF_Plugin_SyncMonotone
         $keyGuard = new IDF_Plugin_SyncMonotone_ModelGuard($key);
 
         foreach (Pluf::factory('IDF_Project')->getList() as $project) {
+            /** @var \IDF_Project $project */
             $conf = new IDF_Conf();
             $conf->setProject($project);
             $scm = $conf->getVal('scm', 'mtn');
@@ -641,7 +642,7 @@ class IDF_Plugin_SyncMonotone
                                       $read_perms, LOCK_EX) === false) {
                     $this->_diagnoseProblem(sprintf(
                         __('Could not write read-permissions for project "%s"'),
-                        $shortname
+                        $project->shortname
                     ));
                 }
             }

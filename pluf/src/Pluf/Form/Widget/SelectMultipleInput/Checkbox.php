@@ -65,7 +65,7 @@ class Pluf_Form_Widget_SelectMultipleInput_Checkbox extends Pluf_Form_Widget_Sel
     public function idForLabel($id)
     {
         if ($id) {
-            $id += '_0';
+            $id .= '_0';
         }
         return $id;
     }

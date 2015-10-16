@@ -89,4 +89,3 @@ echo "\n";
 echo 'Compiled files: '.count($files)."\n";
 file_put_contents($output_file, '<?php '.implode("\n", $output).' ?>');
 echo('Final size: '.(int)(100*filesize($output_file)/$size).'%'."\n");
-?>

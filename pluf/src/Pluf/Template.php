@@ -153,7 +153,6 @@ public static function render($c) {$t = $c; ?>'.$this->template_content.'<?php }
         } else {
             throw new Exception(sprintf(__('Cannot write the compiled template: %s'), $this->compiled_template));
         }
-        return false;
     }
 
     public static function markSafe($string)

@@ -147,7 +147,7 @@ class Pluf_Log
      */
     public static function log($message)
     {
-        return self::_log(self::ALL, $message);
+        self::_log(self::ALL, $message);
     }
 
     /**
