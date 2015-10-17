@@ -4,9 +4,14 @@
 
 <div class="download-file">
 {if $deprecated}<p class="smaller">{blocktrans}<strong>Attention!</strong> This file is marked as deprecated, download it only if you are sure you need this specific version.{/blocktrans}</p>{/if}
+
 <a href="{url 'IDF_Views_Download::download', array($project.shortname, $file.file)}">{$file}</a> - {$file.filesize|size}
+{if !$file.ext_file}
 <br />
 <span class="helptext">{trans 'md5:'} {$file.md5}</span>
+{/if}
+
+
 </div>
 {if $file.changelog}
 <h2 class="changes">{trans 'Changes'}</h2>

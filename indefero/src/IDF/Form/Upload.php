@@ -44,6 +44,15 @@ class IDF_Form_Upload extends Pluf_Form
                                                        'size' => 67,
                                                                     ),
                                             ));
+        $this->fields['ext_file'] = new Pluf_Form_Field_Varchar(
+            array('required' => false,
+                'label' => __('External File'),
+                'initial' => '',
+                'widget_attrs' => array(
+                    'maxlength' => 200,
+                    'size' => 67,
+                ),
+            ));
         $this->fields['changelog'] = new Pluf_Form_Field_Varchar(
                                       array('required' => false,
                                             'label' => __('Description'),
@@ -55,7 +64,7 @@ class IDF_Form_Upload extends Pluf_Form
                                                                     ),
                                             ));
         $this->fields['file'] = new Pluf_Form_Field_File(
-                                      array('required' => true,
+                                      array('required' => false,
                                             'label' => __('File'),
                                             'initial' => '',
                                             'max_size' => Pluf::f('max_upload_size', 2097152),
@@ -80,6 +89,9 @@ class IDF_Form_Upload extends Pluf_Form
     public function clean_file()
     {
         // FIXME: we do the same in IDF_Form_WikiResourceCreate and a couple of other places as well
+        if (empty($this->cleaned_data['file'])) {
+            return $this->cleaned_data['file'];
+        }
         $extra = strtolower(implode('|', explode(' ', Pluf::f('idf_extra_upload_ext'))));
         if (strlen($extra)) $extra .= '|';
         if (!preg_match('/\.('.$extra.'png|jpg|jpeg|gif|bmp|psd|tif|aiff|asf|avi|bz2|css|doc|eps|gz|jar|mdtext|mid|mov|mp3|mpg|ogg|pdf|ppt|ps|qt|ra|ram|rm|rtf|sdd|sdw|sit|sxi|sxw|swf|tgz|txt|wav|xls|xml|war|wmv|zip)$/i', $this->cleaned_data['file'])) {
@@ -120,6 +132,9 @@ class IDF_Form_Upload extends Pluf_Form
                 $this->errors['label'.$i][] = sprintf(__('You cannot provide more than one label from the %s class to a download.'), $class);
                 throw new Pluf_Form_Invalid(__('You provided an invalid label.'));
             }
+        }
+        if (empty($this->cleaned_data["file"]) && empty($this->cleaned_data["ext_file"])) {
+            throw new Pluf_Form_Invalid(__("Must upload a file or specify an external file"));
         }
         return $this->cleaned_data;
     }
@@ -162,14 +177,21 @@ class IDF_Form_Upload extends Pluf_Form
                 $tags[] = IDF_Tag::add($name, $this->project, $class);
             }
         }
+
         // Create the upload
         $upload = new IDF_Upload();
         $upload->project = $this->project;
         $upload->submitter = $this->user;
         $upload->summary = trim($this->cleaned_data['summary']);
         $upload->changelog = trim($this->cleaned_data['changelog']);
-        $upload->file = $this->cleaned_data['file'];
-        $upload->filesize = filesize(Pluf::f('upload_path').'/'.$this->project->shortname.'/files/'.$this->cleaned_data['file']);
+        if (!empty($this->cleaned_data["file"])) {
+            $upload->file = $this->cleaned_data['file'];
+            $upload->filesize = filesize(Pluf::f('upload_path').'/'.$this->project->shortname.'/files/'.$this->cleaned_data['file']);
+        } else {
+            $upload->file = end(explode("/", $this->cleaned_data["ext_file"]));
+            $upload->ext_file = $this->cleaned_data['ext_file'];
+        }
+
         $upload->downloads = 0;
         $upload->create();
         foreach ($tags as $tag) {

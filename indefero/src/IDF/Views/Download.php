@@ -204,11 +204,15 @@ class IDF_Views_Download
         $prj->inOr404($upload);
         $upload->downloads += 1;
         $upload->update();
-        $path = $upload->getFullPath();
-        $mime = IDF_FileUtil::getMimeType($path);
-        $render = new Pluf_HTTP_Response_File($path, $mime[0]);
-        $render->headers['Content-MD5'] = $upload->md5;
-        $render->headers['Content-Disposition'] = 'attachment; filename="'.$upload->file.'"';
+        if ($upload->ext_file == "") {
+            $path = $upload->getFullPath();
+            $mime = IDF_FileUtil::getMimeType($path);
+            $render = new Pluf_HTTP_Response_File($path, $mime[0]);
+            $render->headers['Content-MD5'] = $upload->md5;
+            $render->headers['Content-Disposition'] = 'attachment; filename="'.$upload->file.'"';
+        } else {
+            $render = new Pluf_HTTP_Response_Redirect($upload->ext_file);
+        }
         return $render;
     }
 

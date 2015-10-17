@@ -19,6 +19,12 @@
 </td>
 </tr>
 <tr>
+    <th><strong>{$form.f.ext_file.labelTag}:</strong></th>
+    <td>{if $form.f.ext_file.errors}{$form.f.ext_file.fieldErrors}{/if}
+        {$form.f.ext_file|unsafe}
+    </td>
+</tr>
+<tr>
 <th>{$form.f.changelog.labelTag}:</th>
 <td>{if $form.f.changelog.errors}{$form.f.changelog.fieldErrors}{/if}
 {$form.f.changelog|unsafe}
