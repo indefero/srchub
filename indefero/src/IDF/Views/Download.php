@@ -66,7 +66,7 @@ class IDF_Views_Download
              array('summary', 'IDF_Views_Download_SummaryAndLabels', __('Summary')),
              array('filesize', 'IDF_Views_Download_Size', __('Size')),
              array('creation_dtime', 'Pluf_Paginator_DateYMD', __('Uploaded')),
-	     array('downloads', 'Pluf_Paginator_DisplayVal', __('Downlaods')),
+	     array('downloads', 'Pluf_Paginator_DisplayVal', __('Downloads')),
                               );
         $pag->configure($list_display, array(), array('file', 'filesize', 'creation_dtime'));
         $pag->items_per_page = 10;
