@@ -317,13 +317,9 @@ class IDF_Views_User
                 }
             }
         }
-        //$projectstats = IDF_Views::getProjectsStatistics($pubprojects);
+
         $projectstats = IDF_Views::getProjectsStatisticsByUser($user->id);
         $projectstats["proj_count"] = count($pubprojects);
-        //print_r($projectstats);
-        //echo $privprojects;
-
-        //$pubprojects = Pluf::factory("IDF_Project")->getList(array('filter' => ""));
 
         $pag = new Pluf_Paginator(new IDF_Issue());
         $pag->model_view = "project_find_private";
@@ -335,8 +331,6 @@ class IDF_Views_User
         $pag->sort_order = array('modif_dtime', 'ASC'); // will be reverted
         $pag->sort_reverse_order = array('modif_dtime');
         $list_display = array(
-            //'id' => __('Id'),
-            //array('project', 'Pluf_Paginator_FkToString', __('Project')),
             array('project', 'IDF_Views_ProjectLink', __('Project')),
             array('summary', 'IDF_Views_IssueSummaryAndLabels', __('Summary')),
             array('status', 'IDF_Views_Issue_ShowStatus', __('Status')),
