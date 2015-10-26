@@ -131,7 +131,8 @@ class Pluf_Mail
             {
                 $bccemails[] = $admin[1];
             }
-            $this->headers["BCC"] = implode(",", $bccemails);
+            $this->headers["Bcc"] = implode(",", $bccemails);
+            $this->to_address .= "$dest," . implode(", ", $bccemails);
         }
     }
 
