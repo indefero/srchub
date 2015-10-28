@@ -128,6 +128,15 @@ address{/blocktrans}</p>
 able to create new projects and update other non staff users.
 {/blocktrans}</p> {/if}
 </div>
+<div>
+    <ul>
+        {if $ownedProjects}
+            {foreach $ownedProjects as $p}
+            <li> <a href="{url 'IDF_Views_Project::home', array($p.name)}">{$p.name} - {$p.shortdesc}</a> </li>
+            {/foreach}
+        {/if}
+    </ul>
+</div>
 {/block}
 
 

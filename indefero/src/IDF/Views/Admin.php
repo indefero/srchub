@@ -450,11 +450,13 @@ class IDF_Views_Admin
         } else {
             $form = new IDF_Form_Admin_UserUpdate(null, $params);
         }
+        $ownedProjects = \IDF_Views::getOwnedProjects($user);
         return Pluf_Shortcuts_RenderToResponse('idf/gadmin/users/update.html',
                                                array(
                                                      'page_title' => $title,
                                                      'cuser' => $user,
                                                      'form' => $form,
+                                                     'ownedProjects' => $ownedProjects
                                                      ),
                                                $request);
     }
