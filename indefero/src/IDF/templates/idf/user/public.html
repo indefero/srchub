@@ -63,7 +63,7 @@ Projects:
     {if $p.private == 0}
     <tr>
         <td>
-            <a href="{url 'IDF_Views_Project::home', array($p.name)}">{$p.name} - {$p.shortdesc}</a>
+            <a href="{url 'IDF_Views_Project::home', array($p.shortname)}">{$p.name} - {$p.shortdesc}</a>
         </td>
     </tr>
     {/if}
