@@ -161,15 +161,7 @@ class IDF_Views_Source
         $in_branches = $scm->inBranches($commit, '');
         $tags = $scm->getTags();
         $in_tags = $scm->inTags($commit, '');
-		// Cache may work only if we filter for "default" or "tip" commits
-        //$cache = Pluf_Cache::factory();
 		$res = new Pluf_Template_ContextVars($scm->getTree($commit));
-        $key = sprintf('Project:%s::IDF_Views_Source::treeBase:%s::',
-                       $request->project->id, $commit);
-        /*if (null === ($res=$cache->get($key))) {
-            
-            $cache->set($key, $res);
-        }*/
         $scmConf = $request->conf->getVal('scm', 'git');
         $props = $scm->getProperties($commit);
         $res->uasort(array('IDF_Views_Source', 'treeSort'));
