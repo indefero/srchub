@@ -778,26 +778,31 @@ class IDF_Scm_Git extends IDF_Scm
                    sprintf($cmd, $skip), $rawlog);
         while (count($rawlog) and count($blobs)) {
             $rawlog = implode("\n", array_reverse($rawlog));
-            $newRawLog = substr($rawlog, 0, strrpos(rtrim($rawlog), "\n"));
-            $rawLogArr = explode("\n", $rawlog);
-            $lastLine = $rawLogArr[count($rawLogArr) - 1];
-            $commit = explode(" ", $lastLine)[0];
-            $fc = $this->getCommit($commit);
-
-
-            foreach(explode("\n", $newRawLog) as $line) {
-                $sides = explode("\t", $line);
-                $leftSide = trim($sides[0]);
-                $rightSide = trim($sides[1]);
-                $leftSideSplit = explode(" ", $leftSide);
-                $newHash = sha1($leftSideSplit[3] . $rightSide);
-                $res[$newHash] = (object) [
-                    "hash" => $newHash,
-                    'date' => $fc->date,
-                    'title' => $fc->title,
-                    'author' => $fc->author
-                ];
-                unset($blobs[$newHash]);
+            $tmpRes = [];
+            foreach(explode("\n", $rawlog) as $line) {
+                if ($line[0] != ":") { //This is the commit number line
+                    $commit = explode(" ", $line)[0];
+                    $fc = $this->getCommit($commit);
+                    foreach($tmpRes as $r) {
+                        $res[$r["hash"]] = (object) [
+                            "hash" => $r["hash"],
+                            "date" => $fc->date,
+                            "title" => $fc->title,
+                            "author" => $fc->author
+                        ];
+                    }
+                    $tmpRes = [];
+                } else {
+                    $sides = explode("\t", $line);
+                    $leftSide = trim($sides[0]);
+                    $rightSide = trim($sides[1]);
+                    $leftSideSplit = explode(" ", $leftSide);
+                    $newHash = sha1($leftSideSplit[3] . $rightSide);
+                    $tmpRes[$newHash] = [
+                        "hash" => $newHash
+                    ];
+                    unset($blobs[$newHash]);
+                }
             }
             $rawlog = array();
             $skip += 5000;
