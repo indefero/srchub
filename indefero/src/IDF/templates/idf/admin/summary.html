@@ -110,4 +110,16 @@
     <p><strong>Download Project</strong></p>
     <p>A copy of the project can be downloaded here: <a href="{url 'IDF_Views_Project::backup', array($project.shortname)}">Download</a></p>
 </div>
+{assign $stats = $project.getStats()}
+<div class="issue-submit-info">
+    <p><strong>Project Stats</strong></p>
+    <dl class="statistics smaller">
+    <dt>Size:</dt> <dd>{$project.getRepositorySize()|size}</dd>
+    <dt>Downloads:</dt> <dd>{$stats["downloads"]}</dd>
+    <dt>Reviews:</dt> <dd>{$stats["reviews"]}</dd>
+    <dt>Commits:</dt> <dd>{$stats["commits"]}</dd>
+    <dt>Issues:</dt> <dd>{$stats["issues"]}</dd>
+    <dt>Documentations:</dt> <dd>{$stats["docpages"]}</dd>
+    </dl>
+</div>
 {/block}

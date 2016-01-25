@@ -37,6 +37,14 @@
 <span class="label"><a class="label" href="{$url}">{$member}</a></span><br />
 {/foreach}
 {/if}
+    {assign $stats = $project.getStats()}
+<dl class="statistics smaller">
+    <dt>Downloads:</dt> <dd>{$stats["downloads"]}</dd>
+    <dt>Reviews:</dt> <dd>{$stats["reviews"]}</dd>
+    <dt>Commits:</dt> <dd>{$stats["commits"]}</dd>
+    <dt>Issues:</dt> <dd>{$stats["issues"]}</dd>
+    <dt>Documentations:</dt> <dd>{$stats["docpages"]}</dd>
+</dl>
 </p>
 <p>
 {if $project.enableads}
