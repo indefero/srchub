@@ -12,7 +12,9 @@
 {$error}
 {/foreach}
 {/if}
-<table>
+<div class="content">
+<table class="recent-issues">
+    <thead>
     <tr>
         <th>
             Short Name
@@ -36,6 +38,8 @@
             Reject
         </th>
     </tr>
+    </thead>
+    <tbody>
 {foreach $requests as $req}
 <tr>
     <td>
@@ -63,6 +67,8 @@
     </td>
 </tr>
 {/foreach}
+    </tbody>
 </table>
+</div>
 
 {/block}
