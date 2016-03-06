@@ -107,6 +107,7 @@ function IDF_Middleware_ContextPreProcessor($request)
     $c = array();
     $c['request'] = $request;
     $c['isAdmin'] = ($request->user->administrator or $request->user->staff);
+    $c["pendingProjects"] = Pluf::factory("IDF_ProjectRequest")->getCount();
     if (isset($request->project)) {
         $c['project'] = $request->project;
         $c['isOwner'] = $request->user->hasPerm('IDF.project-owner',
