@@ -3,7 +3,7 @@
     <div class="p-list-prj">
         <div class="logo">
             <a href="{url 'IDF_Views_Project::home', array($p.shortname)}">
-            <img src="{url 'IDF_Views_Project::logo', array($p.shortname)}" alt="{trans 'Project logo'}" />
+            <img src="{media '/idf/img/no_logo.png'}" data-logo="{$p.logo}" class="logo" data-src="{url 'IDF_Views_Project::logo', array($p.shortname)}" alt="{trans 'Project logo'}" />
             </a>
             {if $p.private}
             <div class="private">

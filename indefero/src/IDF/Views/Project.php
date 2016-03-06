@@ -32,7 +32,7 @@ Pluf::loadFunction('Pluf_Shortcuts_GetFormForModel');
 class IDF_Views_Project
 {
     /**
-     * Home page of a project.
+     * Logo of a project.
      */
     public $logo_precond = array('IDF_Precondition::baseAccess');
     public function logo($request, $match)
@@ -50,6 +50,25 @@ class IDF_Views_Project
         $info = IDF_FileUtil::getMimeType($logo);
         return new Pluf_HTTP_Response_File(Pluf::f('upload_path') . '/' . $prj->shortname . $logo,
                                            $info[0]);
+    }
+
+    /**
+     * Logo of a project.
+     */
+    public $logo64_precond = array('IDF_Precondition::baseAccess');
+    public function logo64($request, $match)
+    {
+        $prj = $request->project;
+
+        $logo = $prj->getConf()->getVal('logo');
+        if (empty($logo)) {
+            $file = "./media/idf/img/no_logo.png";
+            $info = IDF_FileUtil::getMimeType($file);
+            return new Pluf_HTTP_Response("data:" . $info[0] . ";base64," . base64_encode(file_get_contents($file)), "text/text");
+        }
+
+        $info = IDF_FileUtil::getMimeType($logo);
+        return new Pluf_HTTP_Response("data:" . $info[0] . ";base64," . base64_encode(file_get_contents(Pluf::f('upload_path') . '/' . $prj->shortname . $logo)), "text/text");
     }
 
     /**

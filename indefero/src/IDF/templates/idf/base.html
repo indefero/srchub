@@ -36,6 +36,7 @@
   {block extraheader}{/block}
   <title>{block pagetitle}{$page_title|strip_tags}{/block}{if $project} - {$project.shortdesc}{/if}</title>
   <script type="text/javascript" src="{media '/idf/js/jquery-1.7.2.min.js'}"></script>
+  <script type="text/javascript" src="{media '/idf/js/logo.cache.js'}"></script>
   <script type="text/javascript" src="{media '/idf/js/syntaxhighlight/shCore.js'}"></script>
   <script type="text/javascript" src="{media '/idf/js/syntaxhighlight/shAutoloader.js'}"></script>
 
@@ -52,6 +53,8 @@
 
     {literal}
     <script type="text/javascript">
+
+
         $.event.special.tripleclick = {
 
             setup: function(data, namespaces) {
@@ -99,7 +102,7 @@
 <div id="{block docid}doc3{/block}" class="{block docclass}yui-t3{/block}">
   <div id="hd">
     {if $project}
-<h1 class="project-title">{$project}<img class="logo" src="{url 'IDF_Views_Project::logo', array($project.shortname)}" alt="{trans 'Project logo'}" />{if $project.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}{assign $url = $project.external_project_url}{if $url != ''}<a href="{$url}" target="_blank" class="external-link" title="{trans 'External link to project'}" />&nbsp;</a>{/if}</h1>{/if}
+<h1 class="project-title">{$project}<img data-logo="{$project.logo}" class="logo" src="{url 'IDF_Views_Project::logo', array($project.shortname)}" alt="{trans 'Project logo'}" />{if $project.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}{assign $url = $project.external_project_url}{if $url != ''}<a href="{$url}" target="_blank" class="external-link" title="{trans 'External link to project'}" />&nbsp;</a>{/if}</h1>{/if}
     {include 'idf/main-menu.html'}
 <div id="header">
 <div id="main-tabs">

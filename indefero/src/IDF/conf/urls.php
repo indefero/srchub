@@ -97,10 +97,17 @@ $ctl[] = array('regex' => '#^/p/([\-\w]+)/$#',
                'model' => 'IDF_Views_Project',
                'method' => 'home');
 
+$ctl[] = array('regex' => '#^/p/([\-\w]+)/logo64/$#',
+    'base' => $base,
+    'model' => 'IDF_Views_Project',
+    'method' => 'logo64');
+
 $ctl[] = array('regex' => '#^/p/([\-\w]+)/logo/$#',
                'base' => $base,
                'model' => 'IDF_Views_Project',
                'method' => 'logo');
+
+
 
 $ctl[] = array('regex' => '#^/p/([\-\w]+)/timeline/(\w+)/$#',
                'base' => $base,
