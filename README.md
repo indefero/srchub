@@ -297,3 +297,19 @@ See the [corresponding ticket][reglink].
 
 [reglink]: http://projects.ceondo.com/p/indefero/issues/481/
 
+# Attributions
+
+srchub is licensed under the GPL and leverages the following projects
+
+- [Pluf Framework](https://srchub.org/p/pluf/) - GPL
+- [Indefero](https://srchub.org/p/indefero/) - GPL
+- [syntaxhighlighter](http://alexgorbatchev.com/SyntaxHighlighter/) - MIT or GPLv3
+- [tabbing in textarea](http://stackoverflow.com/questions/6637341/use-tab-to-indent-in-textarea/25655639)
+- [jQuery](https://jquery.com/) - MIT
+- [jQuery Autocomplete](https://github.com/dyve/jquery-autocomplete) - MIT or GPL or Apache
+- [bgiframe](https://github.com/brandonaaron/bgiframe) - MIT
+- [jQuery hotkeys](https://github.com/tzuryby/jquery.hotkeys) - MIT or GPLv2 (or later)
+- [code-prettify](https://github.com/google/code-prettify) - Apache
+- [ccurl](http://php.net/manual/en/book.curl.php#90821)
+- [Base32 class](http://php.net/manual/en/function.base-convert.php#102232)
+- [PHP OTP](https://github.com/lelag/otphp) - MIT
