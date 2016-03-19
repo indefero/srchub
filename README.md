@@ -313,3 +313,4 @@ srchub is licensed under the GPL and leverages the following projects
 - [ccurl](http://php.net/manual/en/book.curl.php#90821)
 - [Base32 class](http://php.net/manual/en/function.base-convert.php#102232)
 - [PHP OTP](https://github.com/lelag/otphp) - MIT
+- [jQuery QRCode](https://github.com/jeromeetienne/jquery-qrcode) - MIT
