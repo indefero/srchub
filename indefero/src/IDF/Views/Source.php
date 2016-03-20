@@ -211,13 +211,13 @@ class IDF_Views_Source
         if ($request_file_info->type != 'tree') {
             $info = self::getRequestedFileMimeType($request_file_info,
                                                    $commit, $scm);
-            if (!IDF_FileUtil::isText($info)) {
+            if (!IDF_FileUtil::isText($info) && !IDF_FileUtil::isImage($info)) {
                 $rep = new Pluf_HTTP_Response($scm->getFile($request_file_info),
                                               $info[0]);
                 $rep->headers['Content-Disposition'] = 'attachment; filename="'.$info[1].'"';
                 return $rep;
             } else {
-                // We want to display the content of the file as text
+                // We want to display the content of the file
                 $extra = array('branches' => $branches,
                                'tags' => $tags,
                                'commit' => $commit,
@@ -358,6 +358,7 @@ class IDF_Views_Source
      */
     public function viewFile($request, $match, $extra)
     {
+        $project = $request->project;
         $title = sprintf(__('%1$s %2$s Source Tree'), (string) $request->project,
                          $this->getScmType($request));
         $scm = IDF_Scm::get($request->project);
@@ -377,13 +378,8 @@ class IDF_Views_Source
         $previous = substr($request_file, 0, -strlen($l.' '));
         $scmConf = $request->conf->getVal('scm', 'git');
         $props = $scm->getProperties($commit, $request_file);
-        $cache = Pluf_Cache::factory();
-        $key = sha1($request_file.$commit);
-        $content = IDF_FileUtil::highLight($extra['mime'], $scm->getFile($request_file_info));
-        /*if (null === ($content=$cache->get($key))) {
-
-            $cache->set($key, $content);
-        }*/
+        $url = Pluf_HTTP_URL_urlForView('IDF_Views_Source::getFile', [$project->shortname, $commit, $request_file]);
+        $content = IDF_FileUtil::highLight($extra['mime'], $scm->getFile($request_file_info), $url);
         return Pluf_Shortcuts_RenderToResponse('idf/source/'.$scmConf.'/file.html',
                                                array(
                                                      'page_title' => $page_title,

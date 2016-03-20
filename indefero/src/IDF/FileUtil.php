@@ -38,6 +38,8 @@ class IDF_FileUtil
               'skin', 'sln', 'svc', 'vala', 'vb', 'vbproj', 'vbs', 'wsdl', 'xhtml',
               'xml', 'xsd', 'xsl', 'xslt');
 
+    public static $imageExtensions = ["png", "gif", "jpeg", "jpg"];
+
     public static $map = array("cxx" => "cpp", "h" => "cpp", "hpp" => "cpp", "rc"=>"text", "sh"=>"bash", "cs"=>"csharp");
 
     public static $syntaxhighlightext = array("html", "as3", "cf", "cpp", "c", "css", "pas", "diff", "patch", "erl", "java", "jfx", "js", "pl", "php", "py", "rb", "sass", "scss", "scala", "sql", "vb", );
@@ -62,34 +64,46 @@ class IDF_FileUtil
      * @param string the content of the file
      * @return string
      */
-    public static function highLight($fileinfo, $content)
+    public static function highLight($fileinfo, $content, $url)
     {
 
-        $pretty = '';
-        if (self::isSupportedExtension($fileinfo[2])) {
-            $pretty = ' prettyprint';
+
+        if (self::isText($fileinfo)) {
+            $pretty = '';
+            if (self::isSupportedExtension($fileinfo[2])) {
+                $pretty = ' prettyprint';
+            }
+
+            $table = array();
+            $i = 1;
+            /*foreach (self::splitIntoLines($content) as $line) {
+                $table[] = '<tr class="c-line"><td class="code-lc" id="L'.$i.'"><a href="#L'.$i.'">'.$i.'</a></td>'
+                    .'<td class="code mono'.$pretty.'">'.self::emphasizeControlCharacters(Pluf_esc($line)).'</td></tr>';
+                $i++;
+            }
+            return Pluf_Template::markSafe(implode("\n", $table));*/
+            //var_dump($fileinfo);
+            $ext = "";
+            if (in_array($fileinfo[2], self::$syntaxhighlightext))
+                $ext = $fileinfo[2];
+            elseif (array_key_exists($fileinfo[2], self::$map))
+                $ext = self::$map[$fileinfo[2]];
+            else
+                $ext = "text";
+            if ($ext == "php" || $ext == "html" || $ext == "htm" || $ext == "js")
+                $content = '<div id="highlight"><pre class="brush: ' . $ext . '">' . str_replace("<", "&lt;", $content) . '</pre></div>';
+            else
+                $content = '<div id="highlight"><script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script></div>';
+
         }
-        $table = array();
-        $i = 1;
-        /*foreach (self::splitIntoLines($content) as $line) {
-            $table[] = '<tr class="c-line"><td class="code-lc" id="L'.$i.'"><a href="#L'.$i.'">'.$i.'</a></td>'
-                .'<td class="code mono'.$pretty.'">'.self::emphasizeControlCharacters(Pluf_esc($line)).'</td></tr>';
-            $i++;
+
+        if (self::isImage($fileinfo)) {
+            $content = '<tr style="border: 0 !important;"><td style="border: 0 !important;">';
+            $content .= '<img src="' . $url . '" download="' . $fileinfo[1] . '" alt="' . $fileinfo[1] . '"></a></td></tr>';
         }
-        return Pluf_Template::markSafe(implode("\n", $table));*/
-        //var_dump($fileinfo);
-        $ext = "";
-        if (in_array($fileinfo[2], self::$syntaxhighlightext))
-            $ext = $fileinfo[2];
-        elseif (array_key_exists($fileinfo[2], self::$map))
-            $ext = self::$map[$fileinfo[2]];
-        else
-            $ext = "text";
-        if ($ext == "php" || $ext == "html" || $ext == "htm" || $ext == "js")
-            $content = '<div id="highlight"><pre class="brush: ' . $ext . '">' . str_replace("<", "&lt;", $content)  . '</pre></div>';
-        else
-            $content = '<div id="highlight"><script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script></div>';
-        return  Pluf_Template::markSafe($content);
+
+        return Pluf_Template::markSafe($content);
+
     }
 
     /**
@@ -241,5 +255,13 @@ class IDF_FileUtil
             $ext .= ' ' . $extra_ext;
         $ext = array_merge(self::$supportedExtenstions, explode(' ' , $ext));
         return (in_array($fileinfo[2], $ext));
+    }
+
+    public static function isImage($fileinfo) {
+        if (0 === strpos($fileinfo[0], 'image/')) {
+            return true;
+        }
+
+        return false;
     }
 }
