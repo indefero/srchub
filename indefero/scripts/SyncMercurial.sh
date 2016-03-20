@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 private_notify="/home/mercurial/tmp/notify.tmp"
 
