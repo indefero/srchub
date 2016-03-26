@@ -289,7 +289,7 @@ class Pluf_Paginator
                 }
             }
         }
-	//print_r($this->list_display);
+
         if (is_array($search_fields)) {
             $this->search_fields = $search_fields;
         }

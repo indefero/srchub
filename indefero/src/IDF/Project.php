@@ -140,11 +140,13 @@ class IDF_Project extends Pluf_Model
         $thisTable = $this->_con->pfx.'idf_projects';
         $this->_a['views'] = array(
             'repo_size' => [
-                'join' => "INNER JOIN $confTable ON $thisTable.id = $confTable.project",
-                'select' => $this->getSelect() . ', CAST(vdesc as UNSIGNED) as vdesc',
-                'where' => 'vkey = "repository_size"',
+                'join' => "INNER JOIN $confTable s ON $thisTable.id = s.project " .
+                            "INNER JOIN $confTable t ON $thisTable.id = t.project ",
+                'select' => $this->getSelect() . ', CAST(s.vdesc as UNSIGNED) as size, t.vdesc as scm',
+                'where' => 's.vkey = "repository_size" AND t.vkey = "scm"',
                 'props' => array(
-                    'vdesc' => 'vdesc',
+                    'size' => 'size',
+                    'scm' => 'scm'
                 ),
             ],
             'join_activities_and_tags' =>

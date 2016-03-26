@@ -85,12 +85,13 @@ class IDF_Views_Admin
         $list_display = array(
              'shortname' => __('Short Name'),
              'name' => __('Name'),
-             'vdesc' => ["vdesc", "IDF_Views_Admin_projectSize2", __('Repository Size')],
+             'scm' => ["scm", "IDF_Views_Admin_projectSCM", __('Type')],
+             'size' => ["size", "IDF_Views_Admin_projectSize2", __('Repository Size')]
 
                               );
         $pag->configure($list_display, array('shortname', 'shortname'),
-                        array('shortname', 'name', 'vdesc' ));
-        $pag->extra_classes = array('', '', 'right');
+                        array('shortname', 'name', 'scm', 'size' ));
+        $pag->extra_classes = array('', '', '', 'right');
         $pag->items_per_page = 25;
         $pag->no_results_text = __('No projects were found.');
         $pag->setFromRequest($request);
@@ -663,7 +664,12 @@ function IDF_Views_Admin_projectSize($field, $project)
 
 function IDF_Views_Admin_projectSize2($field, $project)
 {
-    return Pluf_Utils::prettySize($project->vdesc);
+    return Pluf_Utils::prettySize($project->size);
+}
+
+function IDF_Views_Admin_projectSCM($field, $project)
+{
+    return $project->getConf()->getVal("scm");
 }
 
 /**
