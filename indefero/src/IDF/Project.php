@@ -130,7 +130,6 @@ class IDF_Project extends Pluf_Model
                                 'type' => 'Pluf_DB_Field_Text',
                                 'blank' => false,
                                 'verbose' => __('syntaxtheme'),
-                                'default' => "Default",
                                 "size" => 50
                             )
                             );
