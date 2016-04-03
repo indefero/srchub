@@ -128,10 +128,11 @@ class IDF_FileUtil
 
         $info = pathinfo($file);
         if (isset($info['extension'])) {
+            $extension = strtolower($info["extension"]);
             foreach ($mimes as $mime) {
                 if ('#' != substr($mime, 0, 1)) {
                     $elts = preg_split('/ |\t/', $mime, -1, PREG_SPLIT_NO_EMPTY);
-                    if (in_array($info['extension'], $elts)) {
+                    if (in_array($extension, $elts)) {
                         return array($elts[0], $info['basename'], $info['extension']);
                     }
                 }
