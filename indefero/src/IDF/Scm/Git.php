@@ -383,8 +383,8 @@ class IDF_Scm_Git extends IDF_Scm
 
     public static function getAuthAccessUrl($project, $user, $commit=null)
     {
-        // if the user haven't registred a public ssh key,
-        // he can't use the write url which use the SSH authentification
+        // if the user haven't registered a public ssh key,
+        // he can't use the write url which use the SSH authentication
         if ($user != null) {
             $keys = $user->get_idf_key_list();
             if (count ($keys) == 0)

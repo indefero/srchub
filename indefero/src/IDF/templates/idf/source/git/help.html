@@ -28,6 +28,16 @@ git push origin master
 
 {/if}
 
+{if !$project.private}
+<h3>Public access</h3>
+
+<p>The following URL provides anonymous public access to the repository.</p>
+
+<p>The URL will not work if your project is private.</p>
+
+<kbd>git clone {$project.getRemoteAccessUrl()}</kbd>
+{/if}
+
 {/block}
 {block context}
 <div class="issue-submit-info">
