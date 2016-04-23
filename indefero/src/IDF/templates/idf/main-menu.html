@@ -10,14 +10,17 @@
 {/if}{if $customForgePageEnabled}
 <li><a href="{url 'IDF_Views::index'}">{trans 'Home'}</a></li>
 {/if}<li id="project-list"><a href="{url 'IDF_Views::listProjects'}">{trans 'Project List'} &#x25be;</a>
-{if $allProjects.count() != 0}
 
+{if $allProjects.count() != 0}
 <ul class="prjlistclass">
     <li id="searchkeep"><input size="15" type="text" id="prjname" name="prjname" placeholder="Project Name..." /></li>
     {foreach $allProjects as $p}
-<li class="projectitem"><a href="{url 'IDF_Views_Project::home', array($p.shortname)}"><img src="{media '/idf/img/no_logo.png'}" data-logo="{$p.logo}" class="logo" data-src="{url 'IDF_Views_Project::logo64', array($p.shortname)}" alt="{trans 'Project logo'}" />{if $p.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}</a></li>
-{/foreach}</ul>
-{/if}</li>{if $isAdmin}<li><a href="{url 'IDF_Views_Admin::forge'}">{trans 'Forge Management'} {if $pendingProjects > 0}({$pendingProjects}){/if}</a></li>{/if}<li>
+        <li class="projectitem"><a href="{url 'IDF_Views_Project::home', array($p.shortname)}"><img src="{media '/idf/img/no_logo.png'}" data-logo="{$p.logo}" class="logo" data-src="{url 'IDF_Views_Project::logo64', array($p.shortname)}" alt="{trans 'Project logo'}" />{if $p.private}<img class="lock" src="{media '/idf/img/lock.png'}" alt="{trans 'Private project'}" />{/if}{$p}</a></li>
+    {/foreach}
+</ul>
+{/if}
+
+</li>{if $isAdmin}<li><a href="{url 'IDF_Views_Admin::forge'}">{trans 'Forge Management'} {if $pendingProjects > 0}({$pendingProjects}){/if}</a></li>{/if}<li>
 <a href="{url 'IDF_Views::faq'}" title="{trans 'Help and accessibility features'}">{trans 'Help'}</a></li>
 </ul>
 

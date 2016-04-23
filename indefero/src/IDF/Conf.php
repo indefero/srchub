@@ -108,6 +108,7 @@ class IDF_Conf extends Pluf_Model
         $conf->vdesc = $value;
         $conf->create();
         $this->initCache();
+        $this->_project->invalidateConfCache();
     }
 
     function getVal($key, $default='')

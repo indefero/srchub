@@ -161,6 +161,14 @@ class IDF_Project extends Pluf_Model
         );
     }
 
+    public function invalidateConfCache() {
+        $cache = Pluf_Cache::factory();
+        $keys = $this->getConf()->getKeys();
+        foreach($keys as $key) {
+            $cache->set("confCache" . $this->id . $key, null);
+        }
+    }
+
 
     /**
      * String representation of the abstract.
@@ -670,7 +678,14 @@ GROUP BY uid";
             return parent::__get($key);
         }
         catch (Exception $e) {
-            return $this->getConf()->getVal($key);
+            $cache = Pluf_Cache::factory();
+            if (null === ($confCache = $cache->get("confCache" . $this->id . $key, null))) {
+                $confCache = $this->getConf()->getVal($key);
+                $cache->set("confCache" . $this->id . $key, $confCache);
+                return $confCache;
+            } else {
+                return $confCache;
+            }
         }
     }
 
