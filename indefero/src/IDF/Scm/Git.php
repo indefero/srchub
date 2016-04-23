@@ -343,7 +343,7 @@ class IDF_Scm_Git extends IDF_Scm
             $res[] = $file;
         }
         // Grab the details for each blob and return the list.
-        return $this->getTreeDetails($res);
+        return $this->getTreeDetails($res, $commit);
     }
 
     /**
@@ -718,13 +718,13 @@ class IDF_Scm_Git extends IDF_Scm
      * @param array Tree information
      * @return array Updated tree information
      */
-    public function getTreeDetails($tree)
+    public function getTreeDetails($tree, $commit)
     {
         $n = count($tree);
         $details = array();
         for ($i=0;$i<$n;$i++) {
             if ($tree[$i]->type == 'blob') {
-                $details[sha1($tree[$i]->hash . $tree[$i]->fullpath)] = $i;
+                $details[sha1($tree[$i]->hash . $tree[$i]->fullpath) . ":" . $tree[$i]->hash . ":" . $tree[$i]->fullpath] = $i;
             }
         }
         if (!count($details)) {
@@ -742,7 +742,7 @@ class IDF_Scm_Git extends IDF_Scm
             }
         }
         if (count($toapp)) {
-            $res = $this->appendBlobInfoCache($toapp);
+            $res = $this->appendBlobInfoCache($toapp, $commit);
             foreach ($details as $blob => $idx) {
                 if (isset($res[$blob])) {
                     $tree[$idx]->date = $res[$blob]->date;
@@ -766,62 +766,110 @@ class IDF_Scm_Git extends IDF_Scm
      * @param array The blob for which we need the information
      * @return array The information
      */
-    public function appendBlobInfoCache($blobs)
+    public function appendBlobInfoCache($blobs, $commit)
     {
         $rawlog = array();
         $cmd = Pluf::f('idf_exec_cmd_prefix', '')
-            .sprintf('GIT_DIR=%s '.Pluf::f('git_path', 'git').' log --raw --abbrev=40 --pretty=oneline -5000 --skip=%%s',
-                     escapeshellarg($this->repo));
+            .sprintf('GIT_DIR=%s '.Pluf::f('git_path', 'git').' log --raw --abbrev=40 --pretty=oneline -5000 --skip=%%s %s',
+                     escapeshellarg($this->repo), $commit);
         $skip = 0;
         $res = array();
         self::exec('IDF_Scm_Git::appendBlobInfoCache',
                    sprintf($cmd, $skip), $rawlog);
-        while (count($rawlog) and count($blobs)) {
-            $rawlog = implode("\n", array_reverse($rawlog));
-            $tmpRes = [];
-            foreach(explode("\n", $rawlog) as $line) {
-                if ($line[0] != ":") { //This is the commit number line
-                    $commit = explode(" ", $line)[0];
-                    $fc = $this->getCommit($commit);
-                    foreach($tmpRes as $r) {
-                        $res[$r["hash"]] = (object) [
-                            "hash" => $r["hash"],
-                            "date" => $fc->date,
-                            "title" => $fc->title,
-                            "author" => $fc->author
-                        ];
-                    }
-                    $tmpRes = [];
-                } else {
-                    $sides = explode("\t", $line);
-                    $leftSide = trim($sides[0]);
-                    $rightSide = trim($sides[1]);
-                    $leftSideSplit = explode(" ", $leftSide);
-                    $newHash = sha1($leftSideSplit[3] . $rightSide);
-                    $tmpRes[$newHash] = [
-                        "hash" => $newHash
-                    ];
-                    unset($blobs[$newHash]);
+
+        $fileinfoarr = [];
+        $lookup = [];
+        $cache = [];
+
+        $currentcommit = null;
+
+        $rawlog = implode("\n", array_reverse($rawlog));
+        foreach(explode("\n", $rawlog) as $line) {
+            if ($line[0] == ":") {
+                $matches = preg_split('/\s/', $line);
+                $currentFileHash = $matches[3];
+                $file = $matches[5];
+                $fileinfoarr[] = [
+                    "filehash" => $currentFileHash,
+                    "file" => $file
+                ];
+            } else {
+                $matches = preg_split('/\s/', $line);
+                $currentcommit = $matches[0];
+                if ($fileinfoarr) {
+                    $lookup[$currentcommit] = $fileinfoarr;
+                    $fileinfoarr = [];
                 }
+
+
             }
-            $rawlog = array();
-            $skip += 5000;
-            if ($skip > 20000) {
-                // We are in the case of the import of a big old
-                // repository, we can store as unknown the commit info
-                // not to try to retrieve them each time.
-                foreach ($blobs as $blob => $idx) {
-                    $res[$blob] = (object) array('hash' => $blob,
-                                                 'date' => '0',
-                                                 'title' => '----',
-                                                 'author' => 'Unknown');
-                }
-                break;
-            }
-            self::exec('IDF_Scm_Git::appendBlobInfoCache',
-                       sprintf($cmd, $skip), $rawlog);
         }
-        $this->cacheBlobInfo($res);
+
+        $commitData = $this->getCommit($commit);
+        foreach($blobs as $blobKey => $blobVal) {
+            list($newhash, $hash, $file) = explode(":", $blobKey);
+            if (isset($lookup[$commitData->commit])) {
+                $test = $lookup[$commitData->commit];
+            } else {
+                if (isset($lookup[$commitData->parents[0]])) { //tag?
+                    $test = $lookup[$commitData->parents[0]];
+                } else {
+                    $test = [];
+                }
+            }
+            $found = false;
+            foreach($test as $fileinfo) {
+                if ($fileinfo["filehash"] == $hash && $fileinfo["file"] == $file) {
+                    $found = true;
+                    $res[$blobKey] = (object) [
+                        "hash" => $newhash,
+                        "date" => $commitData->date,
+                        "title" => $commitData->title,
+                        "author" => $commitData->author
+                    ];
+                    $cache[$blobKey] = $res[$blobKey];
+                }
+            }
+            if (!$found) {
+                foreach ($lookup as $key=>$val) {
+                    foreach($val as $fileinfo) {
+                        if ($fileinfo["filehash"] == $hash && $fileinfo["file"] == $file) {
+                            $commitTempData = $this->getCommit($key);
+                            $res[$blobKey] = (object) [
+                                "hash" => $newhash,
+                                "date" => $commitTempData->date,
+                                "title" => $commitTempData->title,
+                                "author" => $commitTempData->author
+                            ];
+                            $cache[$blobKey] = $res[$blobKey];
+                            $found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            // If it's still not found - find the first commit where it's modified and use that
+            if (!$found) {
+                foreach ($lookup as $key=>$val) {
+                    foreach($val as $fileinfo) {
+                        if ($fileinfo["file"] == $file) {
+                            $commitTempData = $this->getCommit($key);
+                            $res[$blobKey] = (object) [
+                                "hash" => $newhash,
+                                "date" => $commitTempData->date,
+                                "title" => $commitTempData->title,
+                                "author" => $commitTempData->author
+                            ];
+                            $cache[$blobKey] = $res[$blobKey];
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        $this->cacheBlobInfo($cache);
         return $res;
     }
 

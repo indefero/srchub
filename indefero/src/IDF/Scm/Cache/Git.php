@@ -50,10 +50,10 @@ class IDF_Scm_Cache_Git extends Pluf_Model
      */
     public function store($infos)
     {
-        foreach ($infos as $blob) {
+        foreach ($infos as $key => $blob) {
             $cache = new IDF_Scm_Cache_Git();
             $cache->project = $this->_project;
-            $cache->githash = $blob->hash;
+            $cache->githash = $key;
             $blob->title = IDF_Commit::toUTF8($blob->title);
             $cache->content = IDF_Commit::toUTF8($blob->date) . chr(31)
                 . IDF_Commit::toUTF8($blob->author) . chr(31)
@@ -123,9 +123,8 @@ class IDF_Scm_Cache_Git extends Pluf_Model
                                   ),
                             'githash' =>
                             array(
-                                  'type' => 'Pluf_DB_Field_Varchar',
+                                  'type' => 'Pluf_DB_Field_Text',
                                   'blank' => false,
-                                  'size' => 40,
                                   'index' => true,
                                   ),
                             'content' =>
