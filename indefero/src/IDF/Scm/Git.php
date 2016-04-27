@@ -786,9 +786,9 @@ class IDF_Scm_Git extends IDF_Scm
         $rawlog = implode("\n", array_reverse($rawlog));
         foreach(explode("\n", $rawlog) as $line) {
             if ($line[0] == ":") {
-                $matches = preg_split('/\s/', $line);
-                $currentFileHash = $matches[3];
-                $file = $matches[5];
+                preg_match('/\:([0-9]{6}) ([0-9]{6}) ([0-9a-z]{40}) ([0-9a-z]{40}) ([A-Z]{1})\s(.*)$/', $line, $matches);
+                $currentFileHash = $matches[4];
+                $file = $matches[6];
                 $fileinfoarr[] = [
                     "filehash" => $currentFileHash,
                     "file" => $file
