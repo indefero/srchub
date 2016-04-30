@@ -1,6 +1,6 @@
 <?php
 
-function IDF_Migrations_32ExternalFile_up()
+function IDF_Migrations_33GitCache_up()
 {
     $table = Pluf::factory('IDF_Scm_Cache_Git')->getSqlTable();
 
@@ -14,7 +14,7 @@ function IDF_Migrations_32ExternalFile_up()
     $db->execute($sql[$engine]);
 }
 
-function IDF_Migrations_32ExternalFile_down()
+function IDF_Migrations_33GitCache_down()
 {
     $table = Pluf::factory('IDF_Scm_Cache_Git')->getSqlTable();
 
