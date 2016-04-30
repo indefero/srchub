@@ -107,10 +107,11 @@ class IDF_Plugin_SyncGit_Serve
      */
     public static function main($argv, $env)
     {
-        if (count($argv) != 2) {
-            self::fatalError('Missing argument USER.');
+        if (count($argv) != 3) {
+            self::fatalError('Missing argument USER and SSH key id.');
         }
         $username = $argv[1];
+        $keyId = $argv[2];
         umask(0022);
         if (!isset($env['SSH_ORIGINAL_COMMAND'])) {
             self::fatalError('Need SSH_ORIGINAL_COMMAND in environment.');
@@ -120,6 +121,12 @@ class IDF_Plugin_SyncGit_Serve
         $serve = new IDF_Plugin_SyncGit_Serve();
         try {
             $new_cmd = $serve->serve($username, $cmd);
+            if ($keyId) {
+                $key = Pluf::factory('IDF_Key', $keyId);
+                $key->ipaddress = explode(" ", $_SERVER["SSH_CLIENT"])[0];
+                $key->last_used = gmdate('Y-m-d H:i:s');
+                $key->update();
+            }
         } catch (Exception $e) {
             self::fatalError($e->getMessage());
         }

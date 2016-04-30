@@ -29,7 +29,7 @@ class IDF_Plugin_SyncGit_Cron
     /**
      * Template for the SSH key.
      */
-    public $template = 'command="python %s %s",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty %s';
+    public $template = 'command="python %s %s %s",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty %s';
 
     /**
      * Synchronize.
@@ -56,7 +56,7 @@ class IDF_Plugin_SyncGit_Cron
             }
             if ($key_type == 'ssh' and preg_match('/^[a-zA-Z][a-zA-Z0-9_.-]*(@[a-zA-Z][a-zA-Z0-9.-]*)?$/', $key->login)) {
                 $content = trim(str_replace(array("\n", "\r"), '', $key->content));
-                $out .= sprintf($template, $cmd, $key->login, $content)."\n";
+                $out .= sprintf($template, $cmd, $key->login, $key->id, $content)."\n";
             }
         }
         $out = "# indefero start" . PHP_EOL . $out . "# indefero end" . PHP_EOL;

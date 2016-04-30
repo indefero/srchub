@@ -54,6 +54,30 @@ class IDF_Key extends Pluf_Model
                                   'blank' => false,
                                   'verbose' => __('public key'),
                                   ),
+                            'last_used' =>
+                                array(
+                                    'type' => 'Pluf_DB_Field_Datetime',
+                                    'blank' => true,
+                                    'verbose' => __('last used date'),
+                                    'index' => true,
+                                    'help_text' => 'Date of when key was last used',
+                                ),
+                            'creation_dtime' =>
+                                array(
+                                    'type' => 'Pluf_DB_Field_Datetime',
+                                    'blank' => true,
+                                    'verbose' => __('creation date'),
+                                    'index' => true,
+                                    'help_text' => 'Date of addition',
+                                ),
+                            'ipaddress' =>
+                                array(
+                                    'type' => 'Pluf_DB_Field_Varchar',
+                                    'blank' => false,
+                                    'editable' => false,
+                                    'verbose' => __('ipaddress'),
+                                    'help_text' => __('IP address that was last connected with this key'),
+                                ),
                             );
         // WARNING: Not using getSqlTable on the Pluf_User object to
         // avoid recursion.
@@ -155,6 +179,10 @@ class IDF_Key extends Pluf_Model
         $params = array('key' => $this, 'created' => $create);
         Pluf_Signal::send('IDF_Key::postSave',
                           'IDF_Key', $params);
+
+        if ($create) {
+            $this->creation_dtime = gmdate('Y-m-d H:i:s');
+        }
     }
 
     function preDelete()

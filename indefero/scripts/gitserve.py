@@ -27,7 +27,7 @@ import subprocess
 
 SCRIPTDIR = os.path.abspath(__file__).rsplit(os.path.sep, 1)[0]
 GITSERVEPHP = '%s/gitserve.php' % SCRIPTDIR
-process = subprocess.Popen(['php', GITSERVEPHP, sys.argv[1]],
+process = subprocess.Popen(['php', GITSERVEPHP, sys.argv[1], sys.argv[2]],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 output = str.encode("\n").join(process.communicate()).strip()
 status = process.wait()

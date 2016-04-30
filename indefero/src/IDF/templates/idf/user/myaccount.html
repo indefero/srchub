@@ -147,11 +147,35 @@
 
 {if count($keys)}
 <table summary=" " class="recent-issues">
-<tr><th colspan="2">{trans 'Your Current Public Keys'}</th></tr>
-{foreach $keys as $key}<tr><td>
-<span class="mono">{$key.showCompact()}</span></td><td> <form class="star" method="post" action="{url 'IDF_Views_User::deleteKey', array($key.id)}"><input type="image" src="{media '/idf/img/trash.png'}" name="submit" value="{trans 'Delete this key'}" /></form>
-</td>
-</tr>{/foreach}
+    <tr>
+        <th colspan="5">{trans 'Your Current Public Keys'}</th>
+    </tr>
+    <tr>
+        <th>Key</th>
+        <th>Key Added</th>
+        <th>Key Last Used</th>
+        <th>Last IP</th>
+        <th>Delete</th>
+    </tr>
+    {foreach $keys as $key}
+    <tr>
+        <td>
+            <span class="mono">{$key.showCompact()}</span>
+        </td>
+        <td width="13%" style="text-align: center">
+            <span title="{$key.creation_dtime}">{$key.creation_dtime|date}</span>
+        </td>
+        <td width="16%">
+            <span title="{$key.last_used|date:"%Y-%m-%d %H:%M:%S"}">{$key.last_used|dateago}</span>
+        </td>
+        <td>
+            {$key.ipaddress}
+        </td>
+        <td>
+            <form class="star" method="post" action="{url 'IDF_Views_User::deleteKey', array($key.id)}"><input type="image" src="{media '/idf/img/trash.png'}" name="submit" value="{trans 'Delete this key'}" /></form>
+        </td>
+    </tr>
+    {/foreach}
 </table>
 {/if}
 {if count($mailaddrs)>1}
