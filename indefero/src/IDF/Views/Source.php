@@ -213,7 +213,7 @@ class IDF_Views_Source
                                                    $commit, $scm);
             $previewSizeLimit = Pluf::f("preview_size_limit", 2000000);
             if (!IDF_FileUtil::isText($info) && !IDF_FileUtil::isImage($info) ||
-                (!IDF_FileUtil::isImage($info) && $request_file_info->size >= $previewSizeLimit)) {
+                (!IDF_FileUtil::isImage($info) && property_exists($request_file_info, "size") && $request_file_info->size >= $previewSizeLimit)) {
                 $rep = new Pluf_HTTP_Response($scm->getFile($request_file_info),
                                               $info[0]);
                 $rep->headers['Content-Disposition'] = 'attachment; filename="'.$info[1].'"';
