@@ -36,7 +36,7 @@ class IDF_FileUtil
               'h', 'hh', 'hpp', 'hs', 'html', 'html', 'java', 'js', 'lisp', 'master',
               'pas', 'perl', 'php', 'pl', 'pm', 'py', 'rb', 'scm', 'sh', 'sitemap',
               'skin', 'sln', 'svc', 'vala', 'vb', 'vbproj', 'vbs', 'wsdl', 'xhtml',
-              'xml', 'xsd', 'xsl', 'xslt');
+              'xml', 'xsd', 'xsl', 'xslt', 'sql');
 
     public static $imageExtensions = ["png", "gif", "jpeg", "jpg"];
 
@@ -84,17 +84,18 @@ class IDF_FileUtil
             return Pluf_Template::markSafe(implode("\n", $table));*/
             //var_dump($fileinfo);
             $ext = "";
-            if (in_array($fileinfo[2], self::$syntaxhighlightext))
+            if (in_array($fileinfo[2], self::$syntaxhighlightext)) {
                 $ext = $fileinfo[2];
-            elseif (array_key_exists($fileinfo[2], self::$map))
+            } elseif (array_key_exists($fileinfo[2], self::$map)) {
                 $ext = self::$map[$fileinfo[2]];
-            else
+            } else {
                 $ext = "text";
-            if ($ext == "php" || $ext == "html" || $ext == "htm" || $ext == "js")
+            }
+            if ($ext == "php" || $ext == "html" || $ext == "htm" || $ext == "js") {
                 $content = '<div id="highlight"><pre class="brush: ' . $ext . '">' . str_replace("<", "&lt;", $content) . '</pre></div>';
-            else
+            } else {
                 $content = '<div id="highlight"><script type="syntaxhighlighter" class="brush: ' . $ext . '">' . $content . '</script></div>';
-
+            }
         }
 
         if (self::isImage($fileinfo)) {
