@@ -154,6 +154,14 @@ class IDF_Key extends Pluf_Model
         return sha1($keyName.":".$keyData);
     }
 
+    function preSave($create = false)
+    {
+        if ($create) {
+            $this->creation_dtime = gmdate('Y-m-d H:i:s');
+        }
+        parent::preSave($create);
+    }
+
     function postSave($create=false)
     {
         /**
@@ -179,10 +187,6 @@ class IDF_Key extends Pluf_Model
         $params = array('key' => $this, 'created' => $create);
         Pluf_Signal::send('IDF_Key::postSave',
                           'IDF_Key', $params);
-
-        if ($create) {
-            $this->creation_dtime = gmdate('Y-m-d H:i:s');
-        }
     }
 
     function preDelete()
