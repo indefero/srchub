@@ -553,4 +553,9 @@ $cfg['activity_section_weights'] = array(
 # record very little activity, then it might be a good idea to bump this value
 # high enough to show a proper activity index for those projects as well.
 $cfg['activity_lookback'] = 7;
+$cfg["log_level"] = Pluf_Log::ALL;
+$cfg["log_handler"] = 'Pluf_Log_File';
+$cfg["log_delayed"] = true;
+$cfg["pluf_log_file"] = '/home/www/pluf.log';
+Pluf_Log::$level = Pluf_Log::ALL;
 return $cfg;
