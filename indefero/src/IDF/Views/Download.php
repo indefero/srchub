@@ -46,7 +46,7 @@ class IDF_Views_Download
         // Paginator to paginate the files to download.
         $pag = new Pluf_Paginator(new IDF_Upload());
         //$pag->class = 'recent-issues';
-	$pag->class = 'uploads';
+        $pag->class = 'uploads';
         $pag->item_extra_props = array('project_m' => $prj,
                                        'shortname' => $prj->shortname);
         $pag->summary = __('This table shows the files to download.');
