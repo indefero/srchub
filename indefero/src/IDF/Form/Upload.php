@@ -147,7 +147,7 @@ class IDF_Form_Upload extends Pluf_Form
         }
 
         foreach(explode(".", $this->cleaned_data["ext_file_name"]) as $section) {
-            if (!ctype_alpha($section)) {
+            if (!ctype_alnum(($section))) {
                 throw new Pluf_Form_Invalid(__("External file name must not contain characters other than a-zA-Z and ."));
             }
         }
