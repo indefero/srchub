@@ -63,6 +63,13 @@ class IDF_Upload extends Pluf_Model
                                     'size' => 250,
                                     'verbose' => __('External File URL'),
                                 ),
+                            'ext_file_name' =>
+                                array(
+                                    'type' => 'Pluf_DB_Field_Varchar',
+                                    'blank' => false,
+                                    'size' => 250,
+                                    'verbose' => __('External File Name'),
+                                ),
                             'changelog' =>
                             array(
                                   'type' => 'Pluf_DB_Field_Text',

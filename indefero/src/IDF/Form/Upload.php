@@ -53,6 +53,15 @@ class IDF_Form_Upload extends Pluf_Form
                     'size' => 67,
                 ),
             ));
+        $this->fields['ext_file_name'] = new Pluf_Form_Field_Varchar(
+            array('required' => false,
+                'label' => __('External File Name'),
+                'initial' => '',
+                'widget_attrs' => array(
+                    'maxlength' => 200,
+                    'size' => 67,
+                ),
+            ));
         $this->fields['changelog'] = new Pluf_Form_Field_Varchar(
                                       array('required' => false,
                                             'label' => __('Description'),
@@ -133,8 +142,14 @@ class IDF_Form_Upload extends Pluf_Form
                 throw new Pluf_Form_Invalid(__('You provided an invalid label.'));
             }
         }
-        if (empty($this->cleaned_data["file"]) && empty($this->cleaned_data["ext_file"])) {
+        if (empty($this->cleaned_data["file"]) && empty($this->cleaned_data["ext_file"]) && empty($this->cleaned_data["ext_file_name"])) {
             throw new Pluf_Form_Invalid(__("Must upload a file or specify an external file"));
+        }
+
+        foreach(explode(".", $this->cleaned_data["ext_file_name"]) as $section) {
+            if (!ctype_alpha($section)) {
+                throw new Pluf_Form_Invalid(__("External file name must not contain characters other than a-zA-Z and ."));
+            }
         }
         return $this->cleaned_data;
     }
@@ -188,7 +203,7 @@ class IDF_Form_Upload extends Pluf_Form
             $upload->file = $this->cleaned_data['file'];
             $upload->filesize = filesize(Pluf::f('upload_path').'/'.$this->project->shortname.'/files/'.$this->cleaned_data['file']);
         } else {
-            $upload->file = end(explode("/", $this->cleaned_data["ext_file"]));
+            $upload->file = $this->cleaned_data["ext_file_name"];
             $upload->ext_file = $this->cleaned_data['ext_file'];
         }
 
