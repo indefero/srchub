@@ -215,7 +215,8 @@ class IDF_Upload extends Pluf_Model
             if ($this->ext_file == "") {
                 $this->md5 = md5_file ($this->getFullPath());
             } else {
-                $this->filesize = $this->getRemoteFilesize($this->ext_file, false);
+                $this->filesize = max(0, $this->getRemoteFilesize($this->ext_file, false));
+
             }
         }
     }
